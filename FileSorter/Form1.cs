@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace FileSorter
 {
+    public enum FileSortMode { CreationDate, LastChangedDate}
     public partial class FileSorter : Form
     {
         public FileSorter()
@@ -31,11 +32,15 @@ namespace FileSorter
         {
             if(selectSortMode.SelectedIndex == 0)
             {
-                sortByDate();
+                sortByDate(FileSortMode.CreationDate);
+            }
+            if(selectSortMode.SelectedIndex == 1)
+            {
+                sortByDate(FileSortMode.LastChangedDate);
             }
         }
 
-        private void sortByDate()
+        private void sortByDate(FileSortMode fileSortMode)
         {
             DirectoryInfo dirInfoSrc = new DirectoryInfo(textBoxSource.Text);
             DirectoryInfo dirInfoDst = new DirectoryInfo(textBoxDestination.Text);
@@ -44,8 +49,21 @@ namespace FileSorter
             HashSet<String> subDirsDst = getDirectoryNames(dirInfoDst.GetDirectories()); 
             foreach (FileInfo file in files)
             {
-                DateTime creationTime = file.CreationTime.Date;
-                String dateString = creationTime.ToShortDateString();
+                //determine which date to sort
+                String dateString;
+                if(fileSortMode == FileSortMode.CreationDate)
+                {
+                    dateString = file.CreationTime.ToShortDateString();
+                }
+                else if(fileSortMode == FileSortMode.LastChangedDate)
+                {
+                    dateString = file.LastAccessTime.ToShortDateString();
+                }
+                else
+                {
+                    throw new ArgumentException("FileSortMode not handled");
+                }
+
                 if(!subDirsDst.Contains(dateString))
                 {
                     dirInfoDst.CreateSubdirectory(dateString);

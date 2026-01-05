@@ -38,7 +38,7 @@
             // 
             // selectSource
             // 
-            selectSource.Location = new Point(241, 107);
+            selectSource.Location = new Point(259, 230);
             selectSource.Name = "selectSource";
             selectSource.Size = new Size(188, 23);
             selectSource.TabIndex = 0;
@@ -48,7 +48,7 @@
             // 
             // selectDestination
             // 
-            selectDestination.Location = new Point(241, 165);
+            selectDestination.Location = new Point(259, 288);
             selectDestination.Name = "selectDestination";
             selectDestination.Size = new Size(188, 23);
             selectDestination.TabIndex = 1;
@@ -59,7 +59,7 @@
             // textBoxSource
             // 
             textBoxSource.Enabled = false;
-            textBoxSource.Location = new Point(135, 136);
+            textBoxSource.Location = new Point(167, 259);
             textBoxSource.Name = "textBoxSource";
             textBoxSource.Size = new Size(384, 23);
             textBoxSource.TabIndex = 2;
@@ -67,7 +67,7 @@
             // textBoxDestination
             // 
             textBoxDestination.Enabled = false;
-            textBoxDestination.Location = new Point(134, 194);
+            textBoxDestination.Location = new Point(166, 317);
             textBoxDestination.Name = "textBoxDestination";
             textBoxDestination.Size = new Size(385, 23);
             textBoxDestination.TabIndex = 3;
@@ -75,8 +75,8 @@
             // selectSortMode
             // 
             selectSortMode.FormattingEnabled = true;
-            selectSortMode.Items.AddRange(new object[] { "Erstelldatum", "Dateityp", "Name beginnend mit" });
-            selectSortMode.Location = new Point(241, 223);
+            selectSortMode.Items.AddRange(new object[] { "Erstelldatum", "Zuletzt geändert", "Dateityp", "Name beginnend mit" });
+            selectSortMode.Location = new Point(259, 346);
             selectSortMode.Name = "selectSortMode";
             selectSortMode.Size = new Size(188, 23);
             selectSortMode.TabIndex = 4;
@@ -86,7 +86,7 @@
             btnSort.BackColor = Color.ForestGreen;
             btnSort.Font = new Font("Segoe UI", 16F);
             btnSort.ForeColor = Color.White;
-            btnSort.Location = new Point(286, 252);
+            btnSort.Location = new Point(306, 397);
             btnSort.Name = "btnSort";
             btnSort.Size = new Size(113, 41);
             btnSort.TabIndex = 5;
@@ -99,12 +99,12 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(btnSort);
-            Controls.Add(selectSortMode);
-            Controls.Add(textBoxDestination);
-            Controls.Add(textBoxSource);
-            Controls.Add(selectDestination);
             Controls.Add(selectSource);
+            Controls.Add(selectDestination);
+            Controls.Add(textBoxSource);
+            Controls.Add(btnSort);
+            Controls.Add(textBoxDestination);
+            Controls.Add(selectSortMode);
             Name = "FileSorter";
             Text = "FileSorter";
             ResumeLayout(false);
