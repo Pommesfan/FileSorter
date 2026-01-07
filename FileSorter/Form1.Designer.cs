@@ -1,4 +1,5 @@
-﻿namespace FileSorter
+﻿
+namespace FileSorter
 {
     partial class FileSorter
     {
@@ -37,7 +38,7 @@
             textBoxSetFilters = new TextBox();
             textBoxSortBy = new TextBox();
             layoutSort = new FlowLayoutPanel();
-            layoutFilters = new FlowLayoutPanel();
+            fileFilterPanel = new FileFilterPanel();
             btnAdd = new Button();
             layoutSort.SuspendLayout();
             SuspendLayout();
@@ -128,15 +129,15 @@
             layoutSort.Size = new Size(303, 86);
             layoutSort.TabIndex = 0;
             // 
-            // layoutFilters
+            // fileFilterPanel
             // 
-            layoutFilters.AutoSize = true;
-            layoutFilters.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            layoutFilters.FlowDirection = FlowDirection.TopDown;
-            layoutFilters.Location = new Point(12, 171);
-            layoutFilters.Name = "layoutFilters";
-            layoutFilters.Size = new Size(0, 0);
-            layoutFilters.TabIndex = 0;
+            fileFilterPanel.AutoSize = true;
+            fileFilterPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            fileFilterPanel.FlowDirection = FlowDirection.TopDown;
+            fileFilterPanel.Location = new Point(12, 171);
+            fileFilterPanel.Name = "fileFilterPanel";
+            fileFilterPanel.Size = new Size(0, 0);
+            fileFilterPanel.TabIndex = 0;
             // 
             // btnAdd
             // 
@@ -158,7 +159,7 @@
             ClientSize = new Size(800, 450);
             Controls.Add(textBoxSetFilters);
             Controls.Add(btnAdd);
-            Controls.Add(layoutFilters);
+            Controls.Add(fileFilterPanel);
             Controls.Add(layoutSort);
             Controls.Add(selectSource);
             Controls.Add(selectDestination);
@@ -173,6 +174,11 @@
             PerformLayout();
         }
 
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            fileFilterPanel.addFilter();
+        }
+
         #endregion
 
         private Button selectSource;
@@ -184,7 +190,7 @@
         private TextBox textBoxSetFilters;
         private TextBox textBoxSortBy;
         private FlowLayoutPanel layoutSort;
-        private FlowLayoutPanel layoutFilters;
+        private FileFilterPanel fileFilterPanel;
         private Button btnAdd;
     }
 }
