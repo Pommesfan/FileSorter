@@ -12,31 +12,31 @@ namespace FileSorter
         public FileSorter()
         {
             InitializeComponent();
-            initSortModes();
-            initFilterModes();
+            initSortModes(selectSortMode);
+            initFilterModes(comboBoxFilter1);
         }
 
-        private void initSortModes()
+        private void initSortModes(ComboBox comboBox)
         {
             foreach (String mode in sortModeText)
             {
-                selectSortMode.Items.Add(mode);
+                comboBox.Items.Add(mode);
             }
-            selectSortMode.SelectedIndex = 0;
+            comboBox.SelectedIndex = 0;
         }
 
-        private void initFilterModes()
+        private void initFilterModes(ComboBox comboBox)
         {
             foreach (String mode in filterModeText)
             {
-                comboBoxFilter.Items.Add(mode);
+                comboBox.Items.Add(mode);
             }
         }
 
         private void selectLocation(object sender, EventArgs e)
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
-            if(sender == selectDestination)
+            if (sender == selectDestination)
                 dialog.ShowNewFolderButton = true;
             else
                 dialog.ShowNewFolderButton = false;
@@ -68,11 +68,11 @@ namespace FileSorter
             numberFilesFound = 0;
             numberFilesSorted = 0;
 
-            if(selectSortMode.SelectedIndex == 0)
+            if (selectSortMode.SelectedIndex == 0)
             {
                 sortByDate(FileSortMode.CreationDate);
             }
-            if(selectSortMode.SelectedIndex == 1)
+            if (selectSortMode.SelectedIndex == 1)
             {
                 sortByDate(FileSortMode.LastChangedDate);
             }
@@ -85,7 +85,7 @@ namespace FileSorter
             DirectoryInfo dirInfoDst = new DirectoryInfo(textBoxDestination.Text);
 
             FileInfo[] files = dirInfoSrc.GetFiles();
-            HashSet<String> subDirsDst = getDirectoryNames(dirInfoDst.GetDirectories()); 
+            HashSet<String> subDirsDst = getDirectoryNames(dirInfoDst.GetDirectories());
             foreach (FileInfo file in files)
             {
                 numberFilesFound++;
@@ -93,11 +93,11 @@ namespace FileSorter
                     continue;
                 //determine which date to sort
                 String dateString;
-                if(fileSortMode == FileSortMode.CreationDate)
+                if (fileSortMode == FileSortMode.CreationDate)
                 {
                     dateString = file.CreationTime.ToShortDateString();
                 }
-                else if(fileSortMode == FileSortMode.LastChangedDate)
+                else if (fileSortMode == FileSortMode.LastChangedDate)
                 {
                     dateString = file.LastAccessTime.ToShortDateString();
                 }
@@ -106,7 +106,7 @@ namespace FileSorter
                     throw new ArgumentException("FileSortMode not handled");
                 }
 
-                if(!subDirsDst.Contains(dateString))
+                if (!subDirsDst.Contains(dateString))
                 {
                     dirInfoDst.CreateSubdirectory(dateString);
                     subDirsDst.Add(dateString);
@@ -118,21 +118,21 @@ namespace FileSorter
 
         private bool filter(FileInfo file)
         {
-            int mode = comboBoxFilter.SelectedIndex;
-            switch(mode)
+            int mode = comboBoxFilter1.SelectedIndex;
+            switch (mode)
             {
                 case 0: break;
                 case 1:
-                    if(!file.Extension.Equals("." + textBoxFileType.Text))
+                    if (!file.Extension.Equals("." + textBoxFilterArgs1.Text))
                         return false;
                     break;
                 case 2: break;
                 case 3:
-                    if(!Path.GetFileNameWithoutExtension(file.Name).Contains(textBoxFileType.Text))
+                    if (!Path.GetFileNameWithoutExtension(file.Name).Contains(textBoxFilterArgs1.Text))
                         return false;
                     break;
                 case 4:
-                    if (!Path.GetFileNameWithoutExtension(file.Name).StartsWith(textBoxFileType.Text))
+                    if (!Path.GetFileNameWithoutExtension(file.Name).StartsWith(textBoxFilterArgs1.Text))
                         return false;
                     break;
                 default: break;
@@ -140,7 +140,7 @@ namespace FileSorter
             return true;
         }
 
-        private HashSet<String> getDirectoryNames(DirectoryInfo[]dirs)
+        private HashSet<String> getDirectoryNames(DirectoryInfo[] dirs)
         {
             HashSet<String> res = new HashSet<String>();
             foreach (DirectoryInfo dir in dirs)
@@ -148,6 +148,34 @@ namespace FileSorter
                 res.Add(dir.Name);
             }
             return res;
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            int currentIndex = layoutFilters.Controls.Count + 1;
+            FlowLayoutPanel newFlowLayoutPanel = new FlowLayoutPanel();
+            newFlowLayoutPanel.Name = "layoutFilter" + currentIndex;
+            newFlowLayoutPanel.Tag = currentIndex;
+            newFlowLayoutPanel.FlowDirection = FlowDirection.LeftToRight;
+
+            ComboBox comboBoxNewFilter = new ComboBox();
+            comboBoxNewFilter.Size = new Size(146, 23);
+            comboBoxNewFilter.Name = "comboboxFilter" + currentIndex;
+            initFilterModes(comboBoxNewFilter);
+
+            TextBox filterArgs = new TextBox();
+            filterArgs.Name = "textBoxFilterArgs" + currentIndex;
+            filterArgs.Size = new Size(135, 23);
+
+            newFlowLayoutPanel.Size = new Size(303, 30);
+            newFlowLayoutPanel.Controls.Add(comboBoxNewFilter);
+            newFlowLayoutPanel.Controls.Add(filterArgs);
+            layoutFilters.Controls.Add(newFlowLayoutPanel);
+        }
+
+        private void FileSorter_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
