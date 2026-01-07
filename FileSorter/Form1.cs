@@ -5,9 +5,32 @@ namespace FileSorter
     public enum FileSortMode { CreationDate, LastChangedDate}
     public partial class FileSorter : Form
     {
+        public static String[] sortModeText = ["Erstelldatum", "Zuletzt geändert"];
+        public static String[] filterModeText = ["Dateityp", "Erstellt", "Geändert", "Name beinhaltet"];
+        public static int numberFilesFound = 0;
+        public static int numberFilesSorted = 0;
         public FileSorter()
         {
             InitializeComponent();
+            initSortModes();
+            initFilterModes();
+        }
+
+        private void initSortModes()
+        {
+            foreach (String mode in sortModeText)
+            {
+                selectSortMode.Items.Add(mode);
+            }
+            selectSortMode.SelectedIndex = 0;
+        }
+
+        private void initFilterModes()
+        {
+            foreach (String mode in filterModeText)
+            {
+                comboBoxFilter.Items.Add(mode);
+            }
         }
 
         private void selectLocation(object sender, EventArgs e)
@@ -30,6 +53,12 @@ namespace FileSorter
 
         private void btnSort_Click(object sender, EventArgs e)
         {
+            if (String.IsNullOrEmpty(textBoxSource.Text) || String.IsNullOrEmpty(textBoxDestination.Text))
+                MessageBox.Show("Bitte Quelle und Ziel auswählen");
+
+            numberFilesFound = 0;
+            numberFilesSorted = 0;
+
             if(selectSortMode.SelectedIndex == 0)
             {
                 sortByDate(FileSortMode.CreationDate);
@@ -38,6 +67,7 @@ namespace FileSorter
             {
                 sortByDate(FileSortMode.LastChangedDate);
             }
+            MessageBox.Show(numberFilesFound + " Dateien gefunden\ndavon " + numberFilesSorted + " sortiert");
         }
 
         private void sortByDate(FileSortMode fileSortMode)
@@ -49,6 +79,11 @@ namespace FileSorter
             HashSet<String> subDirsDst = getDirectoryNames(dirInfoDst.GetDirectories()); 
             foreach (FileInfo file in files)
             {
+                numberFilesFound++;
+                if(comboBoxFilter.SelectedIndex == 0 && !file.Extension.Equals(textBoxFileType.Text))
+                {
+                    continue;
+                }
                 //determine which date to sort
                 String dateString;
                 if(fileSortMode == FileSortMode.CreationDate)
@@ -70,6 +105,7 @@ namespace FileSorter
                     subDirsDst.Add(dateString);
                 }
                 file.CopyTo(dirInfoDst.FullName + "\\" + dateString + "\\" + file.Name);
+                numberFilesSorted++;
             }
         }
 
