@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 
 namespace FileSorter
@@ -9,11 +10,11 @@ namespace FileSorter
         public static String[] filterModeText = ["Dateityp", "Erstellt", "Geändert", "Name beinhaltet", "Name beginnt mit"];
         public static int numberFilesFound = 0;
         public static int numberFilesSorted = 0;
+        private List<FileFilter> fileFilters = new();
         public FileSorter()
         {
             InitializeComponent();
             initSortModes(selectSortMode);
-            initFilterModes(comboBoxFilter1);
         }
 
         private void initSortModes(ComboBox comboBox)
@@ -118,24 +119,12 @@ namespace FileSorter
 
         private bool filter(FileInfo file)
         {
-            int mode = comboBoxFilter1.SelectedIndex;
-            switch (mode)
+            foreach (FileFilter filter in fileFilters)
             {
-                case 0: break;
-                case 1:
-                    if (!file.Extension.Equals("." + textBoxFilterArgs1.Text))
-                        return false;
-                    break;
-                case 2: break;
-                case 3:
-                    if (!Path.GetFileNameWithoutExtension(file.Name).Contains(textBoxFilterArgs1.Text))
-                        return false;
-                    break;
-                case 4:
-                    if (!Path.GetFileNameWithoutExtension(file.Name).StartsWith(textBoxFilterArgs1.Text))
-                        return false;
-                    break;
-                default: break;
+                if (filter == null)
+                    continue;
+                if (!filter.validate(file))
+                    return false;
             }
             return true;
         }
@@ -153,29 +142,64 @@ namespace FileSorter
         private void btnAdd_Click(object sender, EventArgs e)
         {
             int currentIndex = layoutFilters.Controls.Count + 1;
+            //create panel
             FlowLayoutPanel newFlowLayoutPanel = new FlowLayoutPanel();
             newFlowLayoutPanel.Name = "layoutFilter" + currentIndex;
-            newFlowLayoutPanel.Tag = currentIndex;
             newFlowLayoutPanel.FlowDirection = FlowDirection.LeftToRight;
 
+            //create combobox
             ComboBox comboBoxNewFilter = new ComboBox();
             comboBoxNewFilter.Size = new Size(146, 23);
             comboBoxNewFilter.Name = "comboboxFilter" + currentIndex;
+            comboBoxNewFilter.Tag = currentIndex;
             initFilterModes(comboBoxNewFilter);
 
+            //create textbox
             TextBox filterArgs = new TextBox();
             filterArgs.Name = "textBoxFilterArgs" + currentIndex;
             filterArgs.Size = new Size(135, 23);
+            filterArgs.Tag = currentIndex;
 
+            //add all to panels
             newFlowLayoutPanel.Size = new Size(303, 30);
             newFlowLayoutPanel.Controls.Add(comboBoxNewFilter);
             newFlowLayoutPanel.Controls.Add(filterArgs);
             layoutFilters.Controls.Add(newFlowLayoutPanel);
+
+            //reaction to select filter mode
+            comboBoxNewFilter.SelectedIndexChanged += new EventHandler(onFilterChanged);
+            filterArgs.TextChanged += new EventHandler(onFilterChanged);
+
+            fileFilters.Add(null);
         }
 
-        private void FileSorter_Load(object sender, EventArgs e)
+        private void onFilterChanged(object? sender, EventArgs e)
         {
-
+            Control c = sender as Control;
+            if (c == null)
+                throw new ArgumentException("argument sender is no object of Control");
+            int idx = ((int)c.Tag) - 1;
+            FlowLayoutPanel layout = (FlowLayoutPanel)layoutFilters.Controls[idx];
+            ComboBox comboBoxFilter = (ComboBox)layout.Controls[0];
+            TextBox filterArgs = (TextBox)layout.Controls[1];
+            String argument = filterArgs.Text;
+            FileFilter fileFilter;
+            switch(comboBoxFilter.SelectedIndex)
+            {
+                case 1:
+                    fileFilter = new ExtensionFilter(argument);
+                    break;
+                case 3:
+                    fileFilter = new NameContentsFilter(argument);
+                    break;
+                case 4:
+                    fileFilter = new NameStartFilter(argument);
+                    break;
+                default:
+                    fileFilter = null;
+                    break;
+            }
+            fileFilters[idx] = fileFilter;
         }
     }
 }

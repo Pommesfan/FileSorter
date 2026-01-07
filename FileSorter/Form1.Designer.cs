@@ -34,17 +34,12 @@
             textBoxDestination = new TextBox();
             selectSortMode = new ComboBox();
             btnSort = new Button();
-            comboBoxFilter1 = new ComboBox();
-            textBoxFilterArgs1 = new TextBox();
             textBoxSetFilters = new TextBox();
             textBoxSortBy = new TextBox();
-            flowLayoutPanel1 = new FlowLayoutPanel();
+            layoutSort = new FlowLayoutPanel();
             layoutFilters = new FlowLayoutPanel();
-            layoutFilter1 = new FlowLayoutPanel();
             btnAdd = new Button();
-            flowLayoutPanel1.SuspendLayout();
-            layoutFilters.SuspendLayout();
-            layoutFilter1.SuspendLayout();
+            layoutSort.SuspendLayout();
             SuspendLayout();
             // 
             // selectSource
@@ -104,21 +99,6 @@
             btnSort.UseVisualStyleBackColor = false;
             btnSort.Click += btnSort_Click;
             // 
-            // comboBoxFilter1
-            // 
-            comboBoxFilter1.FormattingEnabled = true;
-            comboBoxFilter1.Location = new Point(3, 3);
-            comboBoxFilter1.Name = "comboBoxFilter1";
-            comboBoxFilter1.Size = new Size(146, 23);
-            comboBoxFilter1.TabIndex = 6;
-            // 
-            // textBoxFilterArgs1
-            // 
-            textBoxFilterArgs1.Location = new Point(155, 3);
-            textBoxFilterArgs1.Name = "textBoxFilterArgs1";
-            textBoxFilterArgs1.Size = new Size(135, 23);
-            textBoxFilterArgs1.TabIndex = 7;
-            // 
             // textBoxSetFilters
             // 
             textBoxSetFilters.Enabled = false;
@@ -139,34 +119,24 @@
             textBoxSortBy.TabIndex = 9;
             textBoxSortBy.Text = "Sortieren nach";
             // 
-            // flowLayoutPanel1
+            // layoutSort
             // 
-            flowLayoutPanel1.Controls.Add(textBoxSortBy);
-            flowLayoutPanel1.Controls.Add(selectSortMode);
-            flowLayoutPanel1.Location = new Point(406, 168);
-            flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(303, 86);
-            flowLayoutPanel1.TabIndex = 0;
+            layoutSort.Controls.Add(textBoxSortBy);
+            layoutSort.Controls.Add(selectSortMode);
+            layoutSort.Location = new Point(406, 168);
+            layoutSort.Name = "layoutSort";
+            layoutSort.Size = new Size(303, 86);
+            layoutSort.TabIndex = 0;
             // 
             // layoutFilters
             // 
             layoutFilters.AutoSize = true;
             layoutFilters.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            layoutFilters.Controls.Add(layoutFilter1);
             layoutFilters.FlowDirection = FlowDirection.TopDown;
-            layoutFilters.Location = new Point(13, 168);
+            layoutFilters.Location = new Point(12, 171);
             layoutFilters.Name = "layoutFilters";
-            layoutFilters.Size = new Size(331, 38);
+            layoutFilters.Size = new Size(0, 0);
             layoutFilters.TabIndex = 0;
-            // 
-            // layoutFilter1
-            // 
-            layoutFilter1.Controls.Add(comboBoxFilter1);
-            layoutFilter1.Controls.Add(textBoxFilterArgs1);
-            layoutFilter1.Location = new Point(3, 3);
-            layoutFilter1.Name = "layoutFilter1";
-            layoutFilter1.Size = new Size(325, 32);
-            layoutFilter1.TabIndex = 0;
             // 
             // btnAdd
             // 
@@ -189,7 +159,7 @@
             Controls.Add(textBoxSetFilters);
             Controls.Add(btnAdd);
             Controls.Add(layoutFilters);
-            Controls.Add(flowLayoutPanel1);
+            Controls.Add(layoutSort);
             Controls.Add(selectSource);
             Controls.Add(selectDestination);
             Controls.Add(textBoxSource);
@@ -197,12 +167,8 @@
             Controls.Add(textBoxDestination);
             Name = "FileSorter";
             Text = "FileSorter";
-            Load += FileSorter_Load;
-            flowLayoutPanel1.ResumeLayout(false);
-            flowLayoutPanel1.PerformLayout();
-            layoutFilters.ResumeLayout(false);
-            layoutFilter1.ResumeLayout(false);
-            layoutFilter1.PerformLayout();
+            layoutSort.ResumeLayout(false);
+            layoutSort.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -215,13 +181,10 @@
         private TextBox textBoxDestination;
         private ComboBox selectSortMode;
         private Button btnSort;
-        private ComboBox comboBoxFilter1;
-        private TextBox textBoxFilterArgs1;
         private TextBox textBoxSetFilters;
         private TextBox textBoxSortBy;
-        private FlowLayoutPanel flowLayoutPanel1;
+        private FlowLayoutPanel layoutSort;
         private FlowLayoutPanel layoutFilters;
-        private FlowLayoutPanel layoutFilter1;
         private Button btnAdd;
     }
 }
