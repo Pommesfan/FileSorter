@@ -6,7 +6,7 @@ namespace FileSorter
     public partial class FileSorter : Form
     {
         public static String[] sortModeText = ["Erstelldatum", "Zuletzt geändert"];
-        public static String[] filterModeText = ["Dateityp", "Erstellt", "Geändert", "Name beinhaltet"];
+        public static String[] filterModeText = ["Dateityp", "Erstellt", "Geändert", "Name beinhaltet", "Name beginnt mit"];
         public static int numberFilesFound = 0;
         public static int numberFilesSorted = 0;
         public FileSorter()
@@ -36,6 +36,12 @@ namespace FileSorter
         private void selectLocation(object sender, EventArgs e)
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog();
+            if(sender == selectDestination)
+                dialog.ShowNewFolderButton = true;
+            else
+                dialog.ShowNewFolderButton = false;
+
+
             DialogResult res = dialog.ShowDialog();
             if (res == DialogResult.OK)
             {
@@ -54,7 +60,10 @@ namespace FileSorter
         private void btnSort_Click(object sender, EventArgs e)
         {
             if (String.IsNullOrEmpty(textBoxSource.Text) || String.IsNullOrEmpty(textBoxDestination.Text))
+            {
                 MessageBox.Show("Bitte Quelle und Ziel auswählen");
+                return;
+            }
 
             numberFilesFound = 0;
             numberFilesSorted = 0;
@@ -80,10 +89,8 @@ namespace FileSorter
             foreach (FileInfo file in files)
             {
                 numberFilesFound++;
-                if(comboBoxFilter.SelectedIndex == 0 && !file.Extension.Equals(textBoxFileType.Text))
-                {
+                if (!filter(file))
                     continue;
-                }
                 //determine which date to sort
                 String dateString;
                 if(fileSortMode == FileSortMode.CreationDate)
@@ -107,6 +114,30 @@ namespace FileSorter
                 file.CopyTo(dirInfoDst.FullName + "\\" + dateString + "\\" + file.Name);
                 numberFilesSorted++;
             }
+        }
+
+        private bool filter(FileInfo file)
+        {
+            int mode = comboBoxFilter.SelectedIndex;
+            switch(mode)
+            {
+                case 0: break;
+                case 1:
+                    if(!file.Extension.Equals("." + textBoxFileType.Text))
+                        return false;
+                    break;
+                case 2: break;
+                case 3:
+                    if(!Path.GetFileNameWithoutExtension(file.Name).Contains(textBoxFileType.Text))
+                        return false;
+                    break;
+                case 4:
+                    if (!Path.GetFileNameWithoutExtension(file.Name).StartsWith(textBoxFileType.Text))
+                        return false;
+                    break;
+                default: break;
+            }
+            return true;
         }
 
         private HashSet<String> getDirectoryNames(DirectoryInfo[]dirs)

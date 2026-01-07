@@ -114,6 +114,7 @@
             // 
             // textBoxSetFilters
             // 
+            textBoxSetFilters.Enabled = false;
             textBoxSetFilters.Font = new Font("Segoe UI", 12F);
             textBoxSetFilters.Location = new Point(236, 166);
             textBoxSetFilters.Name = "textBoxSetFilters";
@@ -123,6 +124,7 @@
             // 
             // textBoxSortBy
             // 
+            textBoxSortBy.Enabled = false;
             textBoxSortBy.Font = new Font("Segoe UI", 12F);
             textBoxSortBy.Location = new Point(236, 238);
             textBoxSortBy.Name = "textBoxSortBy";
