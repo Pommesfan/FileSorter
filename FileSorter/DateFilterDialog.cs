@@ -84,6 +84,37 @@ namespace FileSorter
                     return new DateFilterRes(dateFrom.Value, dateUntil.Value);
                 }
             }
+
+            set
+            {
+                DateTime now = DateTime.Now;
+                if (value.from == null)
+                {
+                    dateFrom.Value = (DateTime)value.until;
+                    dateFrom.Enabled = false;
+                    checkBoxUntil.Enabled = false;
+                    checkBoxFrom.Checked = false;
+                }
+                else
+                {
+                    DateTime from = (DateTime)value.from;
+                    dateFrom.MaxDate = from;
+                    dateFrom.Value = from;
+                }
+                if (value.until == null)
+                {
+                    dateUntil.Value = (DateTime)value.from;
+                    dateUntil.Enabled = false;
+                    checkBoxFrom.Enabled = false;
+                    checkBoxUntil.Checked = false;
+                }
+                else
+                {
+                    DateTime until = (DateTime)value.until;
+                    dateUntil.MinDate = until;
+                    dateUntil.Value = until;
+                }
+            }
         }
     }
 }

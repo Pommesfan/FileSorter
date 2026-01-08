@@ -28,34 +28,43 @@ namespace FileSorter
             newFlowLayoutPanel.Tag = currentIndex;
             newFlowLayoutPanel.FlowDirection = FlowDirection.LeftToRight;
 
-            //create combobox
-            ComboBox comboBoxNewFilter = new ComboBox();
-            comboBoxNewFilter.Size = new Size(146, 25);
-            initFilterModes(comboBoxNewFilter);
-
-            //create textbox
-            TextBox filterArgs = new TextBox();
-            filterArgs.Size = new Size(135, 25);
-
             //create remove button
             Button removeButton = new Button();
-            removeButton.Text = "-";
+            removeButton.Text = "x";
             removeButton.Size = new Size(25, 25);
             removeButton.BackColor = Color.Red;
             removeButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             removeButton.ForeColor = Color.White;
             removeButton.TextAlign = ContentAlignment.TopLeft;
 
+            //create combobox
+            ComboBox comboBoxNewFilter = new ComboBox();
+            comboBoxNewFilter.Size = new Size(146, 25);
+            initFilterModes(comboBoxNewFilter);
+
+            //create remove button
+            Button editValueButton = new Button();
+            editValueButton.Text = "...";
+            editValueButton.Size = new Size(25, 25);
+            editValueButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            editValueButton.ForeColor = Color.Gray;
+            editValueButton.TextAlign = ContentAlignment.TopLeft;
+
+            //create textbox
+            //TextBox filterArgs = new TextBox();
+            //filterArgs.Size = new Size(135, 25);
+
             //add all to panels
             newFlowLayoutPanel.Size = new Size(333, 30);
-            newFlowLayoutPanel.Controls.Add(comboBoxNewFilter);
-            newFlowLayoutPanel.Controls.Add(filterArgs);
             newFlowLayoutPanel.Controls.Add(removeButton);
+            newFlowLayoutPanel.Controls.Add(comboBoxNewFilter);
+            newFlowLayoutPanel.Controls.Add(editValueButton);
+            //newFlowLayoutPanel.Controls.Add(filterArgs);
             Controls.Add(newFlowLayoutPanel);
 
             //reaction to select filter mode
-            comboBoxNewFilter.SelectedIndexChanged += new EventHandler(onFilterChanged);
-            filterArgs.TextChanged += new EventHandler(onFilterChanged);
+            editValueButton.Click += new EventHandler(onValueChangeClicked);
+            //filterArgs.TextChanged += new EventHandler(onFilterChanged);
             removeButton.Click += new EventHandler(onRemove);
 
             fileFilters.Add(null);
@@ -76,34 +85,45 @@ namespace FileSorter
             }
         }
 
-        private void onFilterChanged(object? sender, EventArgs e)
+        private void onValueChangeClicked(object sender, EventArgs e)
         {
-            Control c = sender as Control;
-            if (c == null)
-                throw new ArgumentException("argument sender is no object of Control");
-            Control parent = c.Parent;
-
-            int idx = ((int)parent.Tag) - 1;
-            ComboBox comboBoxFilter = (ComboBox)parent.Controls[0];
-            TextBox filterArgs = (TextBox)parent.Controls[1];
-            String argument = filterArgs.Text;
-            FileFilter fileFilter;
-            switch (comboBoxFilter.SelectedIndex)
+            FlowLayoutPanel currentLayout = (FlowLayoutPanel)(((Control)sender).Parent);
+            ComboBox comboBox = (ComboBox)currentLayout.Controls[1];
+            int idx = (int)currentLayout.Tag - 1;
+            int selectedMode = comboBox.SelectedIndex;
+            if (selectedMode < 0)
+                return;
+            switch(selectedMode)
             {
                 case 0:
-                    fileFilter = new ExtensionFilter(argument);
+                    break;
+                case 1:
+                    setDateFilter(idx);
+                    break;
+                case 2:
                     break;
                 case 3:
-                    fileFilter = new NameContentsFilter(argument);
                     break;
                 case 4:
-                    fileFilter = new NameStartFilter(argument);
-                    break;
-                default:
-                    fileFilter = null;
                     break;
             }
-            fileFilters[idx] = fileFilter;
+        }
+
+        private void setDateFilter(int idx)
+        {
+            DateFilterDialog dialog = new DateFilterDialog();
+            dialog.Owner = (Form)Parent;
+            FileFilter currentFilter = fileFilters[idx];
+            if (currentFilter != null && currentFilter.GetType() == typeof(DateSpanFilter))
+            {
+                DateSpanFilter filter = (DateSpanFilter)currentFilter;
+                dialog.DateSpan = new DateFilterDialog.DateFilterRes(filter.from, filter.until);
+            }
+            DialogResult res = dialog.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                fileFilters[idx] = new DateSpanFilter(dialog.DateSpan.from, dialog.DateSpan.until);
+            }
         }
 
         public int Count {

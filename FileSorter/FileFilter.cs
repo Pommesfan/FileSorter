@@ -8,41 +8,65 @@ namespace FileSorter
 {
     public abstract class FileFilter
     {
-        protected String argument;
-        public FileFilter(String argument)
-        {
-            this.argument = argument;
-        }
         public abstract bool validate(FileInfo file);
     }
 
     public class NameStartFilter : FileFilter
     {
-        public NameStartFilter(string argument) : base(argument) { }
+        public readonly String nameStart;
+        public NameStartFilter(string nameStart) {
+            this.nameStart = nameStart;
+        }
 
         public override bool validate(FileInfo file)
         {
-            return Path.GetFileNameWithoutExtension(file.Name).StartsWith(argument);
+            return Path.GetFileNameWithoutExtension(file.Name).StartsWith(nameStart);
         }
     }
 
     public class NameContentsFilter : FileFilter
     {
-        public NameContentsFilter(string argument) : base(argument) { }
+        private String nameContent;
+        public NameContentsFilter(string nameContent) {
+            this.nameContent = nameContent;
+        }
 
         public override bool validate(FileInfo file)
         {
-            return Path.GetFileNameWithoutExtension(file.Name).Contains(argument);
+            return Path.GetFileNameWithoutExtension(file.Name).Contains(nameContent);
         }
     }
 
     public class ExtensionFilter : FileFilter
     {
-        public ExtensionFilter(string argument) : base(argument) { }
+       public readonly String extension;
+        public ExtensionFilter(string extension) {
+            this.extension = extension;
+        }
 
         public override bool validate(FileInfo file)
         {
-            return file.Extension.Equals("." + argument);
+            return file.Extension.Equals("." + extension);
+        }
+    }
+
+    public class DateSpanFilter: FileFilter
+    {
+        public readonly DateTime? from;
+        public readonly DateTime? until;
+
+        public DateSpanFilter(DateTime? from, DateTime? until)
+        {
+            this.from = from;
+            this.until = until;
+        }
+
+        public override bool validate(FileInfo file)
+        {
+            DateTime? lastDate = file.CreationTime.Date;
+            if ((from != null && lastDate <= from) || (until != null && until <= lastDate))
+                return false;
+            return true;
         }
     }
 }
