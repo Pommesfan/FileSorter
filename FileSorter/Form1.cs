@@ -109,7 +109,7 @@ namespace FileSorter
 
         private bool filter(FileInfo file)
         {
-            for(int i = 0; i < fileFilterPanel.Count; i++)
+            for (int i = 0; i < fileFilterPanel.Count; i++)
             {
                 FileFilter filter = fileFilterPanel[i];
                 if (filter == null)
