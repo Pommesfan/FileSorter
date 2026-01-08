@@ -144,11 +144,12 @@ namespace FileSorter
             btnAdd.BackColor = Color.LimeGreen;
             btnAdd.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAdd.ForeColor = Color.White;
-            btnAdd.Location = new Point(171, 130);
+            btnAdd.Location = new Point(164, 133);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(31, 38);
+            btnAdd.Size = new Size(28, 32);
             btnAdd.TabIndex = 10;
             btnAdd.Text = "+";
+            btnAdd.TextAlign = ContentAlignment.TopLeft;
             btnAdd.UseVisualStyleBackColor = false;
             btnAdd.Click += btnAdd_Click;
             // 
