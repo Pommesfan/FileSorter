@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileSorter
+﻿namespace FileSorter
 {
+    public enum FilterMode { CreationDate, LastChangedDate }
     public abstract class FileFilter
     {
         public abstract bool validate(FileInfo file);
@@ -54,16 +49,25 @@ namespace FileSorter
     {
         public readonly DateTime? from;
         public readonly DateTime? until;
+        public readonly FilterMode filterMode;
 
-        public DateSpanFilter(DateTime? from, DateTime? until)
+        public DateSpanFilter(DateTime? from, DateTime? until, FilterMode filterMode)
         {
             this.from = from;
             this.until = until;
+            this.filterMode = filterMode;
         }
 
         public override bool validate(FileInfo file)
         {
-            DateTime? lastDate = file.CreationTime.Date;
+            DateTime? lastDate;
+            if(filterMode == FilterMode.CreationDate)
+            {
+                lastDate = file.CreationTime.Date;
+            } else
+            {
+                lastDate = file.LastWriteTime.Date;
+            }
             if ((from != null && lastDate <= from) || (until != null && until <= lastDate))
                 return false;
             return true;

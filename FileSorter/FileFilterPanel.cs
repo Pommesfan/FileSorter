@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FileSorter
+﻿namespace FileSorter
 {
     public class FileFilterPanel: FlowLayoutPanel
     {
@@ -98,9 +92,10 @@ namespace FileSorter
                 case 0:
                     break;
                 case 1:
-                    setDateFilter(idx);
+                    setDateFilter(idx, FilterMode.CreationDate);
                     break;
                 case 2:
+                    setDateFilter(idx, FilterMode.LastChangedDate);
                     break;
                 case 3:
                     break;
@@ -109,7 +104,7 @@ namespace FileSorter
             }
         }
 
-        private void setDateFilter(int idx)
+        private void setDateFilter(int idx, FilterMode mode)
         {
             DateFilterDialog dialog = new DateFilterDialog();
             dialog.Owner = (Form)Parent;
@@ -122,7 +117,7 @@ namespace FileSorter
             DialogResult res = dialog.ShowDialog();
             if (res == DialogResult.OK)
             {
-                fileFilters[idx] = new DateSpanFilter(dialog.DateSpan.from, dialog.DateSpan.until);
+                fileFilters[idx] = new DateSpanFilter(dialog.DateSpan.from, dialog.DateSpan.until, mode);
             }
         }
 
