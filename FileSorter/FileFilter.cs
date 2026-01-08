@@ -34,14 +34,20 @@
 
     public class ExtensionFilter : FileFilter
     {
-       public readonly String extension;
-        public ExtensionFilter(string extension) {
-            this.extension = extension;
+       public readonly String[]extensions;
+        public ExtensionFilter(string[]extensions) {
+            this.extensions = extensions;
         }
 
         public override bool validate(FileInfo file)
         {
-            return file.Extension.Equals("." + extension);
+            String fileExtension = file.Extension;
+            foreach(String s in extensions)
+            {
+                if(fileExtension.Equals("." + s))
+                    return true;
+            }
+            return false;
         }
     }
 

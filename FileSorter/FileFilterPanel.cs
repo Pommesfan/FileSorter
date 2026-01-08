@@ -90,6 +90,7 @@
             switch(selectedMode)
             {
                 case 0:
+                    setExtensionFilter(idx);
                     break;
                 case 1:
                     setDateFilter(idx, FilterMode.CreationDate);
@@ -102,6 +103,17 @@
                 case 4:
                     break;
             }
+        }
+
+        private void setExtensionFilter(int idx)
+        {
+            KeyWordsDialog dialog = new KeyWordsDialog();
+            dialog.Owner = (Form)Parent;
+            FileFilter current = fileFilters[idx];
+            if (current != null)
+                dialog.Content = ((ExtensionFilter)current).extensions;
+            if (dialog.ShowDialog() == DialogResult.OK)
+                fileFilters[idx] = new ExtensionFilter(dialog.Content);
         }
 
         private void setDateFilter(int idx, FilterMode mode)

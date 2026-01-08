@@ -1,8 +1,8 @@
 ﻿namespace FileSorter
 {
-    public partial class WordFilterDialog : Form
+    public partial class KeyWordsDialog : Form
     {
-        public WordFilterDialog()
+        public KeyWordsDialog()
         {
             InitializeComponent();
         }
@@ -11,6 +11,7 @@
         {
             if(!string.IsNullOrEmpty(textBoxKeyword.Text))
                 listBoxKeywords.Items.Add(textBoxKeyword.Text);
+            textBoxKeyword.Clear();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)

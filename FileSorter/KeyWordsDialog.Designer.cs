@@ -1,6 +1,6 @@
 ﻿namespace FileSorter
 {
-    partial class WordFilterDialog
+    partial class KeyWordsDialog
     {
         /// <summary>
         /// Required designer variable.
