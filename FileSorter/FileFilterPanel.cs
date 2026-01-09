@@ -33,10 +33,10 @@
 
             //create combobox
             ComboBox comboBoxNewFilter = new ComboBox();
-            comboBoxNewFilter.Size = new Size(146, 25);
+            comboBoxNewFilter.Size = new Size(160, 25);
             initFilterModes(comboBoxNewFilter);
 
-            //create remove button
+            //create edit button
             Button editValueButton = new Button();
             editValueButton.Text = "...";
             editValueButton.Size = new Size(25, 25);
@@ -45,7 +45,7 @@
             editValueButton.TextAlign = ContentAlignment.TopLeft;
 
             //add all to panels
-            newFlowLayoutPanel.Size = new Size(333, 30);
+            newFlowLayoutPanel.Size = new Size(260, 30);
             newFlowLayoutPanel.Controls.Add(removeButton);
             newFlowLayoutPanel.Controls.Add(comboBoxNewFilter);
             newFlowLayoutPanel.Controls.Add(editValueButton);

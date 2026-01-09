@@ -40,12 +40,21 @@ namespace FileSorter
             layoutSort = new FlowLayoutPanel();
             fileFilterPanel = new FileFilterPanel();
             btnAdd = new Button();
+            layoutFilterAndSort = new FlowLayoutPanel();
+            layoutFilters = new FlowLayoutPanel();
+            layoutSetUpFilter = new FlowLayoutPanel();
+            layoutMain = new FileFilterPanel();
             layoutSort.SuspendLayout();
+            layoutFilterAndSort.SuspendLayout();
+            layoutFilters.SuspendLayout();
+            layoutSetUpFilter.SuspendLayout();
+            layoutMain.SuspendLayout();
             SuspendLayout();
             // 
             // selectSource
             // 
-            selectSource.Location = new Point(292, 7);
+            selectSource.Anchor = AnchorStyles.Top;
+            selectSource.Location = new Point(146, 3);
             selectSource.Name = "selectSource";
             selectSource.Size = new Size(188, 23);
             selectSource.TabIndex = 0;
@@ -55,7 +64,8 @@ namespace FileSorter
             // 
             // selectDestination
             // 
-            selectDestination.Location = new Point(292, 65);
+            selectDestination.Anchor = AnchorStyles.Top;
+            selectDestination.Location = new Point(146, 61);
             selectDestination.Name = "selectDestination";
             selectDestination.Size = new Size(188, 23);
             selectDestination.TabIndex = 1;
@@ -65,16 +75,18 @@ namespace FileSorter
             // 
             // textBoxSource
             // 
+            textBoxSource.Anchor = AnchorStyles.Top;
             textBoxSource.Enabled = false;
-            textBoxSource.Location = new Point(200, 36);
+            textBoxSource.Location = new Point(48, 32);
             textBoxSource.Name = "textBoxSource";
             textBoxSource.Size = new Size(384, 23);
             textBoxSource.TabIndex = 2;
             // 
             // textBoxDestination
             // 
+            textBoxDestination.Anchor = AnchorStyles.Top;
             textBoxDestination.Enabled = false;
-            textBoxDestination.Location = new Point(199, 94);
+            textBoxDestination.Location = new Point(48, 90);
             textBoxDestination.Name = "textBoxDestination";
             textBoxDestination.Size = new Size(385, 23);
             textBoxDestination.TabIndex = 3;
@@ -89,10 +101,11 @@ namespace FileSorter
             // 
             // btnSort
             // 
+            btnSort.Anchor = AnchorStyles.Top;
             btnSort.BackColor = Color.ForestGreen;
             btnSort.Font = new Font("Segoe UI", 16F);
             btnSort.ForeColor = Color.White;
-            btnSort.Location = new Point(376, 397);
+            btnSort.Location = new Point(184, 199);
             btnSort.Name = "btnSort";
             btnSort.Size = new Size(113, 41);
             btnSort.TabIndex = 5;
@@ -104,9 +117,9 @@ namespace FileSorter
             // 
             textBoxSetFilters.Enabled = false;
             textBoxSetFilters.Font = new Font("Segoe UI", 12F);
-            textBoxSetFilters.Location = new Point(12, 133);
+            textBoxSetFilters.Location = new Point(3, 3);
             textBoxSetFilters.Name = "textBoxSetFilters";
-            textBoxSetFilters.Size = new Size(146, 29);
+            textBoxSetFilters.Size = new Size(214, 29);
             textBoxSetFilters.TabIndex = 8;
             textBoxSetFilters.Text = "Filter einstellen";
             // 
@@ -116,7 +129,7 @@ namespace FileSorter
             textBoxSortBy.Font = new Font("Segoe UI", 12F);
             textBoxSortBy.Location = new Point(3, 3);
             textBoxSortBy.Name = "textBoxSortBy";
-            textBoxSortBy.Size = new Size(146, 29);
+            textBoxSortBy.Size = new Size(188, 29);
             textBoxSortBy.TabIndex = 9;
             textBoxSortBy.Text = "Sortieren nach";
             // 
@@ -124,9 +137,9 @@ namespace FileSorter
             // 
             layoutSort.Controls.Add(textBoxSortBy);
             layoutSort.Controls.Add(selectSortMode);
-            layoutSort.Location = new Point(406, 168);
+            layoutSort.Location = new Point(275, 3);
             layoutSort.Name = "layoutSort";
-            layoutSort.Size = new Size(303, 86);
+            layoutSort.Size = new Size(197, 68);
             layoutSort.TabIndex = 0;
             // 
             // fileFilterPanel
@@ -134,7 +147,7 @@ namespace FileSorter
             fileFilterPanel.AutoSize = true;
             fileFilterPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             fileFilterPanel.FlowDirection = FlowDirection.TopDown;
-            fileFilterPanel.Location = new Point(12, 171);
+            fileFilterPanel.Location = new Point(3, 51);
             fileFilterPanel.Name = "fileFilterPanel";
             fileFilterPanel.Size = new Size(0, 0);
             fileFilterPanel.TabIndex = 0;
@@ -144,7 +157,7 @@ namespace FileSorter
             btnAdd.BackColor = Color.LimeGreen;
             btnAdd.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAdd.ForeColor = Color.White;
-            btnAdd.Location = new Point(164, 133);
+            btnAdd.Location = new Point(223, 3);
             btnAdd.Name = "btnAdd";
             btnAdd.Size = new Size(28, 32);
             btnAdd.TabIndex = 10;
@@ -153,24 +166,74 @@ namespace FileSorter
             btnAdd.UseVisualStyleBackColor = false;
             btnAdd.Click += btnAdd_Click;
             // 
+            // layoutFilterAndSort
+            // 
+            layoutFilterAndSort.Anchor = AnchorStyles.Top;
+            layoutFilterAndSort.AutoSize = true;
+            layoutFilterAndSort.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            layoutFilterAndSort.Controls.Add(layoutFilters);
+            layoutFilterAndSort.Controls.Add(layoutSort);
+            layoutFilterAndSort.Location = new Point(3, 119);
+            layoutFilterAndSort.Name = "layoutFilterAndSort";
+            layoutFilterAndSort.Size = new Size(475, 74);
+            layoutFilterAndSort.TabIndex = 11;
+            // 
+            // layoutFilters
+            // 
+            layoutFilters.AutoSize = true;
+            layoutFilters.Controls.Add(layoutSetUpFilter);
+            layoutFilters.Controls.Add(fileFilterPanel);
+            layoutFilters.FlowDirection = FlowDirection.TopDown;
+            layoutFilters.Location = new Point(3, 3);
+            layoutFilters.Name = "layoutFilters";
+            layoutFilters.Size = new Size(266, 54);
+            layoutFilters.TabIndex = 0;
+            // 
+            // layoutSetUpFilter
+            // 
+            layoutSetUpFilter.Controls.Add(textBoxSetFilters);
+            layoutSetUpFilter.Controls.Add(btnAdd);
+            layoutSetUpFilter.Location = new Point(3, 3);
+            layoutSetUpFilter.Name = "layoutSetUpFilter";
+            layoutSetUpFilter.Size = new Size(260, 42);
+            layoutSetUpFilter.TabIndex = 12;
+            // 
+            // layoutMain
+            // 
+            layoutMain.Anchor = AnchorStyles.Top;
+            layoutMain.AutoSize = true;
+            layoutMain.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            layoutMain.Controls.Add(selectSource);
+            layoutMain.Controls.Add(textBoxSource);
+            layoutMain.Controls.Add(selectDestination);
+            layoutMain.Controls.Add(textBoxDestination);
+            layoutMain.Controls.Add(layoutFilterAndSort);
+            layoutMain.Controls.Add(btnSort);
+            layoutMain.FlowDirection = FlowDirection.TopDown;
+            layoutMain.Location = new Point(4, 6);
+            layoutMain.Name = "layoutMain";
+            layoutMain.Size = new Size(481, 243);
+            layoutMain.TabIndex = 12;
+            // 
             // FileSorter
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(textBoxSetFilters);
-            Controls.Add(btnAdd);
-            Controls.Add(fileFilterPanel);
-            Controls.Add(layoutSort);
-            Controls.Add(selectSource);
-            Controls.Add(selectDestination);
-            Controls.Add(textBoxSource);
-            Controls.Add(btnSort);
-            Controls.Add(textBoxDestination);
+            AutoSize = true;
+            ClientSize = new Size(504, 450);
+            Controls.Add(layoutMain);
             Name = "FileSorter";
             Text = "FileSorter";
             layoutSort.ResumeLayout(false);
             layoutSort.PerformLayout();
+            layoutFilterAndSort.ResumeLayout(false);
+            layoutFilterAndSort.PerformLayout();
+            layoutFilters.ResumeLayout(false);
+            layoutFilters.PerformLayout();
+            layoutSetUpFilter.ResumeLayout(false);
+            layoutSetUpFilter.PerformLayout();
+            layoutMain.ResumeLayout(false);
+            layoutMain.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -193,5 +256,9 @@ namespace FileSorter
         private FlowLayoutPanel layoutSort;
         private FileFilterPanel fileFilterPanel;
         private Button btnAdd;
+        private FlowLayoutPanel layoutFilterAndSort;
+        private FlowLayoutPanel layoutFilters;
+        private FlowLayoutPanel layoutSetUpFilter;
+        private FileFilterPanel layoutMain;
     }
 }
