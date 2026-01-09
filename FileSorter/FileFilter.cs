@@ -1,48 +1,60 @@
 ﻿namespace FileSorter
 {
-    public enum FilterMode { CreationDate, LastChangedDate }
+    public enum FilterMode { CreationDate, LastChangedDate, Extension, StartsWith, Contains }
     public abstract class FileFilter
     {
         public abstract bool validate(FileInfo file);
     }
 
-    public class NameStartFilter : FileFilter
+    public abstract class FileNameFilter: FileFilter
     {
-        public readonly String nameStart;
-        public NameStartFilter(string nameStart) {
-            this.nameStart = nameStart;
-        }
-
-        public override bool validate(FileInfo file)
+        public readonly String[] possibleKeyWords;
+        public FileNameFilter(string[] possibleKeyWords)
         {
-            return Path.GetFileNameWithoutExtension(file.Name).StartsWith(nameStart);
+            this.possibleKeyWords = possibleKeyWords;
         }
     }
 
-    public class NameContentsFilter : FileFilter
+    public class NameStartFilter : FileNameFilter
     {
-        private String nameContent;
-        public NameContentsFilter(string nameContent) {
-            this.nameContent = nameContent;
-        }
+        public NameStartFilter(string[] possibleNameStarts) : base(possibleNameStarts) { }
 
         public override bool validate(FileInfo file)
         {
-            return Path.GetFileNameWithoutExtension(file.Name).Contains(nameContent);
+            String fileName = Path.GetFileNameWithoutExtension(file.Name);
+            foreach (String item in possibleKeyWords)
+            {
+                if (fileName.StartsWith(item))
+                    return true;
+            }
+            return false;
         }
     }
 
-    public class ExtensionFilter : FileFilter
+    public class NameContentsFilter : FileNameFilter
     {
-       public readonly String[]extensions;
-        public ExtensionFilter(string[]extensions) {
-            this.extensions = extensions;
+        public NameContentsFilter(string[] possibleNameContents) : base(possibleNameContents) {}
+
+        public override bool validate(FileInfo file)
+        {
+            String fileName = Path.GetFileNameWithoutExtension(file.Name);
+            foreach (String item in possibleKeyWords)
+            {
+                if (fileName.Contains(item))
+                    return true;
+            }
+            return false;
         }
+    }
+
+    public class ExtensionFilter : FileNameFilter
+    {
+        public ExtensionFilter(string[]extensions) : base(extensions) {}
 
         public override bool validate(FileInfo file)
         {
             String fileExtension = file.Extension;
-            foreach(String s in extensions)
+            foreach(String s in possibleKeyWords)
             {
                 if(fileExtension.Equals("." + s))
                     return true;

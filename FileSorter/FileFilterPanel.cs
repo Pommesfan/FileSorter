@@ -44,24 +44,68 @@
             editValueButton.ForeColor = Color.Gray;
             editValueButton.TextAlign = ContentAlignment.TopLeft;
 
-            //create textbox
-            //TextBox filterArgs = new TextBox();
-            //filterArgs.Size = new Size(135, 25);
-
             //add all to panels
             newFlowLayoutPanel.Size = new Size(333, 30);
             newFlowLayoutPanel.Controls.Add(removeButton);
             newFlowLayoutPanel.Controls.Add(comboBoxNewFilter);
             newFlowLayoutPanel.Controls.Add(editValueButton);
-            //newFlowLayoutPanel.Controls.Add(filterArgs);
             Controls.Add(newFlowLayoutPanel);
 
             //reaction to select filter mode
+            comboBoxNewFilter.SelectedIndexChanged += new EventHandler(onComboboxValueChanged);
             editValueButton.Click += new EventHandler(onValueChangeClicked);
-            //filterArgs.TextChanged += new EventHandler(onFilterChanged);
             removeButton.Click += new EventHandler(onRemove);
 
             fileFilters.Add(null);
+        }
+
+        private void onComboboxValueChanged(object? sender, EventArgs e)
+        {
+            //when moving from DateSpanFilter to FileNameFilter or opposite, drop the selected information
+            ComboBox combobox = (ComboBox)sender;
+            int idx = (int)combobox.Parent.Tag - 1;
+            int selection = combobox.SelectedIndex;
+            if (selection == 1 || selection == 2)
+            {
+                if(fileFilters[idx] is DateSpanFilter)
+                {
+                    DateSpanFilter dateSpanFilter = (DateSpanFilter)fileFilters[idx];
+                    switch(selection)
+                    {
+                        case 1:
+                            fileFilters[idx] = new DateSpanFilter(dateSpanFilter.from, dateSpanFilter.until, FilterMode.CreationDate);
+                            break;
+                        case 2:
+                            fileFilters[idx] = new DateSpanFilter(dateSpanFilter.from, dateSpanFilter.until, FilterMode.LastChangedDate);
+                            break;
+                    }
+
+                } else
+                {
+                    fileFilters[idx] = null;
+                }
+            }
+            else if (selection == 0 || selection == 3 || selection == 4)
+            {
+                if(fileFilters[idx] is FileNameFilter) {
+                    FileNameFilter fileNameFilter = (FileNameFilter)fileFilters[idx];
+                    switch (selection)
+                    {
+                        case 0:
+                            fileFilters[idx] = new ExtensionFilter(fileNameFilter.possibleKeyWords);
+                            break;
+                        case 3:
+                            fileFilters[idx] = new NameContentsFilter(fileNameFilter.possibleKeyWords);
+                            break;
+                        case 4:
+                            fileFilters[idx] = new NameStartFilter(fileNameFilter.possibleKeyWords);
+                            break;
+                    }
+                } else
+                {
+                    fileFilters[idx] = null;
+                }
+            }
         }
 
         private void onRemove(object? sender, EventArgs e)
@@ -90,7 +134,7 @@
             switch(selectedMode)
             {
                 case 0:
-                    setExtensionFilter(idx);
+                    setKeywordFilter(idx, FilterMode.Extension);
                     break;
                 case 1:
                     setDateFilter(idx, FilterMode.CreationDate);
@@ -99,21 +143,37 @@
                     setDateFilter(idx, FilterMode.LastChangedDate);
                     break;
                 case 3:
+                    setKeywordFilter(idx, FilterMode.Contains);
                     break;
                 case 4:
+                    setKeywordFilter(idx, FilterMode.StartsWith);
                     break;
             }
         }
 
-        private void setExtensionFilter(int idx)
+        private void setKeywordFilter(int idx, FilterMode mode)
         {
             KeyWordsDialog dialog = new KeyWordsDialog();
             dialog.Owner = (Form)Parent;
             FileFilter current = fileFilters[idx];
             if (current != null)
-                dialog.Content = ((ExtensionFilter)current).extensions;
+            {
+                FileNameFilter filter = (FileNameFilter)current;
+                dialog.Content = filter.possibleKeyWords;
+            }
             if (dialog.ShowDialog() == DialogResult.OK)
-                fileFilters[idx] = new ExtensionFilter(dialog.Content);
+                switch (mode)
+                {
+                    case FilterMode.Extension:
+                        fileFilters[idx] = new ExtensionFilter(dialog.Content);
+                        break;
+                    case FilterMode.Contains:
+                        fileFilters[idx] = new NameContentsFilter(dialog.Content);
+                        break;
+                    case FilterMode.StartsWith:
+                        fileFilters[idx] = new NameStartFilter(dialog.Content);
+                        break;
+                }
         }
 
         private void setDateFilter(int idx, FilterMode mode)
