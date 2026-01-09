@@ -38,13 +38,13 @@ namespace FileSorter
             textBoxSetFilters = new TextBox();
             textBoxSortBy = new TextBox();
             layoutSort = new FlowLayoutPanel();
+            checkBoxCopyOnly = new CheckBox();
             fileFilterPanel = new FileFilterPanel();
             btnAdd = new Button();
             layoutFilterAndSort = new FlowLayoutPanel();
             layoutFilters = new FlowLayoutPanel();
             layoutSetUpFilter = new FlowLayoutPanel();
             layoutMain = new FileFilterPanel();
-            checkBoxCopyOnly = new CheckBox();
             layoutSort.SuspendLayout();
             layoutFilterAndSort.SuspendLayout();
             layoutFilters.SuspendLayout();
@@ -94,6 +94,7 @@ namespace FileSorter
             // 
             // selectSortMode
             // 
+            selectSortMode.DropDownStyle = ComboBoxStyle.DropDownList;
             selectSortMode.FormattingEnabled = true;
             selectSortMode.Location = new Point(3, 38);
             selectSortMode.Name = "selectSortMode";
@@ -146,6 +147,18 @@ namespace FileSorter
             layoutSort.Name = "layoutSort";
             layoutSort.Size = new Size(194, 89);
             layoutSort.TabIndex = 0;
+            // 
+            // checkBoxCopyOnly
+            // 
+            checkBoxCopyOnly.AutoSize = true;
+            checkBoxCopyOnly.Checked = true;
+            checkBoxCopyOnly.CheckState = CheckState.Checked;
+            checkBoxCopyOnly.Location = new Point(3, 67);
+            checkBoxCopyOnly.Name = "checkBoxCopyOnly";
+            checkBoxCopyOnly.Size = new Size(136, 19);
+            checkBoxCopyOnly.TabIndex = 10;
+            checkBoxCopyOnly.Text = "Dateien nur kopieren";
+            checkBoxCopyOnly.UseVisualStyleBackColor = true;
             // 
             // fileFilterPanel
             // 
@@ -220,18 +233,6 @@ namespace FileSorter
             layoutMain.Size = new Size(478, 264);
             layoutMain.TabIndex = 12;
             // 
-            // checkBoxCopyOnly
-            // 
-            checkBoxCopyOnly.AutoSize = true;
-            checkBoxCopyOnly.Checked = true;
-            checkBoxCopyOnly.CheckState = CheckState.Checked;
-            checkBoxCopyOnly.Location = new Point(3, 67);
-            checkBoxCopyOnly.Name = "checkBoxCopyOnly";
-            checkBoxCopyOnly.Size = new Size(136, 19);
-            checkBoxCopyOnly.TabIndex = 10;
-            checkBoxCopyOnly.Text = "Dateien nur kopieren";
-            checkBoxCopyOnly.UseVisualStyleBackColor = true;
-            // 
             // FileSorter
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -276,7 +277,7 @@ namespace FileSorter
         private FlowLayoutPanel layoutFilterAndSort;
         private FlowLayoutPanel layoutFilters;
         private FlowLayoutPanel layoutSetUpFilter;
-        private FlowLayoutPanel layoutMain;
         private CheckBox checkBoxCopyOnly;
+        private FileFilterPanel layoutMain;
     }
 }

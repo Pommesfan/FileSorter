@@ -34,6 +34,7 @@
             //create combobox
             ComboBox comboBoxNewFilter = new ComboBox();
             comboBoxNewFilter.Size = new Size(160, 25);
+            comboBoxNewFilter.DropDownStyle = ComboBoxStyle.DropDownList;
             initFilterModes(comboBoxNewFilter);
 
             //create edit button
