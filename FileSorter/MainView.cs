@@ -82,7 +82,7 @@ namespace FileSorter
                 numberFilesFound++;
                 if (!filter(file))
                     continue;
-                file.CopyTo(dirInfoDst.FullName + "\\" + file.Name);
+                copyOrMove(file, dirInfoDst.FullName + "\\" + file.Name);
                 numberFilesSorted++;
             }
         }
@@ -119,7 +119,7 @@ namespace FileSorter
                     dirInfoDst.CreateSubdirectory(dateString);
                     subDirsDst.Add(dateString);
                 }
-                file.CopyTo(dirInfoDst.FullName + "\\" + dateString + "\\" + file.Name);
+                copyOrMove(file, dirInfoDst.FullName + "\\" + dateString + "\\" + file.Name);
                 numberFilesSorted++;
             }
         }
@@ -135,6 +135,17 @@ namespace FileSorter
                     return false;
             }
             return true;
+        }
+
+        private void copyOrMove(FileInfo file, String dst)
+        {
+            if(checkBoxCopyOnly.Checked)
+            {
+                file.CopyTo(dst);
+            } else
+            {
+                file.MoveTo(dst);
+            }
         }
 
         private HashSet<String> getDirectoryNames(DirectoryInfo[] dirs)

@@ -154,7 +154,6 @@
         private void setKeywordFilter(int idx, FilterMode mode)
         {
             KeyWordsDialog dialog = new KeyWordsDialog();
-            dialog.Owner = (Form)Parent;
             FileFilter current = fileFilters[idx];
             if (current != null)
             {

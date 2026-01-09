@@ -44,6 +44,7 @@ namespace FileSorter
             layoutFilters = new FlowLayoutPanel();
             layoutSetUpFilter = new FlowLayoutPanel();
             layoutMain = new FileFilterPanel();
+            checkBoxCopyOnly = new CheckBox();
             layoutSort.SuspendLayout();
             layoutFilterAndSort.SuspendLayout();
             layoutFilters.SuspendLayout();
@@ -54,7 +55,7 @@ namespace FileSorter
             // selectSource
             // 
             selectSource.Anchor = AnchorStyles.Top;
-            selectSource.Location = new Point(146, 3);
+            selectSource.Location = new Point(145, 3);
             selectSource.Name = "selectSource";
             selectSource.Size = new Size(188, 23);
             selectSource.TabIndex = 0;
@@ -65,7 +66,7 @@ namespace FileSorter
             // selectDestination
             // 
             selectDestination.Anchor = AnchorStyles.Top;
-            selectDestination.Location = new Point(146, 61);
+            selectDestination.Location = new Point(145, 61);
             selectDestination.Name = "selectDestination";
             selectDestination.Size = new Size(188, 23);
             selectDestination.TabIndex = 1;
@@ -77,7 +78,7 @@ namespace FileSorter
             // 
             textBoxSource.Anchor = AnchorStyles.Top;
             textBoxSource.Enabled = false;
-            textBoxSource.Location = new Point(48, 32);
+            textBoxSource.Location = new Point(47, 32);
             textBoxSource.Name = "textBoxSource";
             textBoxSource.Size = new Size(384, 23);
             textBoxSource.TabIndex = 2;
@@ -86,7 +87,7 @@ namespace FileSorter
             // 
             textBoxDestination.Anchor = AnchorStyles.Top;
             textBoxDestination.Enabled = false;
-            textBoxDestination.Location = new Point(48, 90);
+            textBoxDestination.Location = new Point(46, 90);
             textBoxDestination.Name = "textBoxDestination";
             textBoxDestination.Size = new Size(385, 23);
             textBoxDestination.TabIndex = 3;
@@ -105,7 +106,7 @@ namespace FileSorter
             btnSort.BackColor = Color.ForestGreen;
             btnSort.Font = new Font("Segoe UI", 16F);
             btnSort.ForeColor = Color.White;
-            btnSort.Location = new Point(184, 199);
+            btnSort.Location = new Point(182, 220);
             btnSort.Name = "btnSort";
             btnSort.Size = new Size(113, 41);
             btnSort.TabIndex = 5;
@@ -135,11 +136,15 @@ namespace FileSorter
             // 
             // layoutSort
             // 
+            layoutSort.AutoSize = true;
+            layoutSort.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             layoutSort.Controls.Add(textBoxSortBy);
             layoutSort.Controls.Add(selectSortMode);
+            layoutSort.Controls.Add(checkBoxCopyOnly);
+            layoutSort.FlowDirection = FlowDirection.TopDown;
             layoutSort.Location = new Point(275, 3);
             layoutSort.Name = "layoutSort";
-            layoutSort.Size = new Size(197, 68);
+            layoutSort.Size = new Size(194, 89);
             layoutSort.TabIndex = 0;
             // 
             // fileFilterPanel
@@ -175,7 +180,7 @@ namespace FileSorter
             layoutFilterAndSort.Controls.Add(layoutSort);
             layoutFilterAndSort.Location = new Point(3, 119);
             layoutFilterAndSort.Name = "layoutFilterAndSort";
-            layoutFilterAndSort.Size = new Size(475, 74);
+            layoutFilterAndSort.Size = new Size(472, 95);
             layoutFilterAndSort.TabIndex = 11;
             // 
             // layoutFilters
@@ -212,8 +217,20 @@ namespace FileSorter
             layoutMain.FlowDirection = FlowDirection.TopDown;
             layoutMain.Location = new Point(4, 6);
             layoutMain.Name = "layoutMain";
-            layoutMain.Size = new Size(481, 243);
+            layoutMain.Size = new Size(478, 264);
             layoutMain.TabIndex = 12;
+            // 
+            // checkBoxCopyOnly
+            // 
+            checkBoxCopyOnly.AutoSize = true;
+            checkBoxCopyOnly.Checked = true;
+            checkBoxCopyOnly.CheckState = CheckState.Checked;
+            checkBoxCopyOnly.Location = new Point(3, 67);
+            checkBoxCopyOnly.Name = "checkBoxCopyOnly";
+            checkBoxCopyOnly.Size = new Size(136, 19);
+            checkBoxCopyOnly.TabIndex = 10;
+            checkBoxCopyOnly.Text = "Dateien nur kopieren";
+            checkBoxCopyOnly.UseVisualStyleBackColor = true;
             // 
             // FileSorter
             // 
@@ -259,6 +276,7 @@ namespace FileSorter
         private FlowLayoutPanel layoutFilterAndSort;
         private FlowLayoutPanel layoutFilters;
         private FlowLayoutPanel layoutSetUpFilter;
-        private FileFilterPanel layoutMain;
+        private FlowLayoutPanel layoutMain;
+        private CheckBox checkBoxCopyOnly;
     }
 }
