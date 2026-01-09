@@ -35,9 +35,9 @@
             layoutForList = new FlowLayoutPanel();
             textBoxInsertKeyword = new TextBox();
             layoutForBtns = new FlowLayoutPanel();
-            layoutMain = new FlowLayoutPanel();
             btnOk = new Button();
             btnCancel = new Button();
+            layoutMain = new FlowLayoutPanel();
             layoutForList.SuspendLayout();
             layoutForBtns.SuspendLayout();
             layoutMain.SuspendLayout();
@@ -113,6 +113,27 @@
             layoutForBtns.Size = new Size(98, 120);
             layoutForBtns.TabIndex = 5;
             // 
+            // btnOk
+            // 
+            btnOk.DialogResult = DialogResult.OK;
+            btnOk.Location = new Point(3, 61);
+            btnOk.Name = "btnOk";
+            btnOk.Size = new Size(88, 23);
+            btnOk.TabIndex = 4;
+            btnOk.Text = "Ok";
+            btnOk.UseVisualStyleBackColor = true;
+            btnOk.Click += btnOk_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.DialogResult = DialogResult.Cancel;
+            btnCancel.Location = new Point(3, 90);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(88, 23);
+            btnCancel.TabIndex = 5;
+            btnCancel.Text = "Abbrechen";
+            btnCancel.UseVisualStyleBackColor = true;
+            // 
             // layoutMain
             // 
             layoutMain.AutoSize = true;
@@ -123,33 +144,13 @@
             layoutMain.Size = new Size(437, 401);
             layoutMain.TabIndex = 6;
             // 
-            // btnOk
-            // 
-            btnOk.Location = new Point(3, 61);
-            btnOk.Name = "btnOk";
-            btnOk.Size = new Size(88, 23);
-            btnOk.TabIndex = 4;
-            btnOk.Text = "Ok";
-            btnOk.UseVisualStyleBackColor = true;
-            btnOk.DialogResult = DialogResult.OK;
-            // 
-            // btnCancel
-            // 
-            btnCancel.Location = new Point(3, 90);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(88, 23);
-            btnCancel.TabIndex = 5;
-            btnCancel.Text = "Abbrechen";
-            btnCancel.UseVisualStyleBackColor = true;
-            btnCancel.DialogResult = DialogResult.Cancel;
-            // 
-            // WordFilterDialog
+            // KeyWordsDialog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(461, 422);
             Controls.Add(layoutMain);
-            Name = "WordFilterDialog";
+            Name = "KeyWordsDialog";
             Text = "WordFilterPanel";
             layoutForList.ResumeLayout(false);
             layoutForList.PerformLayout();

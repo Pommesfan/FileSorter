@@ -2,7 +2,7 @@
 {
     public class FileFilterPanel: FlowLayoutPanel
     {
-        public static String[] filterModeText = ["Dateityp", "Erstellt", "Geändert", "Name beinhaltet", "Name beginnt mit"];
+        public static String[] filterModeText = ["Erstellt", "Geändert", "Dateityp", "Name beinhaltet", "Name beginnt mit", "Name beinhaltet nicht"];
         private List<FileFilter> fileFilters = new();
 
         private void initFilterModes(ComboBox comboBox)
@@ -73,10 +73,10 @@
                     DateSpanFilter dateSpanFilter = (DateSpanFilter)fileFilters[idx];
                     switch(selection)
                     {
-                        case 1:
+                        case 0:
                             fileFilters[idx] = new DateSpanFilter(dateSpanFilter.from, dateSpanFilter.until, FilterMode.CreationDate);
                             break;
-                        case 2:
+                        case 1:
                             fileFilters[idx] = new DateSpanFilter(dateSpanFilter.from, dateSpanFilter.until, FilterMode.LastChangedDate);
                             break;
                     }
@@ -86,13 +86,13 @@
                     fileFilters[idx] = null;
                 }
             }
-            else if (selection == 0 || selection == 3 || selection == 4)
+            else if (selection == 2 || selection == 3 || selection == 4)
             {
                 if(fileFilters[idx] is FileNameFilter) {
                     FileNameFilter fileNameFilter = (FileNameFilter)fileFilters[idx];
                     switch (selection)
                     {
-                        case 0:
+                        case 2:
                             fileFilters[idx] = new ExtensionFilter(fileNameFilter.possibleKeyWords);
                             break;
                         case 3:
@@ -100,6 +100,9 @@
                             break;
                         case 4:
                             fileFilters[idx] = new NameStartFilter(fileNameFilter.possibleKeyWords);
+                            break;
+                        case 5:
+                            fileFilters[idx] = new NameContentsNotFilter(fileNameFilter.possibleKeyWords);
                             break;
                     }
                 } else
@@ -135,19 +138,22 @@
             switch(selectedMode)
             {
                 case 0:
-                    setKeywordFilter(idx, FilterMode.Extension);
-                    break;
-                case 1:
                     setDateFilter(idx, FilterMode.CreationDate);
                     break;
-                case 2:
+                case 1:
                     setDateFilter(idx, FilterMode.LastChangedDate);
+                    break;
+                case 2:
+                    setKeywordFilter(idx, FilterMode.Extension);
                     break;
                 case 3:
                     setKeywordFilter(idx, FilterMode.Contains);
                     break;
                 case 4:
                     setKeywordFilter(idx, FilterMode.StartsWith);
+                    break;
+                case 5:
+                    setKeywordFilter(idx, FilterMode.ContainsNot);
                     break;
             }
         }
@@ -173,13 +179,15 @@
                     case FilterMode.StartsWith:
                         fileFilters[idx] = new NameStartFilter(dialog.Content);
                         break;
+                    case FilterMode.ContainsNot:
+                        fileFilters[idx] = new NameContentsNotFilter(dialog.Content);
+                        break;
                 }
         }
 
         private void setDateFilter(int idx, FilterMode mode)
         {
             DateFilterDialog dialog = new DateFilterDialog();
-            dialog.Owner = (Form)Parent;
             FileFilter currentFilter = fileFilters[idx];
             if (currentFilter != null && currentFilter.GetType() == typeof(DateSpanFilter))
             {

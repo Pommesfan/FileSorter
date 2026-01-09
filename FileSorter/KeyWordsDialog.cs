@@ -9,14 +9,27 @@
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if(!string.IsNullOrEmpty(textBoxKeyword.Text))
+            if (!string.IsNullOrEmpty(textBoxKeyword.Text))
                 listBoxKeywords.Items.Add(textBoxKeyword.Text);
             textBoxKeyword.Clear();
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            listBoxKeywords.Items.RemoveAt(listBoxKeywords.SelectedIndex);
+            int idx = listBoxKeywords.SelectedIndex;
+            if (idx == -1)
+                return;
+            listBoxKeywords.Items.RemoveAt(idx);
+            int new_idx = idx - 1;
+            if(new_idx != -1)
+                listBoxKeywords.SelectedIndex = new_idx;
+            else if(listBoxKeywords.Items.Count > 0)
+                listBoxKeywords.SelectedIndex = 0;
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            btnAdd_Click(sender, e);
         }
 
         public String[] Content

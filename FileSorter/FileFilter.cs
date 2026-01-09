@@ -1,6 +1,6 @@
 ﻿namespace FileSorter
 {
-    public enum FilterMode { CreationDate, LastChangedDate, Extension, StartsWith, Contains }
+    public enum FilterMode { CreationDate, LastChangedDate, Extension, StartsWith, Contains, ContainsNot }
     public abstract class FileFilter
     {
         public abstract bool validate(FileInfo file);
@@ -44,6 +44,16 @@
                     return true;
             }
             return false;
+        }
+    }
+
+    public class NameContentsNotFilter : NameContentsFilter
+    {
+        public NameContentsNotFilter(string[] possibleNameContents) : base(possibleNameContents) { }
+
+        public override bool validate(FileInfo file)
+        {
+            return !base.validate(file);
         }
     }
 
