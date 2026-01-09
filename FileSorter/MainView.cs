@@ -3,7 +3,7 @@ namespace FileSorter
     public enum FileSortMode { CreationDate, LastChangedDate}
     public partial class FileSorter : Form
     {
-        public static String[] sortModeText = ["Erstelldatum", "Zuletzt geändert"];
+        public static String[] sortModeText = ["Keine Sortierung", "Erstelldatum", "Zuletzt geändert"];
         public static int numberFilesFound = 0;
         public static int numberFilesSorted = 0;
         public FileSorter()
@@ -55,16 +55,36 @@ namespace FileSorter
 
             numberFilesFound = 0;
             numberFilesSorted = 0;
+            int selection = selectSortMode.SelectedIndex;
 
-            if (selectSortMode.SelectedIndex == 0)
+            if(selection == 0)
+            {
+                noSort();
+            }
+            else if (selection == 1)
             {
                 sortByDate(FileSortMode.CreationDate);
             }
-            if (selectSortMode.SelectedIndex == 1)
+            else if (selection == 2)
             {
                 sortByDate(FileSortMode.LastChangedDate);
             }
             MessageBox.Show(numberFilesFound + " Dateien gefunden\ndavon " + numberFilesSorted + " sortiert");
+        }
+
+        private void noSort()
+        {
+            DirectoryInfo dirInfoSrc = new DirectoryInfo(textBoxSource.Text);
+            DirectoryInfo dirInfoDst = new DirectoryInfo(textBoxDestination.Text);
+            FileInfo[] files = dirInfoSrc.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                numberFilesFound++;
+                if (!filter(file))
+                    continue;
+                file.CopyTo(dirInfoDst.FullName + "\\" + file.Name);
+                numberFilesSorted++;
+            }
         }
 
         private void sortByDate(FileSortMode fileSortMode)
