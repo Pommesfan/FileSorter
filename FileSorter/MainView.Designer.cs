@@ -29,7 +29,6 @@ namespace FileSorter
         /// </summary>
         private void InitializeComponent()
         {
-            selectSource = new Button();
             selectDestination = new Button();
             textBoxSource = new TextBox();
             textBoxDestination = new TextBox();
@@ -45,23 +44,13 @@ namespace FileSorter
             layoutFilters = new FlowLayoutPanel();
             layoutSetUpFilter = new FlowLayoutPanel();
             layoutMain = new FileFilterPanel();
+            selectSource = new Button();
             layoutSort.SuspendLayout();
             layoutFilterAndSort.SuspendLayout();
             layoutFilters.SuspendLayout();
             layoutSetUpFilter.SuspendLayout();
             layoutMain.SuspendLayout();
             SuspendLayout();
-            // 
-            // selectSource
-            // 
-            selectSource.Anchor = AnchorStyles.Top;
-            selectSource.Location = new Point(145, 3);
-            selectSource.Name = "selectSource";
-            selectSource.Size = new Size(188, 23);
-            selectSource.TabIndex = 0;
-            selectSource.Text = "Quelle auswählen";
-            selectSource.UseVisualStyleBackColor = true;
-            selectSource.Click += selectLocation;
             // 
             // selectDestination
             // 
@@ -233,6 +222,17 @@ namespace FileSorter
             layoutMain.Size = new Size(478, 264);
             layoutMain.TabIndex = 12;
             // 
+            // selectSource
+            // 
+            selectSource.Anchor = AnchorStyles.Top;
+            selectSource.Location = new Point(145, 3);
+            selectSource.Name = "selectSource";
+            selectSource.Size = new Size(188, 23);
+            selectSource.TabIndex = 0;
+            selectSource.Text = "Quelle auswählen";
+            selectSource.UseVisualStyleBackColor = true;
+            selectSource.Click += selectLocation;
+            // 
             // FileSorter
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -262,8 +262,6 @@ namespace FileSorter
         }
 
         #endregion
-
-        private Button selectSource;
         private Button selectDestination;
         private TextBox textBoxSource;
         private TextBox textBoxDestination;
@@ -279,5 +277,6 @@ namespace FileSorter
         private FlowLayoutPanel layoutSetUpFilter;
         private CheckBox checkBoxCopyOnly;
         private FileFilterPanel layoutMain;
+        private Button selectSource;
     }
 }
