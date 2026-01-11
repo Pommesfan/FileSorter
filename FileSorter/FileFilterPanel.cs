@@ -2,7 +2,7 @@
 {
     public class FileFilterPanel: FlowLayoutPanel
     {
-        public static String[] filterModeText = ["Erstellt", "Geändert", "Dateityp", "Name beinhaltet", "Name beginnt mit", "Name beinhaltet nicht", "Dateigröße"];
+        public static String[] filterModeText = ["Erstellt", "Geändert", "Dateityp", "Name beinhaltet", "Name beginnt mit", "Dateityp ist nicht", "Name beinhaltet nicht", "Name beginnt nicht mit", "Dateigröße"];
         private List<FileFilter> fileFilters = new();
 
         private void initFilterModes(ComboBox comboBox)
@@ -86,23 +86,29 @@
                     fileFilters[idx] = null;
                 }
             }
-            else if (selection >= 2 && selection <= 6)
+            else if (selection >= 2 && selection <= 7)
             {
                 if(fileFilters[idx] is FileNameFilter) {
                     FileNameFilter fileNameFilter = (FileNameFilter)fileFilters[idx];
                     switch (selection)
                     {
                         case 2:
-                            fileFilters[idx] = new ExtensionFilter(fileNameFilter.possibleKeyWords);
+                            fileFilters[idx] = new ExtensionFilter(fileNameFilter.possibleKeyWords, false);
                             break;
                         case 3:
-                            fileFilters[idx] = new NameContentsFilter(fileNameFilter.possibleKeyWords);
+                            fileFilters[idx] = new NameContentsFilter(fileNameFilter.possibleKeyWords, false);
                             break;
                         case 4:
-                            fileFilters[idx] = new NameStartFilter(fileNameFilter.possibleKeyWords);
+                            fileFilters[idx] = new NameStartFilter(fileNameFilter.possibleKeyWords, false);
                             break;
                         case 5:
-                            fileFilters[idx] = new NameContentsNotFilter(fileNameFilter.possibleKeyWords);
+                            fileFilters[idx] = new ExtensionFilter(fileNameFilter.possibleKeyWords, true);
+                            break;
+                        case 6:
+                            fileFilters[idx] = new NameContentsFilter(fileNameFilter.possibleKeyWords, true);
+                            break;
+                        case 7:
+                            fileFilters[idx] = new NameStartFilter(fileNameFilter.possibleKeyWords, true);
                             break;
                     }
                 } else
@@ -153,9 +159,15 @@
                     setKeywordFilter(idx, FilterMode.StartsWith);
                     break;
                 case 5:
-                    setKeywordFilter(idx, FilterMode.ContainsNot);
+                    setKeywordFilter(idx, FilterMode.NotExtension);
                     break;
                 case 6:
+                    setKeywordFilter(idx, FilterMode.NotContains);
+                    break;
+                case 7:
+                    setKeywordFilter(idx, FilterMode.NotStartsWith);
+                    break;
+                case 8:
                     setSizeFilter(idx);
                     break;
             }
@@ -174,16 +186,22 @@
                 switch (mode)
                 {
                     case FilterMode.Extension:
-                        fileFilters[idx] = new ExtensionFilter(dialog.Content);
+                        fileFilters[idx] = new ExtensionFilter(dialog.Content, false);
                         break;
                     case FilterMode.Contains:
-                        fileFilters[idx] = new NameContentsFilter(dialog.Content);
+                        fileFilters[idx] = new NameContentsFilter(dialog.Content, false);
                         break;
                     case FilterMode.StartsWith:
-                        fileFilters[idx] = new NameStartFilter(dialog.Content);
+                        fileFilters[idx] = new NameStartFilter(dialog.Content, false);
                         break;
-                    case FilterMode.ContainsNot:
-                        fileFilters[idx] = new NameContentsNotFilter(dialog.Content);
+                    case FilterMode.NotExtension:
+                        fileFilters[idx] = new ExtensionFilter(dialog.Content, true);
+                        break;
+                    case FilterMode.NotContains:
+                        fileFilters[idx] = new NameContentsFilter(dialog.Content, true);
+                        break;
+                    case FilterMode.NotStartsWith:
+                        fileFilters[idx] = new NameStartFilter(dialog.Content, true);
                         break;
                 }
         }

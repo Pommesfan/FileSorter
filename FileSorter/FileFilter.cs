@@ -1,6 +1,6 @@
 ﻿namespace FileSorter
 {
-    public enum FilterMode { CreationDate, LastChangedDate, Extension, StartsWith, Contains, ContainsNot }
+    public enum FilterMode { CreationDate, LastChangedDate, Extension, StartsWith, Contains, NotExtension, NotStartsWith, NotContains }
     public abstract class FileFilter
     {
         public abstract bool validate(FileInfo file);
@@ -9,15 +9,21 @@
     public abstract class FileNameFilter: FileFilter
     {
         public readonly String[] possibleKeyWords;
-        public FileNameFilter(string[] possibleKeyWords)
+        public readonly bool conditionInverted;
+        protected bool invert(bool res)
+        {
+            return res ^ conditionInverted;
+        }
+        public FileNameFilter(string[] possibleKeyWords, bool conditionInverted)
         {
             this.possibleKeyWords = possibleKeyWords;
+            this.conditionInverted = conditionInverted;
         }
     }
 
     public class NameStartFilter : FileNameFilter
     {
-        public NameStartFilter(string[] possibleNameStarts) : base(possibleNameStarts) { }
+        public NameStartFilter(string[] possibleNameStarts, bool conditionInverted) : base(possibleNameStarts, conditionInverted) { }
 
         public override bool validate(FileInfo file)
         {
@@ -25,15 +31,15 @@
             foreach (String item in possibleKeyWords)
             {
                 if (fileName.StartsWith(item))
-                    return true;
+                    return invert(true);
             }
-            return false;
+            return invert(false);
         }
     }
 
     public class NameContentsFilter : FileNameFilter
     {
-        public NameContentsFilter(string[] possibleNameContents) : base(possibleNameContents) {}
+        public NameContentsFilter(string[] possibleNameContents, bool conditionInverted) : base(possibleNameContents, conditionInverted) {}
 
         public override bool validate(FileInfo file)
         {
@@ -41,25 +47,15 @@
             foreach (String item in possibleKeyWords)
             {
                 if (fileName.Contains(item))
-                    return true;
+                    return invert(true);
             }
-            return false;
-        }
-    }
-
-    public class NameContentsNotFilter : NameContentsFilter
-    {
-        public NameContentsNotFilter(string[] possibleNameContents) : base(possibleNameContents) { }
-
-        public override bool validate(FileInfo file)
-        {
-            return !base.validate(file);
+            return invert(false);
         }
     }
 
     public class ExtensionFilter : FileNameFilter
     {
-        public ExtensionFilter(string[]extensions) : base(extensions) {}
+        public ExtensionFilter(string[] extensions, bool conditionInverted) : base(extensions, conditionInverted) {}
 
         public override bool validate(FileInfo file)
         {
@@ -67,9 +63,9 @@
             foreach(String s in possibleKeyWords)
             {
                 if(fileExtension.Equals("." + s))
-                    return true;
+                    return invert(true);
             }
-            return false;
+            return invert(false);
         }
     }
 
