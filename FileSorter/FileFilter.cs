@@ -101,4 +101,24 @@
             return true;
         }
     }
+    public class SizeFilter : FileFilter
+    {
+        public readonly int from;
+        public readonly int until;
+        public SizeFilter(int from, int until)
+        {
+            this.from = from;
+            this.until = until;
+        }
+
+        public override bool validate(FileInfo file)
+        {
+            long size = file.Length;
+            if (from != -1 && size < from)
+                return false;
+            if(until != -1 && size > until)
+                return false;
+            return true;
+        }
+    }
 }

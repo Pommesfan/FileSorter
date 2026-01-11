@@ -2,7 +2,7 @@
 {
     public class FileFilterPanel: FlowLayoutPanel
     {
-        public static String[] filterModeText = ["Erstellt", "Geändert", "Dateityp", "Name beinhaltet", "Name beginnt mit", "Name beinhaltet nicht"];
+        public static String[] filterModeText = ["Erstellt", "Geändert", "Dateityp", "Name beinhaltet", "Name beginnt mit", "Name beinhaltet nicht", "Dateigröße"];
         private List<FileFilter> fileFilters = new();
 
         private void initFilterModes(ComboBox comboBox)
@@ -86,7 +86,7 @@
                     fileFilters[idx] = null;
                 }
             }
-            else if (selection == 2 || selection == 3 || selection == 4)
+            else if (selection >= 2 && selection <= 6)
             {
                 if(fileFilters[idx] is FileNameFilter) {
                     FileNameFilter fileNameFilter = (FileNameFilter)fileFilters[idx];
@@ -155,6 +155,9 @@
                 case 5:
                     setKeywordFilter(idx, FilterMode.ContainsNot);
                     break;
+                case 6:
+                    setSizeFilter(idx);
+                    break;
             }
         }
 
@@ -198,6 +201,23 @@
             if (res == DialogResult.OK)
             {
                 fileFilters[idx] = new DateSpanFilter(dialog.DateSpan.from, dialog.DateSpan.until, mode);
+            }
+        }
+
+        private void setSizeFilter(int idx)
+        {
+            SizeFilterDialog dialog = new SizeFilterDialog();
+            FileFilter currentFilter = fileFilters[idx];
+            if (currentFilter != null && currentFilter is SizeFilter)
+            {
+                SizeFilter filter = (SizeFilter)currentFilter;
+                dialog.SizeSpan = new SizeFilterRes(filter.from, filter.until);
+            }
+            DialogResult res = dialog.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                SizeFilterRes sizeFilterRes = dialog.SizeSpan;
+                fileFilters[idx] = new SizeFilter(sizeFilterRes.from, sizeFilterRes.until);
             }
         }
 

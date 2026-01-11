@@ -19,7 +19,7 @@ namespace FileSorter
         {
             this.from = from;
             this.until = until;
-        }
+       }
     }
     public partial class SizeFilterDialog : Form
     {
