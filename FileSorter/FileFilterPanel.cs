@@ -141,35 +141,18 @@
             int selectedMode = comboBox.SelectedIndex;
             if (selectedMode < 0)
                 return;
-            switch(selectedMode)
+            FilterMode mode = (FilterMode)selectedMode;
+            if (selectedMode < 2)
             {
-                case 0:
-                    setDateFilter(idx, FilterMode.CreationDate);
-                    break;
-                case 1:
-                    setDateFilter(idx, FilterMode.LastChangedDate);
-                    break;
-                case 2:
-                    setKeywordFilter(idx, FilterMode.Extension);
-                    break;
-                case 3:
-                    setKeywordFilter(idx, FilterMode.Contains);
-                    break;
-                case 4:
-                    setKeywordFilter(idx, FilterMode.StartsWith);
-                    break;
-                case 5:
-                    setKeywordFilter(idx, FilterMode.NotExtension);
-                    break;
-                case 6:
-                    setKeywordFilter(idx, FilterMode.NotContains);
-                    break;
-                case 7:
-                    setKeywordFilter(idx, FilterMode.NotStartsWith);
-                    break;
-                case 8:
-                    setSizeFilter(idx);
-                    break;
+                setDateFilter(idx, mode);
+            }
+            else if (selectedMode < 8)
+            {
+                setKeywordFilter(idx, mode);
+            }
+            else if (selectedMode == 8)
+            {
+                setSizeFilter(idx);
             }
         }
 
