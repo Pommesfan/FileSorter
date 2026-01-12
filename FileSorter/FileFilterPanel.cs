@@ -212,13 +212,13 @@
             if (currentFilter != null && currentFilter is SizeFilter)
             {
                 SizeFilter filter = (SizeFilter)currentFilter;
-                dialog.SizeSpan = new SizeFilterRes(filter.from, filter.until);
+                dialog.SizeSpan = filter.sizeFilterRes;
             }
             DialogResult res = dialog.ShowDialog();
             if (res == DialogResult.OK)
             {
                 SizeFilterRes sizeFilterRes = dialog.SizeSpan;
-                fileFilters[idx] = new SizeFilter(sizeFilterRes.from, sizeFilterRes.until);
+                fileFilters[idx] = new SizeFilter(sizeFilterRes);
             }
         }
 

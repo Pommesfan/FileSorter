@@ -48,7 +48,6 @@
             comboBoxSizeFrom.Name = "comboBoxSizeFrom";
             comboBoxSizeFrom.Size = new Size(93, 23);
             comboBoxSizeFrom.TabIndex = 0;
-            comboBoxSizeFrom.SelectedIndexChanged += comboBoxSizeFrom_SelectedIndexChanged;
             // 
             // comboBoxSizeUntil
             // 
@@ -58,7 +57,6 @@
             comboBoxSizeUntil.Name = "comboBoxSizeUntil";
             comboBoxSizeUntil.Size = new Size(93, 23);
             comboBoxSizeUntil.TabIndex = 1;
-            comboBoxSizeUntil.SelectedIndexChanged += comboBoxSizeUntil_SelectedIndexChanged;
             // 
             // checkBoxSizeFrom
             // 
@@ -90,7 +88,6 @@
             textBoxSizeFrom.Name = "textBoxSizeFrom";
             textBoxSizeFrom.Size = new Size(126, 23);
             textBoxSizeFrom.TabIndex = 4;
-            textBoxSizeFrom.TextChanged += textBoxSizeFrom_TextChanged;
             // 
             // textBoxSizeUntil
             // 
@@ -98,17 +95,16 @@
             textBoxSizeUntil.Name = "textBoxSizeUntil";
             textBoxSizeUntil.Size = new Size(126, 23);
             textBoxSizeUntil.TabIndex = 5;
-            textBoxSizeUntil.TextChanged += textBoxSizeUntil_TextChanged;
             // 
             // btnOk
             // 
-            btnOk.DialogResult = DialogResult.OK;
             btnOk.Location = new Point(12, 128);
             btnOk.Name = "btnOk";
             btnOk.Size = new Size(110, 23);
             btnOk.TabIndex = 6;
             btnOk.Text = "Ok";
             btnOk.UseVisualStyleBackColor = true;
+            btnOk.Click += btnOk_Click;
             // 
             // textBoxInsertSizeFrom
             // 
@@ -130,7 +126,7 @@
             // 
             // btnCancel
             // 
-            btnCancel.DialogResult = DialogResult.OK;
+            btnCancel.DialogResult = DialogResult.Cancel;
             btnCancel.Location = new Point(128, 128);
             btnCancel.Name = "btnCancel";
             btnCancel.Size = new Size(109, 23);

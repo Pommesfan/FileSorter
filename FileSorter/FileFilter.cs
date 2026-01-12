@@ -99,20 +99,18 @@
     }
     public class SizeFilter : FileFilter
     {
-        public readonly int from;
-        public readonly int until;
-        public SizeFilter(int from, int until)
+        public readonly SizeFilterRes sizeFilterRes;
+        public SizeFilter(SizeFilterRes sizeFilterRes)
         {
-            this.from = from;
-            this.until = until;
+            this.sizeFilterRes = sizeFilterRes;
         }
 
         public override bool validate(FileInfo file)
         {
             long size = file.Length;
-            if (from != -1 && size < from)
+            if (sizeFilterRes.from != -1 && size < sizeFilterRes.absoluteSizeFrom())
                 return false;
-            if(until != -1 && size > until)
+            if(sizeFilterRes.until != -1 && size > sizeFilterRes.absoluteSizeUntil())
                 return false;
             return true;
         }
