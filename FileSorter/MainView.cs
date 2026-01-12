@@ -55,12 +55,22 @@ namespace FileSorter
 
             numberFilesFound = 0;
             numberFilesSorted = 0;
-            int selection = selectSortMode.SelectedIndex;
 
             DirectoryInfo dirInfoSrc = new DirectoryInfo(textBoxSource.Text);
             DirectoryInfo dirInfoDst = new DirectoryInfo(textBoxDestination.Text);
-            FileInfo[] files = dirInfoSrc.GetFiles();
 
+            int recursionDepth;
+            if (!getRecursionDepth(out recursionDepth))
+            {
+                return;
+            }
+            sort_recursive(selectSortMode.SelectedIndex, dirInfoSrc, dirInfoDst, recursionDepth);
+            MessageBox.Show(numberFilesFound + " Dateien gefunden\ndavon " + numberFilesSorted + " sortiert");
+        }
+
+        private void sort_recursive(int selection, DirectoryInfo dirInfoSrc, DirectoryInfo dirInfoDst, int recursionDepth)
+        {
+            FileInfo[] files = dirInfoSrc.GetFiles();
             foreach (FileInfo file in files)
             {
                 numberFilesFound++;
@@ -80,8 +90,24 @@ namespace FileSorter
                         break;
                 }
             }
- 
-            MessageBox.Show(numberFilesFound + " Dateien gefunden\ndavon " + numberFilesSorted + " sortiert");
+
+            if(recursionDepth > 0)
+            {
+                int new_recursion_depth = recursionDepth - 1;
+                DirectoryInfo[] dirs = dirInfoSrc.GetDirectories();
+                foreach (DirectoryInfo newDirInfoSrc in dirs)
+                {
+                    sort_recursive(selection, newDirInfoSrc, dirInfoDst, new_recursion_depth);
+                }
+            }
+            else if(recursionDepth == -1) // allow limitless recursion
+            {
+                DirectoryInfo[] dirs = dirInfoSrc.GetDirectories();
+                foreach (DirectoryInfo newDirInfoSrc in dirs)
+                {
+                    sort_recursive(selection, newDirInfoSrc, dirInfoDst, -1);
+                }
+            }
         }
 
         private void noSort(FileInfo file, DirectoryInfo dirInfoDst)
@@ -141,7 +167,6 @@ namespace FileSorter
                 file.MoveTo(dst);
             }
         }
-
         private HashSet<String> getDirectoryNames(DirectoryInfo[] dirs)
         {
             HashSet<String> res = new HashSet<String>();
@@ -151,10 +176,30 @@ namespace FileSorter
             }
             return res;
         }
-
         private void sortInSubFolders_CheckedChanged(object sender, EventArgs e)
         {
-            layoutSearchDepth.Enabled = checkboxSortInSubFolders.Checked;
+            bool isChecked = checkboxSortInSubFolders.Checked;
+            layoutSearchDepth.Enabled = isChecked;
+            if (!isChecked)
+                textBoxSearchDepth.Clear();
+        }
+        private bool getRecursionDepth(out int recursionDepth)
+        {
+            recursionDepth = 0;
+            if(checkboxSortInSubFolders.Checked)
+            {
+                if(textBoxSearchDepth.Text.Length == 0)
+                {
+                    recursionDepth = -1;
+                    return true;
+                }
+                if(!int.TryParse(textBoxSearchDepth.Text, out recursionDepth))
+                {
+                    MessageBox.Show("Ungültiger Wert für Suchtiefe");
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
