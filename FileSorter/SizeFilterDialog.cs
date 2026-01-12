@@ -101,7 +101,7 @@
                 }
             }
             //for other allow comma-values
-            else if (!double.TryParse(text, out output))
+            else if (!double.TryParse(text.Replace(".", ","), out output))
             {
                 MessageBox.Show("Ungültiger Wert für Größe");
                 return false;
