@@ -37,6 +37,10 @@ namespace FileSorter
             textBoxSetFilters = new TextBox();
             textBoxSortBy = new TextBox();
             layoutSort = new FlowLayoutPanel();
+            checkboxSortInSubFolders = new CheckBox();
+            layoutSearchDepth = new FlowLayoutPanel();
+            textBoxInsertSearchDepth = new TextBox();
+            textBoxSearchDepth = new TextBox();
             checkBoxCopyOnly = new CheckBox();
             fileFilterPanel = new FileFilterPanel();
             btnAdd = new Button();
@@ -46,6 +50,7 @@ namespace FileSorter
             layoutMain = new FileFilterPanel();
             selectSource = new Button();
             layoutSort.SuspendLayout();
+            layoutSearchDepth.SuspendLayout();
             layoutFilterAndSort.SuspendLayout();
             layoutFilters.SuspendLayout();
             layoutSetUpFilter.SuspendLayout();
@@ -55,7 +60,7 @@ namespace FileSorter
             // selectDestination
             // 
             selectDestination.Anchor = AnchorStyles.Top;
-            selectDestination.Location = new Point(145, 61);
+            selectDestination.Location = new Point(146, 61);
             selectDestination.Name = "selectDestination";
             selectDestination.Size = new Size(188, 23);
             selectDestination.TabIndex = 1;
@@ -67,7 +72,7 @@ namespace FileSorter
             // 
             textBoxSource.Anchor = AnchorStyles.Top;
             textBoxSource.Enabled = false;
-            textBoxSource.Location = new Point(47, 32);
+            textBoxSource.Location = new Point(48, 32);
             textBoxSource.Name = "textBoxSource";
             textBoxSource.Size = new Size(384, 23);
             textBoxSource.TabIndex = 2;
@@ -76,7 +81,7 @@ namespace FileSorter
             // 
             textBoxDestination.Anchor = AnchorStyles.Top;
             textBoxDestination.Enabled = false;
-            textBoxDestination.Location = new Point(46, 90);
+            textBoxDestination.Location = new Point(48, 90);
             textBoxDestination.Name = "textBoxDestination";
             textBoxDestination.Size = new Size(385, 23);
             textBoxDestination.TabIndex = 3;
@@ -85,7 +90,7 @@ namespace FileSorter
             // 
             selectSortMode.DropDownStyle = ComboBoxStyle.DropDownList;
             selectSortMode.FormattingEnabled = true;
-            selectSortMode.Location = new Point(3, 38);
+            selectSortMode.Location = new Point(3, 99);
             selectSortMode.Name = "selectSortMode";
             selectSortMode.Size = new Size(188, 23);
             selectSortMode.TabIndex = 4;
@@ -96,7 +101,7 @@ namespace FileSorter
             btnSort.BackColor = Color.ForestGreen;
             btnSort.Font = new Font("Segoe UI", 16F);
             btnSort.ForeColor = Color.White;
-            btnSort.Location = new Point(182, 220);
+            btnSort.Location = new Point(184, 281);
             btnSort.Name = "btnSort";
             btnSort.Size = new Size(113, 41);
             btnSort.TabIndex = 5;
@@ -118,7 +123,7 @@ namespace FileSorter
             // 
             textBoxSortBy.Enabled = false;
             textBoxSortBy.Font = new Font("Segoe UI", 12F);
-            textBoxSortBy.Location = new Point(3, 3);
+            textBoxSortBy.Location = new Point(3, 64);
             textBoxSortBy.Name = "textBoxSortBy";
             textBoxSortBy.Size = new Size(188, 29);
             textBoxSortBy.TabIndex = 9;
@@ -128,21 +133,60 @@ namespace FileSorter
             // 
             layoutSort.AutoSize = true;
             layoutSort.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            layoutSort.Controls.Add(checkboxSortInSubFolders);
+            layoutSort.Controls.Add(layoutSearchDepth);
             layoutSort.Controls.Add(textBoxSortBy);
             layoutSort.Controls.Add(selectSortMode);
             layoutSort.Controls.Add(checkBoxCopyOnly);
             layoutSort.FlowDirection = FlowDirection.TopDown;
             layoutSort.Location = new Point(275, 3);
             layoutSort.Name = "layoutSort";
-            layoutSort.Size = new Size(194, 89);
+            layoutSort.Size = new Size(197, 150);
             layoutSort.TabIndex = 0;
+            // 
+            // checkboxSortInSubFolders
+            // 
+            checkboxSortInSubFolders.AutoSize = true;
+            checkboxSortInSubFolders.Location = new Point(3, 3);
+            checkboxSortInSubFolders.Name = "checkboxSortInSubFolders";
+            checkboxSortInSubFolders.Size = new Size(159, 19);
+            checkboxSortInSubFolders.TabIndex = 0;
+            checkboxSortInSubFolders.Text = "in Unterordnern sortieren";
+            checkboxSortInSubFolders.UseVisualStyleBackColor = true;
+            checkboxSortInSubFolders.CheckedChanged += sortInSubFolders_CheckedChanged;
+            // 
+            // layoutSearchDepth
+            // 
+            layoutSearchDepth.Controls.Add(textBoxInsertSearchDepth);
+            layoutSearchDepth.Controls.Add(textBoxSearchDepth);
+            layoutSearchDepth.Enabled = false;
+            layoutSearchDepth.Location = new Point(3, 28);
+            layoutSearchDepth.Name = "layoutSearchDepth";
+            layoutSearchDepth.Size = new Size(191, 30);
+            layoutSearchDepth.TabIndex = 13;
+            // 
+            // textBoxInsertSearchDepth
+            // 
+            textBoxInsertSearchDepth.Enabled = false;
+            textBoxInsertSearchDepth.Location = new Point(3, 3);
+            textBoxInsertSearchDepth.Name = "textBoxInsertSearchDepth";
+            textBoxInsertSearchDepth.Size = new Size(87, 23);
+            textBoxInsertSearchDepth.TabIndex = 0;
+            textBoxInsertSearchDepth.Text = "Max. Suchtiefe";
+            // 
+            // textBoxSearchDepth
+            // 
+            textBoxSearchDepth.Location = new Point(96, 3);
+            textBoxSearchDepth.Name = "textBoxSearchDepth";
+            textBoxSearchDepth.Size = new Size(92, 23);
+            textBoxSearchDepth.TabIndex = 1;
             // 
             // checkBoxCopyOnly
             // 
             checkBoxCopyOnly.AutoSize = true;
             checkBoxCopyOnly.Checked = true;
             checkBoxCopyOnly.CheckState = CheckState.Checked;
-            checkBoxCopyOnly.Location = new Point(3, 67);
+            checkBoxCopyOnly.Location = new Point(3, 128);
             checkBoxCopyOnly.Name = "checkBoxCopyOnly";
             checkBoxCopyOnly.Size = new Size(136, 19);
             checkBoxCopyOnly.TabIndex = 10;
@@ -182,7 +226,7 @@ namespace FileSorter
             layoutFilterAndSort.Controls.Add(layoutSort);
             layoutFilterAndSort.Location = new Point(3, 119);
             layoutFilterAndSort.Name = "layoutFilterAndSort";
-            layoutFilterAndSort.Size = new Size(472, 95);
+            layoutFilterAndSort.Size = new Size(475, 156);
             layoutFilterAndSort.TabIndex = 11;
             // 
             // layoutFilters
@@ -219,13 +263,13 @@ namespace FileSorter
             layoutMain.FlowDirection = FlowDirection.TopDown;
             layoutMain.Location = new Point(4, 6);
             layoutMain.Name = "layoutMain";
-            layoutMain.Size = new Size(478, 264);
+            layoutMain.Size = new Size(481, 325);
             layoutMain.TabIndex = 12;
             // 
             // selectSource
             // 
             selectSource.Anchor = AnchorStyles.Top;
-            selectSource.Location = new Point(145, 3);
+            selectSource.Location = new Point(146, 3);
             selectSource.Name = "selectSource";
             selectSource.Size = new Size(188, 23);
             selectSource.TabIndex = 0;
@@ -244,6 +288,8 @@ namespace FileSorter
             Text = "FileSorter";
             layoutSort.ResumeLayout(false);
             layoutSort.PerformLayout();
+            layoutSearchDepth.ResumeLayout(false);
+            layoutSearchDepth.PerformLayout();
             layoutFilterAndSort.ResumeLayout(false);
             layoutFilterAndSort.PerformLayout();
             layoutFilters.ResumeLayout(false);
@@ -278,5 +324,9 @@ namespace FileSorter
         private CheckBox checkBoxCopyOnly;
         private FileFilterPanel layoutMain;
         private Button selectSource;
+        private CheckBox checkboxSortInSubFolders;
+        private FlowLayoutPanel layoutSearchDepth;
+        private TextBox textBoxInsertSearchDepth;
+        private TextBox textBoxSearchDepth;
     }
 }

@@ -57,71 +57,64 @@ namespace FileSorter
             numberFilesSorted = 0;
             int selection = selectSortMode.SelectedIndex;
 
-            if(selection == 0)
+            DirectoryInfo dirInfoSrc = new DirectoryInfo(textBoxSource.Text);
+            DirectoryInfo dirInfoDst = new DirectoryInfo(textBoxDestination.Text);
+            FileInfo[] files = dirInfoSrc.GetFiles();
+
+            foreach (FileInfo file in files)
             {
-                noSort();
+                numberFilesFound++;
+                if (!filter(file))
+                    continue;
+
+                switch (selection)
+                {
+                    case 0:
+                        noSort(file, dirInfoDst);
+                        break;
+                    case 1:
+                        sortByDate(file, FileSortMode.CreationDate, dirInfoDst);
+                        break;
+                    case 2:
+                        sortByDate(file, FileSortMode.LastChangedDate, dirInfoDst);
+                        break;
+                }
             }
-            else if (selection == 1)
-            {
-                sortByDate(FileSortMode.CreationDate);
-            }
-            else if (selection == 2)
-            {
-                sortByDate(FileSortMode.LastChangedDate);
-            }
+ 
             MessageBox.Show(numberFilesFound + " Dateien gefunden\ndavon " + numberFilesSorted + " sortiert");
         }
 
-        private void noSort()
+        private void noSort(FileInfo file, DirectoryInfo dirInfoDst)
         {
-            DirectoryInfo dirInfoSrc = new DirectoryInfo(textBoxSource.Text);
-            DirectoryInfo dirInfoDst = new DirectoryInfo(textBoxDestination.Text);
-            FileInfo[] files = dirInfoSrc.GetFiles();
-            foreach (FileInfo file in files)
-            {
-                numberFilesFound++;
-                if (!filter(file))
-                    continue;
-                copyOrMove(file, dirInfoDst.FullName + "\\" + file.Name);
-                numberFilesSorted++;
-            }
+            copyOrMove(file, dirInfoDst.FullName + "\\" + file.Name);
+            numberFilesSorted++;
         }
 
-        private void sortByDate(FileSortMode fileSortMode)
+        private void sortByDate(FileInfo file, FileSortMode fileSortMode, DirectoryInfo dirInfoDst)
         {
-            DirectoryInfo dirInfoSrc = new DirectoryInfo(textBoxSource.Text);
-            DirectoryInfo dirInfoDst = new DirectoryInfo(textBoxDestination.Text);
-
-            FileInfo[] files = dirInfoSrc.GetFiles();
             HashSet<String> subDirsDst = getDirectoryNames(dirInfoDst.GetDirectories());
-            foreach (FileInfo file in files)
+            //determine which date to sort
+            String dateString;
+            if (fileSortMode == FileSortMode.CreationDate)
             {
-                numberFilesFound++;
-                if (!filter(file))
-                    continue;
-                //determine which date to sort
-                String dateString;
-                if (fileSortMode == FileSortMode.CreationDate)
-                {
-                    dateString = file.CreationTime.ToShortDateString();
-                }
-                else if (fileSortMode == FileSortMode.LastChangedDate)
-                {
-                    dateString = file.LastAccessTime.ToShortDateString();
-                }
-                else
-                {
-                    throw new ArgumentException("FileSortMode not handled");
-                }
-
-                if (!subDirsDst.Contains(dateString))
-                {
-                    dirInfoDst.CreateSubdirectory(dateString);
-                    subDirsDst.Add(dateString);
-                }
-                copyOrMove(file, dirInfoDst.FullName + "\\" + dateString + "\\" + file.Name);
-                numberFilesSorted++;
+                dateString = file.CreationTime.ToShortDateString();
             }
+            else if (fileSortMode == FileSortMode.LastChangedDate)
+            {
+                dateString = file.LastAccessTime.ToShortDateString();
+            }
+            else
+            {
+                throw new ArgumentException("FileSortMode not handled");
+            }
+
+            if (!subDirsDst.Contains(dateString))
+            {
+                dirInfoDst.CreateSubdirectory(dateString);
+                subDirsDst.Add(dateString);
+            }
+            copyOrMove(file, dirInfoDst.FullName + "\\" + dateString + "\\" + file.Name);
+            numberFilesSorted++;
         }
 
         private bool filter(FileInfo file)
@@ -139,10 +132,11 @@ namespace FileSorter
 
         private void copyOrMove(FileInfo file, String dst)
         {
-            if(checkBoxCopyOnly.Checked)
+            if (checkBoxCopyOnly.Checked)
             {
                 file.CopyTo(dst);
-            } else
+            }
+            else
             {
                 file.MoveTo(dst);
             }
@@ -156,6 +150,11 @@ namespace FileSorter
                 res.Add(dir.Name);
             }
             return res;
+        }
+
+        private void sortInSubFolders_CheckedChanged(object sender, EventArgs e)
+        {
+            layoutSearchDepth.Enabled = checkboxSortInSubFolders.Checked;
         }
     }
 }
