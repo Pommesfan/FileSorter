@@ -8,6 +8,7 @@ namespace FileSorter
         public static String[] sortModeText = ["Keine Sortierung", "Erstelldatum", "Zuletzt geändert"];
         public static int numberFilesFound = 0;
         public static int numberFilesSorted = 0;
+        private String? currentUrlUserConfig = null;
         public FileSorter()
         {
             InitializeComponent();
@@ -222,6 +223,21 @@ namespace FileSorter
 
         private void menuItemSaveIn_Click(object sender, EventArgs e)
         {
+            SaveFileDialog dialog = new SaveFileDialog();
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                save(dialog.FileName);
+                currentUrlUserConfig = dialog.FileName;
+            }
+        }
+        private void menuItemSave_Click(object sender, EventArgs e)
+        {
+            if(currentUrlUserConfig != null)
+                save(currentUrlUserConfig);
+        }
+
+        private void save(String fileName)
+        {
             FileFilter[] fileFilters = new FileFilter[fileFilterPanel.Count];
             for (int i = 0; i < fileFilterPanel.Count; i++)
             {
@@ -250,15 +266,6 @@ namespace FileSorter
                 sortInSubfolders = -2;
             }
             FileModel fileModel = new FileModel(textBoxSource.Text, textBoxDestination.Text, fileFilters, sortInSubfolders, selectSortMode.SelectedIndex, checkBoxCopyOnly.Checked);
-            SaveFileDialog dialog = new SaveFileDialog();
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                save(dialog.FileName, fileModel);
-            }
-        }
-
-        private void save(String fileName, FileModel fileModel)
-        {
             StreamWriter writer = new StreamWriter(fileName);
             String json = fileModel.json();
             writer.Write(json);
@@ -271,6 +278,7 @@ namespace FileSorter
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 open(dialog.FileName);
+                currentUrlUserConfig = dialog.FileName;
             }
         }
 
@@ -314,6 +322,7 @@ namespace FileSorter
                 selectSortMode.SelectedIndex = model.sortMode;
                 checkBoxCopyOnly.Checked = model.copyOnly;
             }
+            reader.Close();
         }
     }
 }

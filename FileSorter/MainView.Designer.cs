@@ -345,6 +345,7 @@ namespace FileSorter
             menuItemSave.Name = "menuItemSave";
             menuItemSave.Size = new Size(180, 22);
             menuItemSave.Text = "Speichern";
+            menuItemSave.Click += menuItemSave_Click;
             // 
             // FileSorter
             // 
