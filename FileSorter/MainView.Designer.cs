@@ -49,12 +49,15 @@ namespace FileSorter
             layoutSetUpFilter = new FlowLayoutPanel();
             layoutMain = new FileFilterPanel();
             selectSource = new Button();
+            layoutSortAndPreview = new FlowLayoutPanel();
+            btnPreview = new Button();
             layoutSort.SuspendLayout();
             layoutSearchDepth.SuspendLayout();
             layoutFilterAndSort.SuspendLayout();
             layoutFilters.SuspendLayout();
             layoutSetUpFilter.SuspendLayout();
             layoutMain.SuspendLayout();
+            layoutSortAndPreview.SuspendLayout();
             SuspendLayout();
             // 
             // selectDestination
@@ -99,9 +102,9 @@ namespace FileSorter
             // 
             btnSort.Anchor = AnchorStyles.Top;
             btnSort.BackColor = Color.ForestGreen;
-            btnSort.Font = new Font("Segoe UI", 16F);
+            btnSort.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSort.ForeColor = Color.White;
-            btnSort.Location = new Point(184, 281);
+            btnSort.Location = new Point(3, 3);
             btnSort.Name = "btnSort";
             btnSort.Size = new Size(113, 41);
             btnSort.TabIndex = 5;
@@ -259,11 +262,11 @@ namespace FileSorter
             layoutMain.Controls.Add(selectDestination);
             layoutMain.Controls.Add(textBoxDestination);
             layoutMain.Controls.Add(layoutFilterAndSort);
-            layoutMain.Controls.Add(btnSort);
+            layoutMain.Controls.Add(layoutSortAndPreview);
             layoutMain.FlowDirection = FlowDirection.TopDown;
             layoutMain.Location = new Point(4, 6);
             layoutMain.Name = "layoutMain";
-            layoutMain.Size = new Size(481, 325);
+            layoutMain.Size = new Size(481, 331);
             layoutMain.TabIndex = 12;
             // 
             // selectSource
@@ -276,6 +279,30 @@ namespace FileSorter
             selectSource.Text = "Quelle auswählen";
             selectSource.UseVisualStyleBackColor = true;
             selectSource.Click += selectLocation;
+            // 
+            // layoutSortAndPreview
+            // 
+            layoutSortAndPreview.Anchor = AnchorStyles.Top;
+            layoutSortAndPreview.AutoSize = true;
+            layoutSortAndPreview.Controls.Add(btnSort);
+            layoutSortAndPreview.Controls.Add(btnPreview);
+            layoutSortAndPreview.Location = new Point(122, 281);
+            layoutSortAndPreview.Name = "layoutSortAndPreview";
+            layoutSortAndPreview.Size = new Size(237, 47);
+            layoutSortAndPreview.TabIndex = 13;
+            // 
+            // btnPreview
+            // 
+            btnPreview.BackColor = Color.Yellow;
+            btnPreview.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnPreview.ForeColor = Color.RosyBrown;
+            btnPreview.Location = new Point(122, 3);
+            btnPreview.Name = "btnPreview";
+            btnPreview.Size = new Size(112, 41);
+            btnPreview.TabIndex = 6;
+            btnPreview.Text = "Vorschau";
+            btnPreview.UseVisualStyleBackColor = false;
+            btnPreview.Click += btnPreview_Click;
             // 
             // FileSorter
             // 
@@ -298,6 +325,7 @@ namespace FileSorter
             layoutSetUpFilter.PerformLayout();
             layoutMain.ResumeLayout(false);
             layoutMain.PerformLayout();
+            layoutSortAndPreview.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -328,5 +356,7 @@ namespace FileSorter
         private FlowLayoutPanel layoutSearchDepth;
         private TextBox textBoxInsertSearchDepth;
         private TextBox textBoxSearchDepth;
+        private FlowLayoutPanel layoutSortAndPreview;
+        private Button btnPreview;
     }
 }

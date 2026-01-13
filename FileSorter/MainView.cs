@@ -6,6 +6,7 @@ namespace FileSorter
         public static String[] sortModeText = ["Keine Sortierung", "Erstelldatum", "Zuletzt geändert"];
         public static int numberFilesFound = 0;
         public static int numberFilesSorted = 0;
+        private FileAction fileAction;
         public FileSorter()
         {
             InitializeComponent();
@@ -53,22 +54,31 @@ namespace FileSorter
                 return;
             }
 
-            numberFilesFound = 0;
-            numberFilesSorted = 0;
-
             DirectoryInfo dirInfoSrc = new DirectoryInfo(textBoxSource.Text);
             DirectoryInfo dirInfoDst = new DirectoryInfo(textBoxDestination.Text);
+            if (checkBoxCopyOnly.Checked)
+                fileAction = new CopyAction(dirInfoDst.FullName);
+            else
+                fileAction = new MoveAction(dirInfoDst.FullName);
+            sort(dirInfoSrc);
+        }
+
+        private void sort(DirectoryInfo dirInfoDst)
+        {
+            numberFilesFound = 0;
+            numberFilesSorted = 0;
 
             int recursionDepth;
             if (!getRecursionDepth(out recursionDepth))
             {
                 return;
             }
-            sort_recursive(selectSortMode.SelectedIndex, dirInfoSrc, dirInfoDst, recursionDepth);
+            HashSet<String> subDirsDst = getDirectoryNames(fileAction.getDirectories());
+            sort_recursive(selectSortMode.SelectedIndex, subDirsDst, dirInfoDst, recursionDepth);
             MessageBox.Show(numberFilesFound + " Dateien gefunden\ndavon " + numberFilesSorted + " sortiert");
         }
 
-        private void sort_recursive(int selection, DirectoryInfo dirInfoSrc, DirectoryInfo dirInfoDst, int recursionDepth)
+        private void sort_recursive(int selection, HashSet<String> subDirsDst, DirectoryInfo dirInfoSrc, int recursionDepth)
         {
             FileInfo[] files = dirInfoSrc.GetFiles();
             foreach (FileInfo file in files)
@@ -80,45 +90,44 @@ namespace FileSorter
                 switch (selection)
                 {
                     case 0:
-                        noSort(file, dirInfoDst);
+                        noSort(file);
                         break;
                     case 1:
-                        sortByDate(file, FileSortMode.CreationDate, dirInfoDst);
+                        sortByDate(file, subDirsDst, FileSortMode.CreationDate);
                         break;
                     case 2:
-                        sortByDate(file, FileSortMode.LastChangedDate, dirInfoDst);
+                        sortByDate(file, subDirsDst, FileSortMode.LastChangedDate);
                         break;
                 }
             }
 
-            if(recursionDepth > 0)
+            if (recursionDepth > 0)
             {
                 int new_recursion_depth = recursionDepth - 1;
                 DirectoryInfo[] dirs = dirInfoSrc.GetDirectories();
                 foreach (DirectoryInfo newDirInfoSrc in dirs)
                 {
-                    sort_recursive(selection, newDirInfoSrc, dirInfoDst, new_recursion_depth);
+                    sort_recursive(selection, subDirsDst, newDirInfoSrc, new_recursion_depth);
                 }
             }
-            else if(recursionDepth == -1) // allow limitless recursion
+            else if (recursionDepth == -1) // allow limitless recursion
             {
                 DirectoryInfo[] dirs = dirInfoSrc.GetDirectories();
                 foreach (DirectoryInfo newDirInfoSrc in dirs)
                 {
-                    sort_recursive(selection, newDirInfoSrc, dirInfoDst, -1);
+                    sort_recursive(selection, subDirsDst, newDirInfoSrc, -1);
                 }
             }
         }
 
-        private void noSort(FileInfo file, DirectoryInfo dirInfoDst)
+        private void noSort(FileInfo file)
         {
-            copyOrMove(file, dirInfoDst.FullName + "\\" + file.Name);
+            fileAction.action(file, "");
             numberFilesSorted++;
         }
 
-        private void sortByDate(FileInfo file, FileSortMode fileSortMode, DirectoryInfo dirInfoDst)
+        private void sortByDate(FileInfo file, HashSet<String> subDirsDst, FileSortMode fileSortMode)
         {
-            HashSet<String> subDirsDst = getDirectoryNames(dirInfoDst.GetDirectories());
             //determine which date to sort
             String dateString;
             if (fileSortMode == FileSortMode.CreationDate)
@@ -136,10 +145,10 @@ namespace FileSorter
 
             if (!subDirsDst.Contains(dateString))
             {
-                dirInfoDst.CreateSubdirectory(dateString);
+                fileAction.createSubDirectory(dateString);
                 subDirsDst.Add(dateString);
             }
-            copyOrMove(file, dirInfoDst.FullName + "\\" + dateString + "\\" + file.Name);
+            fileAction.action(file, dateString);
             numberFilesSorted++;
         }
 
@@ -154,18 +163,6 @@ namespace FileSorter
                     return false;
             }
             return true;
-        }
-
-        private void copyOrMove(FileInfo file, String dst)
-        {
-            if (checkBoxCopyOnly.Checked)
-            {
-                file.CopyTo(dst);
-            }
-            else
-            {
-                file.MoveTo(dst);
-            }
         }
         private HashSet<String> getDirectoryNames(DirectoryInfo[] dirs)
         {
@@ -186,20 +183,36 @@ namespace FileSorter
         private bool getRecursionDepth(out int recursionDepth)
         {
             recursionDepth = 0;
-            if(checkboxSortInSubFolders.Checked)
+            if (checkboxSortInSubFolders.Checked)
             {
-                if(textBoxSearchDepth.Text.Length == 0)
+                if (textBoxSearchDepth.Text.Length == 0)
                 {
                     recursionDepth = -1;
                     return true;
                 }
-                if(!int.TryParse(textBoxSearchDepth.Text, out recursionDepth))
+                if (!int.TryParse(textBoxSearchDepth.Text, out recursionDepth))
                 {
                     MessageBox.Show("Ungültiger Wert für Suchtiefe");
                     return false;
                 }
             }
             return true;
+        }
+
+        private void btnPreview_Click(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(textBoxSource.Text))
+            {
+                MessageBox.Show("Bitte Quelle auswählen");
+                return;
+            }
+
+            DirectoryInfo dirInfoSrc = new DirectoryInfo(textBoxSource.Text);
+            SortPreview sortPreview = new SortPreview();
+            fileAction = new PreviewAction(sortPreview, sortPreview);
+            sort(dirInfoSrc);
+
+            sortPreview.ShowDialog();
         }
     }
 }
