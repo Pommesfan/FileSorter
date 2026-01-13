@@ -6,7 +6,6 @@ namespace FileSorter
         public static String[] sortModeText = ["Keine Sortierung", "Erstelldatum", "Zuletzt geändert"];
         public static int numberFilesFound = 0;
         public static int numberFilesSorted = 0;
-        private FileAction fileAction;
         public FileSorter()
         {
             InitializeComponent();
@@ -56,14 +55,15 @@ namespace FileSorter
 
             DirectoryInfo dirInfoSrc = new DirectoryInfo(textBoxSource.Text);
             DirectoryInfo dirInfoDst = new DirectoryInfo(textBoxDestination.Text);
+            FileAction fileAction;
             if (checkBoxCopyOnly.Checked)
-                fileAction = new CopyAction(dirInfoDst.FullName);
+                fileAction = new CopyAction(dirInfoDst);
             else
-                fileAction = new MoveAction(dirInfoDst.FullName);
-            sort(dirInfoSrc);
+                fileAction = new MoveAction(dirInfoDst);
+            sort(dirInfoSrc, fileAction);
         }
 
-        private void sort(DirectoryInfo dirInfoDst)
+        private void sort(DirectoryInfo dirInfoSrc, FileAction fileAction)
         {
             numberFilesFound = 0;
             numberFilesSorted = 0;
@@ -74,11 +74,11 @@ namespace FileSorter
                 return;
             }
             HashSet<String> subDirsDst = getDirectoryNames(fileAction.getDirectories());
-            sort_recursive(selectSortMode.SelectedIndex, subDirsDst, dirInfoDst, recursionDepth);
+            sort_recursive(selectSortMode.SelectedIndex, fileAction, subDirsDst, dirInfoSrc, recursionDepth);
             MessageBox.Show(numberFilesFound + " Dateien gefunden\ndavon " + numberFilesSorted + " sortiert");
         }
 
-        private void sort_recursive(int selection, HashSet<String> subDirsDst, DirectoryInfo dirInfoSrc, int recursionDepth)
+        private void sort_recursive(int selection, FileAction fileAction, HashSet<String> subDirsDst, DirectoryInfo dirInfoSrc, int recursionDepth)
         {
             FileInfo[] files = dirInfoSrc.GetFiles();
             foreach (FileInfo file in files)
@@ -90,13 +90,13 @@ namespace FileSorter
                 switch (selection)
                 {
                     case 0:
-                        noSort(file);
+                        noSort(file, fileAction);
                         break;
                     case 1:
-                        sortByDate(file, subDirsDst, FileSortMode.CreationDate);
+                        sortByDate(file, fileAction, subDirsDst, FileSortMode.CreationDate);
                         break;
                     case 2:
-                        sortByDate(file, subDirsDst, FileSortMode.LastChangedDate);
+                        sortByDate(file, fileAction, subDirsDst, FileSortMode.LastChangedDate);
                         break;
                 }
             }
@@ -107,7 +107,7 @@ namespace FileSorter
                 DirectoryInfo[] dirs = dirInfoSrc.GetDirectories();
                 foreach (DirectoryInfo newDirInfoSrc in dirs)
                 {
-                    sort_recursive(selection, subDirsDst, newDirInfoSrc, new_recursion_depth);
+                    sort_recursive(selection, fileAction, subDirsDst, newDirInfoSrc, new_recursion_depth);
                 }
             }
             else if (recursionDepth == -1) // allow limitless recursion
@@ -115,18 +115,18 @@ namespace FileSorter
                 DirectoryInfo[] dirs = dirInfoSrc.GetDirectories();
                 foreach (DirectoryInfo newDirInfoSrc in dirs)
                 {
-                    sort_recursive(selection, subDirsDst, newDirInfoSrc, -1);
+                    sort_recursive(selection, fileAction, subDirsDst, newDirInfoSrc, -1);
                 }
             }
         }
 
-        private void noSort(FileInfo file)
+        private void noSort(FileInfo file, FileAction fileAction)
         {
             fileAction.action(file, "");
             numberFilesSorted++;
         }
 
-        private void sortByDate(FileInfo file, HashSet<String> subDirsDst, FileSortMode fileSortMode)
+        private void sortByDate(FileInfo file, FileAction fileAction, HashSet<String> subDirsDst, FileSortMode fileSortMode)
         {
             //determine which date to sort
             String dateString;
@@ -209,8 +209,8 @@ namespace FileSorter
 
             DirectoryInfo dirInfoSrc = new DirectoryInfo(textBoxSource.Text);
             SortPreview sortPreview = new SortPreview();
-            fileAction = new PreviewAction(sortPreview, sortPreview);
-            sort(dirInfoSrc);
+            FileAction fileAction = new PreviewAction(sortPreview, sortPreview);
+            sort(dirInfoSrc, fileAction);
 
             sortPreview.ShowDialog();
         }

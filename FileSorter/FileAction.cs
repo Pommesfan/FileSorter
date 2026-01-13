@@ -2,30 +2,19 @@
 {
     public interface FileAction
     {
-        public void action(FileInfo file, String folderTo);
-        public void createSubDirectory(String name);
+        public abstract void action(FileInfo file, String folderTo);
+        public abstract void createSubDirectory(String name);
         public DirectoryInfo[] getDirectories();
     }
 
-    public class CopyAction : FileAction
+    public abstract class RealFileAction : FileAction
     {
-        public readonly String dst;
         private DirectoryInfo dstInfo;
-        public CopyAction(String dst)
-        {
-            this.dst = dst;
-            this.dstInfo = new DirectoryInfo(dst);
-        }
-        public void action(FileInfo file, String folderTo)
-        {
-            String url;
-            if (folderTo.Length == 0)
-                url = dst + "\\" + file.Name;
-            else
-                url = dst + "\\" + folderTo + "\\" + file.Name;
-            file.CopyTo(url);
-        }
 
+        public RealFileAction(DirectoryInfo dstInfo)
+        {
+            this.dstInfo = dstInfo;
+        }
         public void createSubDirectory(string name)
         {
             dstInfo.CreateSubdirectory(name);
@@ -34,35 +23,34 @@
         public DirectoryInfo[] getDirectories()
         {
             return dstInfo.GetDirectories();
+        }
+
+        protected String createUrl(FileInfo file, String folderTo)
+        {
+            if (folderTo.Length == 0)
+                return dstInfo.FullName + "\\" + file.Name;
+            else
+                return dstInfo.FullName + "\\" + folderTo + "\\" + file.Name;
+        }
+
+        public abstract void action(FileInfo file, String folderTo);
+    }
+
+    public class CopyAction : RealFileAction
+    {
+        public CopyAction(DirectoryInfo dstInfo) : base(dstInfo) { }
+        public override void action(FileInfo file, String folderTo)
+        {
+            file.CopyTo(createUrl(file, folderTo));
         }
     }
 
-    public class MoveAction : FileAction
+    public class MoveAction : RealFileAction
     {
-        public readonly String dst;
-        private DirectoryInfo dstInfo;
-        public MoveAction(String dst) {
-            this.dst = dst;
-            this.dstInfo = new DirectoryInfo(dst);
-        }
-        public void action(FileInfo file, String folderTo)
+        public MoveAction(DirectoryInfo dirInfoDst) : base(dirInfoDst) { }
+        public override void action(FileInfo file, String folderTo)
         {
-            String url;
-            if (folderTo.Length == 0)
-                url = dst + "\\" + file.Name;
-            else
-                url = dst + "\\" + folderTo + "\\" + file.Name;
-            file.MoveTo(url);
-        }
-
-        public void createSubDirectory(string name)
-        {
-            dstInfo.CreateSubdirectory(name);
-        }
-
-        public DirectoryInfo[] getDirectories()
-        {
-            return dstInfo.GetDirectories();
+            file.MoveTo(createUrl(file, folderTo));
         }
     }
     public class PreviewAction : FileAction
