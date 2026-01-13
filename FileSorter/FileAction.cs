@@ -5,6 +5,7 @@
         public abstract void action(FileInfo file, String folderTo);
         public abstract void createSubDirectory(String name);
         public DirectoryInfo[] getDirectories();
+        public abstract void addFilteredOut(String name);
     }
 
     public abstract class RealFileAction : FileAction
@@ -34,6 +35,11 @@
         }
 
         public abstract void action(FileInfo file, String folderTo);
+
+        public void addFilteredOut(string name)
+        {
+            //on copy or move ignore, used in sort preview to see what is not moved
+        }
     }
 
     public class CopyAction : RealFileAction
@@ -77,6 +83,11 @@
         public DirectoryInfo[] getDirectories()
         {
             return new DirectoryInfo[] { };
+        }
+
+        public void addFilteredOut(string name)
+        {
+            dialog.addSortedOutFile(name);
         }
     }
 }

@@ -85,7 +85,10 @@ namespace FileSorter
             {
                 numberFilesFound++;
                 if (!filter(file))
+                {
+                    fileAction.addFilteredOut(file.Name);
                     continue;
+                }
 
                 switch (selection)
                 {

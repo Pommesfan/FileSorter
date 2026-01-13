@@ -30,5 +30,10 @@
             else
                 return res[0];
         }
+
+        public void addSortedOutFile(String name)
+        {
+            listBoxFilteredOutItems.Items.Add(name);
+        }
     }
 }
