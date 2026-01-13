@@ -55,6 +55,7 @@
             // 
             // textBoxShowFilteredOutItems
             // 
+            textBoxShowFilteredOutItems.Enabled = false;
             textBoxShowFilteredOutItems.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             textBoxShowFilteredOutItems.Location = new Point(3, 3);
             textBoxShowFilteredOutItems.Name = "textBoxShowFilteredOutItems";

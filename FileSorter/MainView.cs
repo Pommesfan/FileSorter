@@ -238,8 +238,7 @@ namespace FileSorter
                 }
                 else
                 {
-                    int depth;
-                    if (!int.TryParse(text, out depth))
+                    if (!int.TryParse(text, out sortInSubfolders))
                     {
                         MessageBox.Show("Ungültiger Wert für Suchtiefe");
                         return;
@@ -269,7 +268,7 @@ namespace FileSorter
         private void menuItemOpen_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            if(dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
                 open(dialog.FileName);
             }
@@ -278,8 +277,43 @@ namespace FileSorter
         private void open(string fileName)
         {
             StreamReader reader = new StreamReader(fileName);
-            FileModel? model = FileModel.fromJson(reader.ReadToEnd());
+            FileModel? model;
+            try
+            {
+                model = FileModel.fromJson(reader.ReadToEnd());
+            }
+            catch
+            {
+                MessageBox.Show("Fehler beim Öffnen");
+                return;
+            }
             Console.WriteLine();
+            if (model == null)
+            {
+                MessageBox.Show("Fehler beim Öffnen");
+            }
+            else
+            {
+                textBoxSource.Text = model.sortSrc;
+                textBoxDestination.Text = model.sortDst;
+                int subfolders = model.sortInSubFolder;
+                if (subfolders == -2)
+                {
+                    checkboxSortInSubFolders.Checked = false;
+                }
+                else if (subfolders == -1)
+                {
+                    checkboxSortInSubFolders.Checked = true;
+                    textBoxSearchDepth.Text = "";
+                }
+                else
+                {
+                    checkboxSortInSubFolders.Checked = true;
+                    textBoxSearchDepth.Text = subfolders.ToString();
+                }
+                selectSortMode.SelectedIndex = model.sortMode;
+                checkBoxCopyOnly.Checked = model.copyOnly;
+            }
         }
     }
 }
