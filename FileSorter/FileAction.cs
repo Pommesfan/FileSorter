@@ -2,10 +2,10 @@
 {
     public interface FileAction
     {
-        public abstract void action(FileInfo file, String folderTo);
-        public abstract void createSubDirectory(String name);
-        public DirectoryInfo[] getDirectories();
-        public abstract void addFilteredOut(String name);
+        void action(FileInfo file, String folderTo);
+        void createSubDirectory(String name);
+        DirectoryInfo[] getDirectories();
+        void addFilteredOut(String name);
     }
 
     public abstract class RealFileAction : FileAction

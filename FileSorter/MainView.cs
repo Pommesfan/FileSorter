@@ -1,3 +1,5 @@
+using System.Runtime.Serialization.Formatters.Binary;
+
 namespace FileSorter
 {
     public enum FileSortMode { CreationDate, LastChangedDate}
@@ -216,6 +218,68 @@ namespace FileSorter
             sort(dirInfoSrc, fileAction);
 
             sortPreview.ShowDialog();
+        }
+
+        private void menuItemSaveIn_Click(object sender, EventArgs e)
+        {
+            FileFilter[] fileFilters = new FileFilter[fileFilterPanel.Count];
+            for (int i = 0; i < fileFilterPanel.Count; i++)
+            {
+                fileFilters[i] = fileFilterPanel[i];
+            }
+
+            int sortInSubfolders = 0; // -1 replesents selected search in subfolders but by no limit, -2 replesents no search in subfolders
+            if (checkboxSortInSubFolders.Checked)
+            {
+                String text = textBoxSearchDepth.Text;
+                if (text.Length == 0)
+                {
+                    sortInSubfolders = -1;
+                }
+                else
+                {
+                    int depth;
+                    if (!int.TryParse(text, out depth))
+                    {
+                        MessageBox.Show("Ungültiger Wert für Suchtiefe");
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                sortInSubfolders = -2;
+            }
+            FileModel fileModel = new FileModel(textBoxSource.Text, textBoxDestination.Text, fileFilters, sortInSubfolders, selectSortMode.SelectedIndex, checkBoxCopyOnly.Checked);
+            SaveFileDialog dialog = new SaveFileDialog();
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                save(dialog.FileName, fileModel);
+            }
+        }
+
+        private void save(String fileName, FileModel fileModel)
+        {
+            StreamWriter writer = new StreamWriter(fileName);
+            String json = fileModel.json();
+            writer.Write(json);
+            writer.Close();
+        }
+
+        private void menuItemOpen_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            if(dialog.ShowDialog() == DialogResult.OK)
+            {
+                open(dialog.FileName);
+            }
+        }
+
+        private void open(string fileName)
+        {
+            StreamReader reader = new StreamReader(fileName);
+            FileModel? model = FileModel.fromJson(reader.ReadToEnd());
+            Console.WriteLine();
         }
     }
 }

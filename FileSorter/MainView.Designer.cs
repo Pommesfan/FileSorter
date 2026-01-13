@@ -51,6 +51,11 @@ namespace FileSorter
             selectSource = new Button();
             layoutSortAndPreview = new FlowLayoutPanel();
             btnPreview = new Button();
+            menuStrip2 = new MenuStrip();
+            fileSorterMenu = new ToolStripMenuItem();
+            menuItemOpen = new ToolStripMenuItem();
+            menuItemSaveIn = new ToolStripMenuItem();
+            menuItemSave = new ToolStripMenuItem();
             layoutSort.SuspendLayout();
             layoutSearchDepth.SuspendLayout();
             layoutFilterAndSort.SuspendLayout();
@@ -58,6 +63,7 @@ namespace FileSorter
             layoutSetUpFilter.SuspendLayout();
             layoutMain.SuspendLayout();
             layoutSortAndPreview.SuspendLayout();
+            menuStrip2.SuspendLayout();
             SuspendLayout();
             // 
             // selectDestination
@@ -264,7 +270,7 @@ namespace FileSorter
             layoutMain.Controls.Add(layoutFilterAndSort);
             layoutMain.Controls.Add(layoutSortAndPreview);
             layoutMain.FlowDirection = FlowDirection.TopDown;
-            layoutMain.Location = new Point(4, 6);
+            layoutMain.Location = new Point(11, 27);
             layoutMain.Name = "layoutMain";
             layoutMain.Size = new Size(481, 331);
             layoutMain.TabIndex = 12;
@@ -304,13 +310,51 @@ namespace FileSorter
             btnPreview.UseVisualStyleBackColor = false;
             btnPreview.Click += btnPreview_Click;
             // 
+            // menuStrip2
+            // 
+            menuStrip2.Items.AddRange(new ToolStripItem[] { fileSorterMenu });
+            menuStrip2.Location = new Point(0, 0);
+            menuStrip2.Name = "menuStrip2";
+            menuStrip2.Size = new Size(504, 24);
+            menuStrip2.TabIndex = 13;
+            menuStrip2.Text = "menuStrip2";
+            // 
+            // fileSorterMenu
+            // 
+            fileSorterMenu.DropDownItems.AddRange(new ToolStripItem[] { menuItemOpen, menuItemSaveIn, menuItemSave });
+            fileSorterMenu.Name = "fileSorterMenu";
+            fileSorterMenu.Size = new Size(68, 20);
+            fileSorterMenu.Text = "FileSorter";
+            // 
+            // menuItemOpen
+            // 
+            menuItemOpen.Name = "menuItemOpen";
+            menuItemOpen.Size = new Size(180, 22);
+            menuItemOpen.Text = "Öffnen";
+            menuItemOpen.Click += menuItemOpen_Click;
+            // 
+            // menuItemSaveIn
+            // 
+            menuItemSaveIn.Name = "menuItemSaveIn";
+            menuItemSaveIn.Size = new Size(180, 22);
+            menuItemSaveIn.Text = "Speichern unter";
+            menuItemSaveIn.Click += menuItemSaveIn_Click;
+            // 
+            // menuItemSave
+            // 
+            menuItemSave.Name = "menuItemSave";
+            menuItemSave.Size = new Size(180, 22);
+            menuItemSave.Text = "Speichern";
+            // 
             // FileSorter
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(504, 450);
+            ClientSize = new Size(504, 445);
             Controls.Add(layoutMain);
+            Controls.Add(menuStrip2);
+            MainMenuStrip = menuStrip2;
             Name = "FileSorter";
             Text = "FileSorter";
             layoutSort.ResumeLayout(false);
@@ -326,6 +370,8 @@ namespace FileSorter
             layoutMain.ResumeLayout(false);
             layoutMain.PerformLayout();
             layoutSortAndPreview.ResumeLayout(false);
+            menuStrip2.ResumeLayout(false);
+            menuStrip2.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -358,5 +404,10 @@ namespace FileSorter
         private TextBox textBoxSearchDepth;
         private FlowLayoutPanel layoutSortAndPreview;
         private Button btnPreview;
+        private MenuStrip menuStrip2;
+        private ToolStripMenuItem fileSorterMenu;
+        private ToolStripMenuItem menuItemOpen;
+        private ToolStripMenuItem menuItemSaveIn;
+        private ToolStripMenuItem menuItemSave;
     }
 }
