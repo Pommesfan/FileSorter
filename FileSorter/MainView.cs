@@ -3,12 +3,16 @@ namespace FileSorter
     public enum FileSortDate { CreationDate, LastChangedDate}
     public partial class MainView : Form
     {
+        private List<FileSortStrategy> fileSortStrategies = new();
+        private List<FileFilter> fileFilters = new();
         public static int numberFilesFound = 0;
         public static int numberFilesSorted = 0;
         private String? currentUrlUserConfig = null;
         public MainView()
         {
             InitializeComponent();
+            fileFilterPanel.mainView = this;
+            fileSortStrategyPanel.mainView = this;
         }
 
         private void selectLocation(object sender, EventArgs e)
@@ -104,9 +108,8 @@ namespace FileSorter
         private void sortIn(FileInfo file, FileAction fileAction, HashSet<string> subDirsDst)
         {
             String s = "";
-            for (int i = 0; i < fileSortStrategyPanel.Count; i++)
+            foreach (FileSortStrategy strategy in fileSortStrategies)
             {
-                FileSortStrategy strategy = fileSortStrategyPanel[i];
                 s += strategy.folderName(file) + "\\";
                 if(!subDirsDst.Contains(s))
                 {
@@ -120,9 +123,8 @@ namespace FileSorter
 
         private bool filter(FileInfo file)
         {
-            for (int i = 0; i < fileFilterPanel.Count; i++)
+            foreach (FileFilter filter in fileFilters)
             {
-                FileFilter filter = fileFilterPanel[i];
                 if (filter == null)
                     continue;
                 if (!filter.validate(file))
@@ -198,12 +200,6 @@ namespace FileSorter
 
         private void save(String fileName)
         {
-            FileFilter[] fileFilters = new FileFilter[fileFilterPanel.Count];
-            for (int i = 0; i < fileFilterPanel.Count; i++)
-            {
-                fileFilters[i] = fileFilterPanel[i];
-            }
-
             int sortInSubfolders = 0; // -1 replesents selected search in subfolders but by no limit, -2 replesents no search in subfolders
             if (checkboxSortInSubFolders.Checked)
             {
@@ -225,7 +221,7 @@ namespace FileSorter
             {
                 sortInSubfolders = -2;
             }
-            FileModel fileModel = new FileModel(textBoxSource.Text, textBoxDestination.Text, fileFilters, sortInSubfolders, [], checkBoxCopyOnly.Checked);
+            FileModel fileModel = new FileModel(textBoxSource.Text, textBoxDestination.Text, [], sortInSubfolders, [], checkBoxCopyOnly.Checked);
             StreamWriter writer = new StreamWriter(fileName);
             String json = fileModel.json();
             writer.Write(json);
@@ -293,6 +289,21 @@ namespace FileSorter
         private void btnAddSortStrategy_Click(object sender, EventArgs e)
         {
             fileSortStrategyPanel.addSortStrategy(sender, e);
+        }
+
+        public List<FileFilter> FileFilterList
+        {
+            get
+            {
+                return fileFilters;
+            }
+        }
+        public List<FileSortStrategy> FileSortStrategyList
+        {
+            get
+            {
+                return fileSortStrategies;
+            }
         }
     }
 }

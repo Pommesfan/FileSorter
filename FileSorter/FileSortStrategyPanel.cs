@@ -2,8 +2,8 @@
 {
     public partial class FileSortStrategyPanel : FlowLayoutPanel
     {
+        public MainView? mainView;
         public static String[] sortModeText = ["Erstelldatum", "Zuletzt geändert"];
-        private List<FileSortStrategy> sortModes = new();
         public FileSortStrategyPanel()
         {
             InitializeComponent();
@@ -16,12 +16,14 @@
                 comboBox.Items.Add(s);
             }
             comboBox.SelectedIndex = 0;
-            sortModes.Add(new DateSortStrategy(FileSortDate.CreationDate));
+            mainView.FileSortStrategyList.Add(new DateSortStrategy(FileSortDate.CreationDate));
         }
 
         public void addSortStrategy(object sender, EventArgs e)
         {
-            int currentIndex = sortModes.Count + 1;
+            if (mainView == null)
+                return;
+            int currentIndex = mainView.FileSortStrategyList.Count + 1;
             //create panel
             FlowLayoutPanel newSortStrategyLayout = new FlowLayoutPanel();
             newSortStrategyLayout.Name = "layoutSortStrategy" + currentIndex;
@@ -64,10 +66,12 @@
 
         private void onRemove(object? sender, EventArgs e)
         {
+            if (mainView == null)
+                return;
             Button removeButton = sender as Button;
             int idx = ((int)removeButton.Parent.Tag) - 1;
             Controls.RemoveAt(idx);
-            sortModes.RemoveAt(idx);
+            mainView.FileSortStrategyList.RemoveAt(idx);
             //on remove, move tag and index in name
             for (int i = idx; i < Controls.Count; i++)
             {
@@ -79,6 +83,8 @@
 
         private void onComboboxChanged(object? sender, EventArgs e)
         {
+            if (mainView == null)
+                return;
             ComboBox comboBox = sender as ComboBox;
             if (comboBox == null)
                 return;
@@ -86,21 +92,12 @@
             switch (comboBox.SelectedIndex)
             {
                 case 0:
-                    sortModes[idx] = new DateSortStrategy(FileSortDate.CreationDate);
+                    mainView.FileSortStrategyList[idx] = new DateSortStrategy(FileSortDate.CreationDate);
                     break;
                 case 1:
-                    sortModes[idx] = new DateSortStrategy(FileSortDate.LastChangedDate);
+                    mainView.FileSortStrategyList[idx] = new DateSortStrategy(FileSortDate.LastChangedDate);
                     break;
             }
-        }
-
-        public int Count {
-            get { return sortModes.Count; }
-        }
-
-        public FileSortStrategy this[int idx]
-        {
-            get { return sortModes[idx]; }
         }
     }
 }

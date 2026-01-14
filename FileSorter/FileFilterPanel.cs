@@ -2,8 +2,8 @@
 {
     public partial class FileFilterPanel : FlowLayoutPanel
     {
+        public MainView? mainView;
         public static String[] filterModeText = ["Erstellt", "Geändert", "Dateityp", "Name beinhaltet", "Name beginnt mit", "Dateityp ist nicht", "Name beinhaltet nicht", "Name beginnt nicht mit", "Dateigröße"];
-        private List<FileFilter> fileFilters = new();
         public FileFilterPanel()
         {
             InitializeComponent();
@@ -18,6 +18,8 @@
 
         public void addFilter()
         {
+            if (mainView == null)
+                return;
             int currentIndex = Controls.Count + 1;
             //create panel
             FlowLayoutPanel newFlowLayoutPanel = new FlowLayoutPanel();
@@ -60,15 +62,18 @@
             editValueButton.Click += new EventHandler(onValueChangeClicked);
             removeButton.Click += new EventHandler(onRemove);
 
-            fileFilters.Add(null);
+            mainView.FileFilterList.Add(null);
         }
 
         private void onComboboxValueChanged(object? sender, EventArgs e)
         {
+            if (mainView == null)
+                return;
             //when moving from DateSpanFilter to FileNameFilter or opposite, drop the selected information
             ComboBox combobox = (ComboBox)sender;
             int idx = (int)combobox.Parent.Tag - 1;
             int selection = combobox.SelectedIndex;
+            List<FileFilter> fileFilters = mainView.FileFilterList;
             if (selection == 1 || selection == 2)
             {
                 if (fileFilters[idx] is DateSpanFilter)
@@ -126,9 +131,11 @@
 
         private void onRemove(object? sender, EventArgs e)
         {
+            if (mainView == null)
+                return;
             Button removeButton = sender as Button;
             int idx = ((int)removeButton.Parent.Tag) - 1;
-            fileFilters.RemoveAt(idx);
+            mainView.FileFilterList.RemoveAt(idx);
             Controls.RemoveAt(idx);
             //on remove, move tag and index in name
             for (int i = idx; i < Controls.Count; i++)
@@ -141,6 +148,8 @@
 
         private void onValueChangeClicked(object sender, EventArgs e)
         {
+            if (mainView == null)
+                return;
             FlowLayoutPanel currentLayout = (FlowLayoutPanel)(((Control)sender).Parent);
             ComboBox comboBox = (ComboBox)currentLayout.Controls[1];
             int idx = (int)currentLayout.Tag - 1;
@@ -164,6 +173,7 @@
 
         private void setKeywordFilter(int idx, FilterMode mode)
         {
+            List<FileFilter> fileFilters = mainView.FileFilterList;
             KeyWordsDialog dialog = new KeyWordsDialog();
             FileFilter current = fileFilters[idx];
             if (current != null)
@@ -198,7 +208,7 @@
         private void setDateFilter(int idx, FilterMode mode)
         {
             DateFilterDialog dialog = new DateFilterDialog();
-            FileFilter currentFilter = fileFilters[idx];
+            FileFilter currentFilter = mainView.FileFilterList[idx];
             if (currentFilter != null && currentFilter.GetType() == typeof(DateSpanFilter))
             {
                 DateSpanFilter filter = (DateSpanFilter)currentFilter;
@@ -207,14 +217,14 @@
             DialogResult res = dialog.ShowDialog();
             if (res == DialogResult.OK)
             {
-                fileFilters[idx] = new DateSpanFilter(dialog.DateSpan.from, dialog.DateSpan.until, mode);
+                mainView.FileFilterList[idx] = new DateSpanFilter(dialog.DateSpan.from, dialog.DateSpan.until, mode);
             }
         }
 
         private void setSizeFilter(int idx)
         {
             SizeFilterDialog dialog = new SizeFilterDialog();
-            FileFilter currentFilter = fileFilters[idx];
+            FileFilter currentFilter = mainView.FileFilterList[idx];
             if (currentFilter != null && currentFilter is SizeFilter)
             {
                 SizeFilter filter = (SizeFilter)currentFilter;
@@ -224,18 +234,8 @@
             if (res == DialogResult.OK)
             {
                 SizeFilterRes sizeFilterRes = dialog.SizeSpan;
-                fileFilters[idx] = new SizeFilter(sizeFilterRes);
+                mainView.FileFilterList[idx] = new SizeFilter(sizeFilterRes);
             }
-        }
-
-        public int Count
-        {
-            get { return fileFilters.Count; }
-        }
-
-        public FileFilter this[int idx]
-        {
-            get { return fileFilters[idx]; }
         }
     }
 }
