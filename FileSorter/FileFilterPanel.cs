@@ -1,10 +1,13 @@
 ﻿namespace FileSorter
 {
-    public class FileFilterPanel: FlowLayoutPanel
+    public partial class FileFilterPanel : FlowLayoutPanel
     {
         public static String[] filterModeText = ["Erstellt", "Geändert", "Dateityp", "Name beinhaltet", "Name beginnt mit", "Dateityp ist nicht", "Name beinhaltet nicht", "Name beginnt nicht mit", "Dateigröße"];
         private List<FileFilter> fileFilters = new();
-
+        public FileFilterPanel()
+        {
+            InitializeComponent();
+        }
         private void initFilterModes(ComboBox comboBox)
         {
             foreach (String mode in filterModeText)
@@ -68,10 +71,10 @@
             int selection = combobox.SelectedIndex;
             if (selection == 1 || selection == 2)
             {
-                if(fileFilters[idx] is DateSpanFilter)
+                if (fileFilters[idx] is DateSpanFilter)
                 {
                     DateSpanFilter dateSpanFilter = (DateSpanFilter)fileFilters[idx];
-                    switch(selection)
+                    switch (selection)
                     {
                         case 0:
                             fileFilters[idx] = new DateSpanFilter(dateSpanFilter.from, dateSpanFilter.until, FilterMode.CreationDate);
@@ -81,14 +84,16 @@
                             break;
                     }
 
-                } else
+                }
+                else
                 {
                     fileFilters[idx] = null;
                 }
             }
             else if (selection >= 2 && selection <= 7)
             {
-                if(fileFilters[idx] is FileNameFilter) {
+                if (fileFilters[idx] is FileNameFilter)
+                {
                     FileNameFilter fileNameFilter = (FileNameFilter)fileFilters[idx];
                     switch (selection)
                     {
@@ -111,7 +116,8 @@
                             fileFilters[idx] = new NameStartFilter(fileNameFilter.possibleKeyWords, true);
                             break;
                     }
-                } else
+                }
+                else
                 {
                     fileFilters[idx] = null;
                 }
@@ -222,7 +228,8 @@
             }
         }
 
-        public int Count {
+        public int Count
+        {
             get { return fileFilters.Count; }
         }
 

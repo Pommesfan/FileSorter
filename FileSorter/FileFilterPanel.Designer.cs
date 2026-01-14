@@ -1,7 +1,6 @@
-﻿
-namespace FileSorter
+﻿namespace FileSorter
 {
-    partial class FileSortStrategyPanel
+    partial class FileFilterPanel
     {
         /// <summary> 
         /// Erforderliche Designervariable.
@@ -29,13 +28,10 @@ namespace FileSorter
         /// </summary>
         private void InitializeComponent()
         {
-            SuspendLayout();
-            // 
-            // FileSortStrategyPanel
-            // 
             Name = "FileSortStrategyPanel";
             ResumeLayout(false);
         }
+
         #endregion
     }
 }

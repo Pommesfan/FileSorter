@@ -118,36 +118,6 @@ namespace FileSorter
             numberFilesSorted++;
         }
 
-
-
-        /*
-        private void sortByDate(FileInfo file, FileAction fileAction, HashSet<String> subDirsDst, FileSortDate fileSortMode)
-        {
-            //determine which date to sort
-            String dateString;
-            if (fileSortMode == FileSortDate.CreationDate)
-            {
-                dateString = file.CreationTime.ToShortDateString();
-            }
-            else if (fileSortMode == FileSortDate.LastChangedDate)
-            {
-                dateString = file.LastAccessTime.ToShortDateString();
-            }
-            else
-            {
-                throw new ArgumentException("FileSortMode not handled");
-            }
-
-            if (!subDirsDst.Contains(dateString))
-            {
-                fileAction.createSubDirectory(dateString);
-                subDirsDst.Add(dateString);
-            }
-            fileAction.action(file, dateString);
-            numberFilesSorted++;
-        }
-        */
-
         private bool filter(FileInfo file)
         {
             for (int i = 0; i < fileFilterPanel.Count; i++)
