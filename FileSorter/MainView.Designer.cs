@@ -1,7 +1,7 @@
 ﻿
 namespace FileSorter
 {
-    partial class FileSorter
+    partial class MainView
     {
         /// <summary>
         ///  Required designer variable.
@@ -92,7 +92,7 @@ namespace FileSorter
             // 
             textBoxSource.Anchor = AnchorStyles.Top;
             textBoxSource.Enabled = false;
-            textBoxSource.Location = new Point(3, 90);
+            textBoxSource.Location = new Point(3, 32);
             textBoxSource.Name = "textBoxSource";
             textBoxSource.Size = new Size(423, 23);
             textBoxSource.TabIndex = 2;
@@ -101,7 +101,7 @@ namespace FileSorter
             // 
             textBoxDestination.Anchor = AnchorStyles.Top;
             textBoxDestination.Enabled = false;
-            textBoxDestination.Location = new Point(3, 32);
+            textBoxDestination.Location = new Point(3, 90);
             textBoxDestination.Name = "textBoxDestination";
             textBoxDestination.Size = new Size(423, 23);
             textBoxDestination.TabIndex = 3;
@@ -198,9 +198,9 @@ namespace FileSorter
             fileSortStrategyPanel.Anchor = AnchorStyles.Top;
             fileSortStrategyPanel.AutoSize = true;
             fileSortStrategyPanel.FlowDirection = FlowDirection.TopDown;
-            fileSortStrategyPanel.Location = new Point(127, 47);
+            fileSortStrategyPanel.Location = new Point(130, 47);
             fileSortStrategyPanel.Name = "fileSortStrategyPanel";
-            fileSortStrategyPanel.Size = new Size(6, 6);
+            fileSortStrategyPanel.Size = new Size(0, 0);
             fileSortStrategyPanel.TabIndex = 14;
             // 
             // fileFilterPanel
@@ -236,7 +236,7 @@ namespace FileSorter
             layoutFilterAndSort.Controls.Add(flowLayoutPanel1);
             layoutFilterAndSort.Location = new Point(53, 131);
             layoutFilterAndSort.Name = "layoutFilterAndSort";
-            layoutFilterAndSort.Size = new Size(538, 62);
+            layoutFilterAndSort.Size = new Size(538, 60);
             layoutFilterAndSort.TabIndex = 11;
             // 
             // layoutFilters
@@ -268,7 +268,7 @@ namespace FileSorter
             flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
             flowLayoutPanel1.Location = new Point(275, 3);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(260, 56);
+            flowLayoutPanel1.Size = new Size(260, 50);
             flowLayoutPanel1.TabIndex = 14;
             // 
             // layoutSetUpSorterHead
@@ -316,7 +316,7 @@ namespace FileSorter
             layoutMain.FlowDirection = FlowDirection.TopDown;
             layoutMain.Location = new Point(21, 27);
             layoutMain.Name = "layoutMain";
-            layoutMain.Size = new Size(644, 249);
+            layoutMain.Size = new Size(644, 247);
             layoutMain.TabIndex = 12;
             // 
             // layoutGenralSortSettings
@@ -335,9 +335,9 @@ namespace FileSorter
             layoutSrcAndDst.Anchor = AnchorStyles.Top;
             layoutSrcAndDst.AutoSize = true;
             layoutSrcAndDst.Controls.Add(selectSource);
-            layoutSrcAndDst.Controls.Add(textBoxDestination);
-            layoutSrcAndDst.Controls.Add(selectDestination);
             layoutSrcAndDst.Controls.Add(textBoxSource);
+            layoutSrcAndDst.Controls.Add(selectDestination);
+            layoutSrcAndDst.Controls.Add(textBoxDestination);
             layoutSrcAndDst.FlowDirection = FlowDirection.TopDown;
             layoutSrcAndDst.Location = new Point(3, 3);
             layoutSrcAndDst.Name = "layoutSrcAndDst";
@@ -361,7 +361,7 @@ namespace FileSorter
             layoutSortAndPreview.AutoSize = true;
             layoutSortAndPreview.Controls.Add(btnSort);
             layoutSortAndPreview.Controls.Add(btnPreview);
-            layoutSortAndPreview.Location = new Point(203, 199);
+            layoutSortAndPreview.Location = new Point(203, 197);
             layoutSortAndPreview.Name = "layoutSortAndPreview";
             layoutSortAndPreview.Size = new Size(237, 47);
             layoutSortAndPreview.TabIndex = 13;
@@ -421,7 +421,7 @@ namespace FileSorter
             fileSystemWatcher1.EnableRaisingEvents = true;
             fileSystemWatcher1.SynchronizingObject = this;
             // 
-            // FileSorter
+            // MainView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -430,7 +430,7 @@ namespace FileSorter
             Controls.Add(layoutMain);
             Controls.Add(menuStrip2);
             MainMenuStrip = menuStrip2;
-            Name = "FileSorter";
+            Name = "MainView";
             Text = "FileSorter";
             layoutSort.ResumeLayout(false);
             layoutSort.PerformLayout();

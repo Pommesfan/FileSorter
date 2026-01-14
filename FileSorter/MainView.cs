@@ -1,14 +1,12 @@
-using System.Runtime.Serialization.Formatters.Binary;
-
 namespace FileSorter
 {
-    public enum FileSortMode { CreationDate, LastChangedDate}
-    public partial class FileSorter : Form
+    public enum FileSortDate { CreationDate, LastChangedDate}
+    public partial class MainView : Form
     {
         public static int numberFilesFound = 0;
         public static int numberFilesSorted = 0;
         private String? currentUrlUserConfig = null;
-        public FileSorter()
+        public MainView()
         {
             InitializeComponent();
         }
@@ -66,11 +64,11 @@ namespace FileSorter
                 return;
             }
             HashSet<String> subDirsDst = getDirectoryNames(fileAction.getDirectories());
-            sort_recursive(fileSortStrategyPanel.SortMode, fileAction, subDirsDst, dirInfoSrc, recursionDepth);
+            sort_recursive(fileAction, subDirsDst, dirInfoSrc, recursionDepth);
             MessageBox.Show(numberFilesFound + " Dateien gefunden\ndavon " + numberFilesSorted + " sortiert");
         }
 
-        private void sort_recursive(int selection, FileAction fileAction, HashSet<String> subDirsDst, DirectoryInfo dirInfoSrc, int recursionDepth)
+        private void sort_recursive(FileAction fileAction, HashSet<String> subDirsDst, DirectoryInfo dirInfoSrc, int recursionDepth)
         {
             FileInfo[] files = dirInfoSrc.GetFiles();
             foreach (FileInfo file in files)
@@ -81,19 +79,7 @@ namespace FileSorter
                     fileAction.addFilteredOut(file.Name);
                     continue;
                 }
-
-                switch (selection)
-                {
-                    case 0:
-                        noSort(file, fileAction);
-                        break;
-                    case 1:
-                        sortByDate(file, fileAction, subDirsDst, FileSortMode.CreationDate);
-                        break;
-                    case 2:
-                        sortByDate(file, fileAction, subDirsDst, FileSortMode.LastChangedDate);
-                        break;
-                }
+                sortIn(file, fileAction, subDirsDst);
             }
 
             if (recursionDepth > 0)
@@ -102,7 +88,7 @@ namespace FileSorter
                 DirectoryInfo[] dirs = dirInfoSrc.GetDirectories();
                 foreach (DirectoryInfo newDirInfoSrc in dirs)
                 {
-                    sort_recursive(selection, fileAction, subDirsDst, newDirInfoSrc, new_recursion_depth);
+                    sort_recursive(fileAction, subDirsDst, newDirInfoSrc, new_recursion_depth);
                 }
             }
             else if (recursionDepth == -1) // allow limitless recursion
@@ -110,26 +96,40 @@ namespace FileSorter
                 DirectoryInfo[] dirs = dirInfoSrc.GetDirectories();
                 foreach (DirectoryInfo newDirInfoSrc in dirs)
                 {
-                    sort_recursive(selection, fileAction, subDirsDst, newDirInfoSrc, -1);
+                    sort_recursive(fileAction, subDirsDst, newDirInfoSrc, -1);
                 }
             }
         }
 
-        private void noSort(FileInfo file, FileAction fileAction)
+        private void sortIn(FileInfo file, FileAction fileAction, HashSet<string> subDirsDst)
         {
-            fileAction.action(file, "");
+            String s = "";
+            for (int i = 0; i < fileSortStrategyPanel.Count; i++)
+            {
+                FileSortStrategy strategy = fileSortStrategyPanel[i];
+                s += strategy.folderName(file) + "\\";
+                if(!subDirsDst.Contains(s))
+                {
+                    subDirsDst.Add(s);
+                    fileAction.createSubDirectory(s);
+                }
+            }
+            fileAction.action(file, s);
             numberFilesSorted++;
         }
 
-        private void sortByDate(FileInfo file, FileAction fileAction, HashSet<String> subDirsDst, FileSortMode fileSortMode)
+
+
+        /*
+        private void sortByDate(FileInfo file, FileAction fileAction, HashSet<String> subDirsDst, FileSortDate fileSortMode)
         {
             //determine which date to sort
             String dateString;
-            if (fileSortMode == FileSortMode.CreationDate)
+            if (fileSortMode == FileSortDate.CreationDate)
             {
                 dateString = file.CreationTime.ToShortDateString();
             }
-            else if (fileSortMode == FileSortMode.LastChangedDate)
+            else if (fileSortMode == FileSortDate.LastChangedDate)
             {
                 dateString = file.LastAccessTime.ToShortDateString();
             }
@@ -146,6 +146,7 @@ namespace FileSorter
             fileAction.action(file, dateString);
             numberFilesSorted++;
         }
+        */
 
         private bool filter(FileInfo file)
         {
@@ -254,7 +255,7 @@ namespace FileSorter
             {
                 sortInSubfolders = -2;
             }
-            FileModel fileModel = new FileModel(textBoxSource.Text, textBoxDestination.Text, fileFilters, sortInSubfolders, fileSortStrategyPanel.SortMode, checkBoxCopyOnly.Checked);
+            FileModel fileModel = new FileModel(textBoxSource.Text, textBoxDestination.Text, fileFilters, sortInSubfolders, [], checkBoxCopyOnly.Checked);
             StreamWriter writer = new StreamWriter(fileName);
             String json = fileModel.json();
             writer.Write(json);

@@ -3,7 +3,7 @@
     public partial class FileSortStrategyPanel : FlowLayoutPanel
     {
         public static String[] sortModeText = ["Erstelldatum", "Zuletzt geändert"];
-        private List<int> sortModes = new();
+        private List<FileSortStrategy> sortModes = new();
         public FileSortStrategyPanel()
         {
             InitializeComponent();
@@ -16,7 +16,7 @@
                 comboBox.Items.Add(s);
             }
             comboBox.SelectedIndex = 0;
-            sortModes.Add(0);
+            sortModes.Add(new DateSortStrategy(FileSortDate.CreationDate));
         }
 
         public void addSortStrategy(object sender, EventArgs e)
@@ -83,18 +83,24 @@
             if (comboBox == null)
                 return;
             int idx = ((int)comboBox.Parent.Tag) - 1;
-            sortModes[idx] = comboBox.SelectedIndex;
+            switch (comboBox.SelectedIndex)
+            {
+                case 0:
+                    sortModes[idx] = new DateSortStrategy(FileSortDate.CreationDate);
+                    break;
+                case 1:
+                    sortModes[idx] = new DateSortStrategy(FileSortDate.LastChangedDate);
+                    break;
+            }
         }
 
-        public int SortMode
+        public int Count {
+            get { return sortModes.Count; }
+        }
+
+        public FileSortStrategy this[int idx]
         {
-            get
-            {
-                if (sortModes.Count == 0)
-                    return 0;
-                else
-                    return sortModes[0] + 1;
-            }
+            get { return sortModes[idx]; }
         }
     }
 }

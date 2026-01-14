@@ -8,16 +8,16 @@ namespace FileSorter
         public String sortDst { get; }
         public FileFilter[] fileFilters { get; }
         public int sortInSubFolder { get; }
-        public int sortMode { get; }
+        public FileSortStrategy[] sortStrategies { get; }
         public bool copyOnly { get; }
 
-        public FileModel(String sortSrc, String sortDst, FileFilter[] fileFilters,  int sortInSubFolder, int sortMode, bool copyOnly)
+        public FileModel(String sortSrc, String sortDst, FileFilter[] fileFilters,  int sortInSubFolder, FileSortStrategy[] sortStrategies, bool copyOnly)
         {
             this.sortSrc = sortSrc;
             this.sortDst = sortDst;
             this.fileFilters = fileFilters;
             this.sortInSubFolder = sortInSubFolder;
-            this.sortMode = sortMode;
+            this.sortStrategies = sortStrategies;
             this.copyOnly = copyOnly;
         }
 
