@@ -9,18 +9,35 @@
 
         public TreeNode addFolder(String name)
         {
+            return addFolder(name, treeViewSorted.Nodes);
+        }
 
-            TreeNode res = new TreeNode(name);
-            treeViewSorted.Nodes.Add(res);
+        public TreeNode addFolder(String name, TreeNodeCollection current)
+        {
+            String[] folderNames = name.Split("\\", StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < folderNames.Length - 1; i++)
+            {
+                current = getNodeFromName(current, folderNames[i]).Nodes;
+            }
+
+            TreeNode res = new TreeNode(folderNames.Last());
+            current.Add(res);
             return res;
         }
 
         public void addItem(String folder, String name)
         {
-            TreeNode res = getNodeFromName(treeViewSorted.Nodes, folder);
-            if (res == null)
-                res = addFolder(folder);
-            res.Nodes.Add(new TreeNode(name));
+            String[] folderNames = folder.Split("\\", StringSplitOptions.RemoveEmptyEntries);
+            TreeNodeCollection current = treeViewSorted.Nodes;
+            for (int i = 0; i < folderNames.Length; i++)
+            {
+                TreeNode next = getNodeFromName(current, folderNames[i]);
+                if (next == null)
+                    current = addFolder(folderNames[i], current).Nodes;
+                else
+                    current = next.Nodes;
+            }
+            current.Add(new TreeNode(name));
         }
 
         private TreeNode getNodeFromName(TreeNodeCollection nodes, String name)
