@@ -5,23 +5,12 @@ namespace FileSorter
     public enum FileSortMode { CreationDate, LastChangedDate}
     public partial class FileSorter : Form
     {
-        public static String[] sortModeText = ["Keine Sortierung", "Erstelldatum", "Zuletzt geändert"];
         public static int numberFilesFound = 0;
         public static int numberFilesSorted = 0;
         private String? currentUrlUserConfig = null;
         public FileSorter()
         {
             InitializeComponent();
-            initSortModes(selectSortMode);
-        }
-
-        private void initSortModes(ComboBox comboBox)
-        {
-            foreach (String mode in sortModeText)
-            {
-                comboBox.Items.Add(mode);
-            }
-            comboBox.SelectedIndex = 0;
         }
 
         private void selectLocation(object sender, EventArgs e)
@@ -77,7 +66,7 @@ namespace FileSorter
                 return;
             }
             HashSet<String> subDirsDst = getDirectoryNames(fileAction.getDirectories());
-            sort_recursive(selectSortMode.SelectedIndex, fileAction, subDirsDst, dirInfoSrc, recursionDepth);
+            sort_recursive(fileSortStrategyPanel.SortMode, fileAction, subDirsDst, dirInfoSrc, recursionDepth);
             MessageBox.Show(numberFilesFound + " Dateien gefunden\ndavon " + numberFilesSorted + " sortiert");
         }
 
@@ -232,7 +221,7 @@ namespace FileSorter
         }
         private void menuItemSave_Click(object sender, EventArgs e)
         {
-            if(currentUrlUserConfig != null)
+            if (currentUrlUserConfig != null)
                 save(currentUrlUserConfig);
         }
 
@@ -265,7 +254,7 @@ namespace FileSorter
             {
                 sortInSubfolders = -2;
             }
-            FileModel fileModel = new FileModel(textBoxSource.Text, textBoxDestination.Text, fileFilters, sortInSubfolders, selectSortMode.SelectedIndex, checkBoxCopyOnly.Checked);
+            FileModel fileModel = new FileModel(textBoxSource.Text, textBoxDestination.Text, fileFilters, sortInSubfolders, fileSortStrategyPanel.SortMode, checkBoxCopyOnly.Checked);
             StreamWriter writer = new StreamWriter(fileName);
             String json = fileModel.json();
             writer.Write(json);
@@ -319,10 +308,20 @@ namespace FileSorter
                     checkboxSortInSubFolders.Checked = true;
                     textBoxSearchDepth.Text = subfolders.ToString();
                 }
-                selectSortMode.SelectedIndex = model.sortMode;
+                //selectSortMode.SelectedIndex = model.sortMode;
                 checkBoxCopyOnly.Checked = model.copyOnly;
             }
             reader.Close();
+        }
+
+        private void btnAddFilter_Click(object sender, EventArgs e)
+        {
+            fileFilterPanel.addFilter();
+        }
+
+        private void btnAddSortStrategy_Click(object sender, EventArgs e)
+        {
+            fileSortStrategyPanel.addSortStrategy(sender, e);
         }
     }
 }

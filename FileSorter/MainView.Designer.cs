@@ -32,7 +32,6 @@ namespace FileSorter
             selectDestination = new Button();
             textBoxSource = new TextBox();
             textBoxDestination = new TextBox();
-            selectSortMode = new ComboBox();
             btnSort = new Button();
             textBoxSetFilters = new TextBox();
             layoutSort = new FlowLayoutPanel();
@@ -43,10 +42,14 @@ namespace FileSorter
             checkBoxCopyOnly = new CheckBox();
             fileSortStrategyPanel = new FileSortStrategyPanel();
             fileFilterPanel = new FileFilterPanel();
-            btnAdd = new Button();
+            btnAddFilter = new Button();
             layoutFilterAndSort = new FlowLayoutPanel();
             layoutFilters = new FlowLayoutPanel();
-            layoutSetUpFilter = new FlowLayoutPanel();
+            layoutSetUpFilterHead = new FlowLayoutPanel();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            layoutSetUpSorterHead = new FlowLayoutPanel();
+            textBoxInsertSortStrategy = new TextBox();
+            btnAddSortStrategy = new Button();
             layoutMain = new FileFilterPanel();
             layoutGenralSortSettings = new FlowLayoutPanel();
             layoutSrcAndDst = new FlowLayoutPanel();
@@ -63,7 +66,9 @@ namespace FileSorter
             layoutSearchDepth.SuspendLayout();
             layoutFilterAndSort.SuspendLayout();
             layoutFilters.SuspendLayout();
-            layoutSetUpFilter.SuspendLayout();
+            layoutSetUpFilterHead.SuspendLayout();
+            flowLayoutPanel1.SuspendLayout();
+            layoutSetUpSorterHead.SuspendLayout();
             layoutMain.SuspendLayout();
             layoutGenralSortSettings.SuspendLayout();
             layoutSrcAndDst.SuspendLayout();
@@ -101,15 +106,6 @@ namespace FileSorter
             textBoxDestination.Size = new Size(423, 23);
             textBoxDestination.TabIndex = 3;
             // 
-            // selectSortMode
-            // 
-            selectSortMode.DropDownStyle = ComboBoxStyle.DropDownList;
-            selectSortMode.FormattingEnabled = true;
-            selectSortMode.Location = new Point(3, 64);
-            selectSortMode.Name = "selectSortMode";
-            selectSortMode.Size = new Size(188, 23);
-            selectSortMode.TabIndex = 4;
-            // 
             // btnSort
             // 
             btnSort.Anchor = AnchorStyles.Top;
@@ -141,12 +137,11 @@ namespace FileSorter
             layoutSort.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             layoutSort.Controls.Add(checkboxSortInSubFolders);
             layoutSort.Controls.Add(layoutSearchDepth);
-            layoutSort.Controls.Add(selectSortMode);
             layoutSort.Controls.Add(checkBoxCopyOnly);
             layoutSort.FlowDirection = FlowDirection.TopDown;
             layoutSort.Location = new Point(438, 3);
             layoutSort.Name = "layoutSort";
-            layoutSort.Size = new Size(197, 115);
+            layoutSort.Size = new Size(197, 86);
             layoutSort.TabIndex = 0;
             // 
             // checkboxSortInSubFolders
@@ -191,7 +186,7 @@ namespace FileSorter
             checkBoxCopyOnly.AutoSize = true;
             checkBoxCopyOnly.Checked = true;
             checkBoxCopyOnly.CheckState = CheckState.Checked;
-            checkBoxCopyOnly.Location = new Point(3, 93);
+            checkBoxCopyOnly.Location = new Point(3, 64);
             checkBoxCopyOnly.Name = "checkBoxCopyOnly";
             checkBoxCopyOnly.Size = new Size(136, 19);
             checkBoxCopyOnly.TabIndex = 10;
@@ -203,9 +198,9 @@ namespace FileSorter
             fileSortStrategyPanel.Anchor = AnchorStyles.Top;
             fileSortStrategyPanel.AutoSize = true;
             fileSortStrategyPanel.FlowDirection = FlowDirection.TopDown;
-            fileSortStrategyPanel.Location = new Point(275, 3);
+            fileSortStrategyPanel.Location = new Point(127, 47);
             fileSortStrategyPanel.Name = "fileSortStrategyPanel";
-            fileSortStrategyPanel.Size = new Size(206, 44);
+            fileSortStrategyPanel.Size = new Size(6, 6);
             fileSortStrategyPanel.TabIndex = 14;
             // 
             // fileFilterPanel
@@ -218,19 +213,19 @@ namespace FileSorter
             fileFilterPanel.Size = new Size(0, 0);
             fileFilterPanel.TabIndex = 0;
             // 
-            // btnAdd
+            // btnAddFilter
             // 
-            btnAdd.BackColor = Color.LimeGreen;
-            btnAdd.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnAdd.ForeColor = Color.White;
-            btnAdd.Location = new Point(223, 3);
-            btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(28, 32);
-            btnAdd.TabIndex = 10;
-            btnAdd.Text = "+";
-            btnAdd.TextAlign = ContentAlignment.TopLeft;
-            btnAdd.UseVisualStyleBackColor = false;
-            btnAdd.Click += btnAdd_Click;
+            btnAddFilter.BackColor = Color.LimeGreen;
+            btnAddFilter.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAddFilter.ForeColor = Color.White;
+            btnAddFilter.Location = new Point(223, 3);
+            btnAddFilter.Name = "btnAddFilter";
+            btnAddFilter.Size = new Size(28, 32);
+            btnAddFilter.TabIndex = 10;
+            btnAddFilter.Text = "+";
+            btnAddFilter.TextAlign = ContentAlignment.TopLeft;
+            btnAddFilter.UseVisualStyleBackColor = false;
+            btnAddFilter.Click += btnAddFilter_Click;
             // 
             // layoutFilterAndSort
             // 
@@ -238,17 +233,17 @@ namespace FileSorter
             layoutFilterAndSort.AutoSize = true;
             layoutFilterAndSort.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             layoutFilterAndSort.Controls.Add(layoutFilters);
-            layoutFilterAndSort.Controls.Add(fileSortStrategyPanel);
-            layoutFilterAndSort.Location = new Point(80, 131);
+            layoutFilterAndSort.Controls.Add(flowLayoutPanel1);
+            layoutFilterAndSort.Location = new Point(53, 131);
             layoutFilterAndSort.Name = "layoutFilterAndSort";
-            layoutFilterAndSort.Size = new Size(484, 60);
+            layoutFilterAndSort.Size = new Size(538, 62);
             layoutFilterAndSort.TabIndex = 11;
             // 
             // layoutFilters
             // 
             layoutFilters.Anchor = AnchorStyles.Top;
             layoutFilters.AutoSize = true;
-            layoutFilters.Controls.Add(layoutSetUpFilter);
+            layoutFilters.Controls.Add(layoutSetUpFilterHead);
             layoutFilters.Controls.Add(fileFilterPanel);
             layoutFilters.FlowDirection = FlowDirection.TopDown;
             layoutFilters.Location = new Point(3, 3);
@@ -256,14 +251,59 @@ namespace FileSorter
             layoutFilters.Size = new Size(266, 54);
             layoutFilters.TabIndex = 0;
             // 
-            // layoutSetUpFilter
+            // layoutSetUpFilterHead
             // 
-            layoutSetUpFilter.Controls.Add(textBoxSetFilters);
-            layoutSetUpFilter.Controls.Add(btnAdd);
-            layoutSetUpFilter.Location = new Point(3, 3);
-            layoutSetUpFilter.Name = "layoutSetUpFilter";
-            layoutSetUpFilter.Size = new Size(260, 42);
-            layoutSetUpFilter.TabIndex = 12;
+            layoutSetUpFilterHead.Controls.Add(textBoxSetFilters);
+            layoutSetUpFilterHead.Controls.Add(btnAddFilter);
+            layoutSetUpFilterHead.Location = new Point(3, 3);
+            layoutSetUpFilterHead.Name = "layoutSetUpFilterHead";
+            layoutSetUpFilterHead.Size = new Size(260, 42);
+            layoutSetUpFilterHead.TabIndex = 12;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.AutoSize = true;
+            flowLayoutPanel1.Controls.Add(layoutSetUpSorterHead);
+            flowLayoutPanel1.Controls.Add(fileSortStrategyPanel);
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(275, 3);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(260, 56);
+            flowLayoutPanel1.TabIndex = 14;
+            // 
+            // layoutSetUpSorterHead
+            // 
+            layoutSetUpSorterHead.AutoSize = true;
+            layoutSetUpSorterHead.Controls.Add(textBoxInsertSortStrategy);
+            layoutSetUpSorterHead.Controls.Add(btnAddSortStrategy);
+            layoutSetUpSorterHead.Location = new Point(3, 3);
+            layoutSetUpSorterHead.Name = "layoutSetUpSorterHead";
+            layoutSetUpSorterHead.Size = new Size(254, 38);
+            layoutSetUpSorterHead.TabIndex = 0;
+            // 
+            // textBoxInsertSortStrategy
+            // 
+            textBoxInsertSortStrategy.Enabled = false;
+            textBoxInsertSortStrategy.Font = new Font("Segoe UI", 12F);
+            textBoxInsertSortStrategy.Location = new Point(3, 3);
+            textBoxInsertSortStrategy.Name = "textBoxInsertSortStrategy";
+            textBoxInsertSortStrategy.Size = new Size(214, 29);
+            textBoxInsertSortStrategy.TabIndex = 11;
+            textBoxInsertSortStrategy.Text = "Sortierer einstellen";
+            // 
+            // btnAddSortStrategy
+            // 
+            btnAddSortStrategy.BackColor = Color.LimeGreen;
+            btnAddSortStrategy.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAddSortStrategy.ForeColor = Color.White;
+            btnAddSortStrategy.Location = new Point(223, 3);
+            btnAddSortStrategy.Name = "btnAddSortStrategy";
+            btnAddSortStrategy.Size = new Size(28, 32);
+            btnAddSortStrategy.TabIndex = 12;
+            btnAddSortStrategy.Text = "+";
+            btnAddSortStrategy.TextAlign = ContentAlignment.TopLeft;
+            btnAddSortStrategy.UseVisualStyleBackColor = false;
+            btnAddSortStrategy.Click += btnAddSortStrategy_Click;
             // 
             // layoutMain
             // 
@@ -276,7 +316,7 @@ namespace FileSorter
             layoutMain.FlowDirection = FlowDirection.TopDown;
             layoutMain.Location = new Point(21, 27);
             layoutMain.Name = "layoutMain";
-            layoutMain.Size = new Size(644, 247);
+            layoutMain.Size = new Size(644, 249);
             layoutMain.TabIndex = 12;
             // 
             // layoutGenralSortSettings
@@ -321,7 +361,7 @@ namespace FileSorter
             layoutSortAndPreview.AutoSize = true;
             layoutSortAndPreview.Controls.Add(btnSort);
             layoutSortAndPreview.Controls.Add(btnPreview);
-            layoutSortAndPreview.Location = new Point(203, 197);
+            layoutSortAndPreview.Location = new Point(203, 199);
             layoutSortAndPreview.Name = "layoutSortAndPreview";
             layoutSortAndPreview.Size = new Size(237, 47);
             layoutSortAndPreview.TabIndex = 13;
@@ -400,8 +440,12 @@ namespace FileSorter
             layoutFilterAndSort.PerformLayout();
             layoutFilters.ResumeLayout(false);
             layoutFilters.PerformLayout();
-            layoutSetUpFilter.ResumeLayout(false);
-            layoutSetUpFilter.PerformLayout();
+            layoutSetUpFilterHead.ResumeLayout(false);
+            layoutSetUpFilterHead.PerformLayout();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
+            layoutSetUpSorterHead.ResumeLayout(false);
+            layoutSetUpSorterHead.PerformLayout();
             layoutMain.ResumeLayout(false);
             layoutMain.PerformLayout();
             layoutGenralSortSettings.ResumeLayout(false);
@@ -416,24 +460,18 @@ namespace FileSorter
             PerformLayout();
         }
 
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-            fileFilterPanel.addFilter();
-        }
-
         #endregion
         private Button selectDestination;
         private TextBox textBoxSource;
         private TextBox textBoxDestination;
-        private ComboBox selectSortMode;
         private Button btnSort;
         private TextBox textBoxSetFilters;
         private FlowLayoutPanel layoutSort;
         private FileFilterPanel fileFilterPanel;
-        private Button btnAdd;
+        private Button btnAddFilter;
         private FlowLayoutPanel layoutFilterAndSort;
         private FlowLayoutPanel layoutFilters;
-        private FlowLayoutPanel layoutSetUpFilter;
+        private FlowLayoutPanel layoutSetUpFilterHead;
         private CheckBox checkBoxCopyOnly;
         private FileFilterPanel layoutMain;
         private Button selectSource;
@@ -452,5 +490,9 @@ namespace FileSorter
         private FlowLayoutPanel layoutSrcAndDst;
         private FileSystemWatcher fileSystemWatcher1;
         private FlowLayoutPanel layoutGenralSortSettings;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private FlowLayoutPanel layoutSetUpSorterHead;
+        private TextBox textBoxInsertSortStrategy;
+        private Button btnAddSortStrategy;
     }
 }

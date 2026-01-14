@@ -1,25 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace FileSorter
+﻿namespace FileSorter
 {
     public partial class FileSortStrategyPanel : FlowLayoutPanel
     {
+        public static String[] sortModeText = ["Erstelldatum", "Zuletzt geändert"];
+        private List<int> sortModes = new();
         public FileSortStrategyPanel()
         {
             InitializeComponent();
         }
 
-        private void addSortStrategy(object sender, EventArgs e)
+        private void initComboBox(ComboBox comboBox)
         {
-            int currentIndex = Controls.Count + 1;
+            foreach (String s in sortModeText)
+            {
+                comboBox.Items.Add(s);
+            }
+            comboBox.SelectedIndex = 0;
+            sortModes.Add(0);
+        }
+
+        public void addSortStrategy(object sender, EventArgs e)
+        {
+            int currentIndex = sortModes.Count + 1;
             //create panel
             FlowLayoutPanel newSortStrategyLayout = new FlowLayoutPanel();
             newSortStrategyLayout.Name = "layoutSortStrategy" + currentIndex;
@@ -40,6 +42,7 @@ namespace FileSorter
             ComboBox comboBoxNewFilter = new ComboBox();
             comboBoxNewFilter.Size = new Size(160, 25);
             comboBoxNewFilter.DropDownStyle = ComboBoxStyle.DropDownList;
+            initComboBox(comboBoxNewFilter);
 
             //create edit button
             Button editValueButton = new Button();
@@ -55,6 +58,8 @@ namespace FileSorter
             newSortStrategyLayout.Controls.Add(comboBoxNewFilter);
             newSortStrategyLayout.Controls.Add(editValueButton);
             Controls.Add(newSortStrategyLayout);
+
+            comboBoxNewFilter.SelectedIndexChanged += onComboboxChanged; //at end to not invoke on init
         }
 
         private void onRemove(object? sender, EventArgs e)
@@ -62,12 +67,33 @@ namespace FileSorter
             Button removeButton = sender as Button;
             int idx = ((int)removeButton.Parent.Tag) - 1;
             Controls.RemoveAt(idx);
+            sortModes.RemoveAt(idx);
             //on remove, move tag and index in name
             for (int i = idx; i < Controls.Count; i++)
             {
                 Control c = Controls[i];
                 c.Tag = i + 1;
                 c.Name = "layoutSortStrategy" + (i + 1);
+            }
+        }
+
+        private void onComboboxChanged(object? sender, EventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+            if (comboBox == null)
+                return;
+            int idx = ((int)comboBox.Parent.Tag) - 1;
+            sortModes[idx] = comboBox.SelectedIndex;
+        }
+
+        public int SortMode
+        {
+            get
+            {
+                if (sortModes.Count == 0)
+                    return 0;
+                else
+                    return sortModes[0] + 1;
             }
         }
     }
