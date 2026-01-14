@@ -46,7 +46,7 @@ namespace FileSorter
             textBoxSortBy.Font = new Font("Segoe UI", 12F);
             textBoxSortBy.Location = new Point(3, 3);
             textBoxSortBy.Name = "textBoxSortBy";
-            textBoxSortBy.Size = new Size(160, 29);
+            textBoxSortBy.Size = new Size(200, 29);
             textBoxSortBy.TabIndex = 9;
             textBoxSortBy.Text = "Sortieren nach";
             // 
