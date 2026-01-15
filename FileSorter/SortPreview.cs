@@ -7,12 +7,7 @@
             InitializeComponent();
         }
 
-        public TreeNode addFolder(String name)
-        {
-            return addFolder(name, treeViewSorted.Nodes);
-        }
-
-        public TreeNode addFolder(String name, TreeNodeCollection current)
+        private TreeNode addFolderToTreeView(String name, TreeNodeCollection current)
         {
             String[] folderNames = name.Split("\\", StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < folderNames.Length - 1; i++)
@@ -25,22 +20,25 @@
             return res;
         }
 
-        public void addItem(String folder, String name)
+        private void addItemToTreeView(String folder, String name, TreeNodeCollection current)
         {
             String[] folderNames = folder.Split("\\", StringSplitOptions.RemoveEmptyEntries);
-            TreeNodeCollection current = treeViewSorted.Nodes;
             for (int i = 0; i < folderNames.Length; i++)
             {
-                TreeNode next = getNodeFromName(current, folderNames[i]);
+                TreeNode? next = getNodeFromName(current, folderNames[i]);
                 if (next == null)
-                    current = addFolder(folderNames[i], current).Nodes;
+                    current = addFolderToTreeView(folderNames[i], current).Nodes;
                 else
                     current = next.Nodes;
             }
             current.Add(new TreeNode(name));
         }
+        public void addItem(String folder, String name)
+        {
+            addItemToTreeView(folder, name, treeViewSorted.Nodes);
+        }
 
-        private TreeNode getNodeFromName(TreeNodeCollection nodes, String name)
+        private TreeNode? getNodeFromName(TreeNodeCollection nodes, String name)
         {
             TreeNode[]res = nodes.Cast<TreeNode>().Where(item => item.Text == name).ToArray();
             if(res.Length == 0)
@@ -49,9 +47,9 @@
                 return res[0];
         }
 
-        public void addSortedOutFile(String name)
+        public void addSortedOutFile(String folderName, String fileName)
         {
-            listBoxFilteredOutItems.Items.Add(name);
+            addItemToTreeView(folderName, fileName, treeViewsortedOut.Nodes);
         }
     }
 }

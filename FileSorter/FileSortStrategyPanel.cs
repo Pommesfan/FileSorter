@@ -16,7 +16,7 @@
                 comboBox.Items.Add(s);
             }
             comboBox.SelectedIndex = 0;
-            mainView.FileSortStrategyList.Add(new DateSortStrategy(FileSortDate.CreationDate));
+            mainView?.FileSortStrategyList.Add(new DateSortStrategy(FileSortDate.CreationDate));
         }
 
         public void addSortStrategy(object sender, EventArgs e)
@@ -87,7 +87,7 @@
         {
             if (mainView == null)
                 return;
-            ComboBox comboBox = sender as ComboBox;
+            ComboBox? comboBox = sender as ComboBox;
             if (comboBox == null)
                 return;
             int idx = Utils.getTagNumber(comboBox) - 1;

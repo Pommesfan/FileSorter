@@ -80,7 +80,7 @@ namespace FileSorter
                 numberFilesFound++;
                 if (!filter(file))
                 {
-                    fileAction.addFilteredOut(file.Name);
+                    fileAction.addFilteredOut(file);
                     continue;
                 }
                 sortIn(file, fileAction, subDirsDst);
@@ -175,9 +175,10 @@ namespace FileSorter
                 return;
             }
 
-            DirectoryInfo dirInfoSrc = new DirectoryInfo(textBoxSource.Text);
+            String srcPath = textBoxSource.Text;
+            DirectoryInfo dirInfoSrc = new DirectoryInfo(srcPath);
             SortPreview sortPreview = new SortPreview();
-            FileAction fileAction = new PreviewAction(sortPreview, sortPreview);
+            FileAction fileAction = new PreviewAction(sortPreview, sortPreview, srcPath);
             sort(dirInfoSrc, fileAction);
 
             sortPreview.ShowDialog();

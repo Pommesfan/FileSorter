@@ -5,7 +5,7 @@
         void action(FileInfo file, String folderTo);
         void createSubDirectory(String name);
         DirectoryInfo[] getDirectories();
-        void addFilteredOut(String name);
+        void addFilteredOut(FileInfo file);
     }
 
     public abstract class RealFileAction : FileAction
@@ -36,7 +36,7 @@
 
         public abstract void action(FileInfo file, String folderTo);
 
-        public void addFilteredOut(string name)
+        public void addFilteredOut(FileInfo file)
         {
             //on copy or move ignore, used in sort preview to see what is not moved
         }
@@ -63,11 +63,13 @@
     {
         private SortPreview sortPreview;
         private SortPreview dialog;
+        private String srcPath;
 
-        public PreviewAction(SortPreview sortPreview, SortPreview dialog)
+        public PreviewAction(SortPreview sortPreview, SortPreview dialog, String srcPath)
         {
             this.sortPreview = sortPreview;
             this.dialog = dialog;
+            this.srcPath = srcPath;
         }
 
         public void action(FileInfo file, String folderTo)
@@ -77,7 +79,7 @@
 
         public void createSubDirectory(string name)
         {
-            dialog.addFolder(name);
+            //in dialog automatically creating subnode, when searched node is not found
         }
 
         public DirectoryInfo[] getDirectories()
@@ -85,9 +87,16 @@
             return new DirectoryInfo[] { };
         }
 
-        public void addFilteredOut(string name)
+        public void addFilteredOut(FileInfo file)
         {
-            dialog.addSortedOutFile(name);
+            String? dir = file.DirectoryName;
+            if (dir == null)
+                dir = "";
+            else
+            {
+                dir = dir.Substring(srcPath.Length);
+            }
+            dialog.addSortedOutFile(dir, file.Name);
         }
     }
 }

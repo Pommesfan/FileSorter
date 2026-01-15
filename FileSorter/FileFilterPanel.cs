@@ -152,9 +152,10 @@
         {
             if (mainView == null)
                 return;
-            FlowLayoutPanel currentLayout = (FlowLayoutPanel)(((Control)sender).Parent);
+            Control control = (Control)sender;
+            FlowLayoutPanel currentLayout = (FlowLayoutPanel)(control.Parent);
             ComboBox comboBox = (ComboBox)currentLayout.Controls[1];
-            int idx = Utils.getTagNumber(currentLayout) - 1;
+            int idx = Utils.getTagNumber(control) - 1;
             int selectedMode = comboBox.SelectedIndex;
             if (selectedMode < 0)
                 return;

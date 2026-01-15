@@ -17,7 +17,7 @@ namespace FileSorter
             Control parent = control.Parent;
             if (parent.Tag == null)
                 throw new ArgumentException("Tag is null");
-            if (parent.Tag.GetType() != typeof(Int32))
+            if (parent.Tag.GetType() != typeof(int))
                 throw new ArgumentException("Tag is no int");
             return (int)parent.Tag;
         }
