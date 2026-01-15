@@ -112,8 +112,10 @@ namespace FileSorter
             {
                 if (strategy == null)
                     continue;
-                s += strategy.folderName(file) + "\\";
-                if (!subDirsDst.Contains(s))
+                String folderName = strategy.folderName(file);
+                s += folderName + "\\";
+                //folder can be "" if no classification done; when creating a subfolder with name "\\", it causes problems
+                if (folderName.Length != 0 && !subDirsDst.Contains(s))
                 {
                     subDirsDst.Add(s);
                     fileAction.createSubDirectory(s);

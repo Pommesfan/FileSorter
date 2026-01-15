@@ -346,7 +346,7 @@ namespace FileSorter
             layoutMain.Controls.Add(layoutFilterAndSort);
             layoutMain.Controls.Add(layoutSortAndPreview);
             layoutMain.FlowDirection = FlowDirection.TopDown;
-            layoutMain.Location = new Point(21, 27);
+            layoutMain.Location = new Point(12, 27);
             layoutMain.Name = "layoutMain";
             layoutMain.Size = new Size(644, 247);
             layoutMain.TabIndex = 12;
@@ -416,7 +416,7 @@ namespace FileSorter
             menuStrip2.Items.AddRange(new ToolStripItem[] { fileSorterMenu });
             menuStrip2.Location = new Point(0, 0);
             menuStrip2.Name = "menuStrip2";
-            menuStrip2.Size = new Size(804, 24);
+            menuStrip2.Size = new Size(667, 24);
             menuStrip2.TabIndex = 13;
             menuStrip2.Text = "menuStrip2";
             // 
@@ -458,7 +458,7 @@ namespace FileSorter
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(804, 596);
+            ClientSize = new Size(667, 601);
             Controls.Add(layoutMain);
             Controls.Add(menuStrip2);
             MainMenuStrip = menuStrip2;

@@ -65,7 +65,24 @@
 
         public override string folderName(FileInfo file)
         {
-            return "";
+            String[] variables;
+            if (!Utils.parseVariables(Path.GetFileNameWithoutExtension(file.FullName), fileNamePattern, out variables))
+                return "";
+            else
+            {
+                String res = folderNamePattern;
+                for (int i = 0; i < variables.Length; i++)
+                {
+                    String variableInRes = "?" + (i + 1);
+                    if (!res.Contains(variableInRes))
+                        return "";
+                    else
+                        res = res.Replace(variableInRes, variables[i]);
+                }
+                if (res.Contains('?')) //if variables in folder couldn't be resolved
+                    return "";
+                return res;
+            }
         }
     }
 }
