@@ -110,6 +110,8 @@ namespace FileSorter
             String s = "";
             foreach (FileSortStrategy strategy in fileSortStrategies)
             {
+                if (strategy == null)
+                    continue;
                 s += strategy.folderName(file) + "\\";
                 if (!subDirsDst.Contains(s))
                 {

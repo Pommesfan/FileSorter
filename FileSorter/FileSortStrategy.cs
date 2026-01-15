@@ -5,8 +5,13 @@
         public abstract String folderName(FileInfo file);
     }
 
-    public class DateSortStrategy(FileSortDate fileSortDate) : FileSortStrategy
+    public class DateSortStrategy : FileSortStrategy
     {
+        public readonly FileSortDate fileSortDate;
+        public DateSortStrategy(FileSortDate fileSortDate)
+        {
+            this.fileSortDate = fileSortDate;
+        }
         public override string folderName(FileInfo file)
         {
             if(fileSortDate == FileSortDate.CreationDate)
@@ -22,8 +27,14 @@
         }
     }
 
-    public class YearSortStrategy(FileSortDate fileSortDate) : FileSortStrategy
+    public class YearSortStrategy : FileSortStrategy
     {
+        public readonly FileSortDate fileSortDate;
+        public YearSortStrategy(FileSortDate fileSortDate)
+        {
+            this.fileSortDate = fileSortDate;
+        }
+
         public override string folderName(FileInfo file)
         {
             if (fileSortDate == FileSortDate.CreationDate)
@@ -38,6 +49,23 @@
             {
                 throw new ArgumentException("value from enum FileSortDate not supported here");
             }
+        }
+    }
+
+    public class FileNameSortStrategy : FileSortStrategy
+    {
+        public readonly string fileNamePattern;
+        public readonly string folderNamePattern;
+
+        public FileNameSortStrategy(string fileNamePattern, string folderNamePattern)
+        {
+            this.fileNamePattern = fileNamePattern;
+            this.folderNamePattern = folderNamePattern;
+        }
+
+        public override string folderName(FileInfo file)
+        {
+            return "";
         }
     }
 }

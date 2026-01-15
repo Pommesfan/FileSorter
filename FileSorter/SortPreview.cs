@@ -9,13 +9,7 @@
 
         private TreeNode addFolderToTreeView(String name, TreeNodeCollection current)
         {
-            String[] folderNames = name.Split("\\", StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < folderNames.Length - 1; i++)
-            {
-                current = getNodeFromName(current, folderNames[i]).Nodes;
-            }
-
-            TreeNode res = new TreeNode(folderNames.Last());
+            TreeNode res = new TreeNode(name);
             current.Add(res);
             return res;
         }

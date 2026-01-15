@@ -3,7 +3,7 @@
     public partial class FileSortStrategyPanel : FlowLayoutPanel
     {
         public MainView? mainView;
-        public static String[] sortModeText = ["Erstelldatum", "Zuletzt geändert", "Jahr erstellt", "Jahr zuletzt geändert"];
+        public static String[] sortModeText = ["Erstelldatum", "Zuletzt geändert", "Jahr erstellt", "Jahr zuletzt geändert", "Dateiname bestehend aus"];
         private List<RadioButton> radioButtonGroup = new List<RadioButton>();
         private int selectedRadioButton = -1;
         public FileSortStrategyPanel()
@@ -55,6 +55,7 @@
             editValueButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             editValueButton.ForeColor = Color.Gray;
             editValueButton.TextAlign = ContentAlignment.TopLeft;
+            editValueButton.Click += new EventHandler(editValueBtnClicked);
 
             //createRadioButton
             RadioButton radioButton = new RadioButton();
@@ -73,11 +74,34 @@
             comboBoxNewFilter.SelectedIndexChanged += onComboboxChanged; //at end to not invoke on init
         }
 
+        private void editValueBtnClicked(object? sender, EventArgs e)
+        {
+            if (mainView == null)
+                return;
+            Button? editButton = sender as Button;
+            if(editButton == null)
+                return;
+            int idx = Utils.getTagNumber(editButton) - 1;
+            ComboBox comboBox = (ComboBox)editButton.Parent.Controls[2];
+            FileNameSortDialog dialog = new FileNameSortDialog();
+            FileSortStrategy current = mainView.FileSortStrategyList[idx];
+            if(current != null && current.GetType() == typeof(FileNameSortStrategy))
+            {
+                FileNameSortStrategy strategy = (FileNameSortStrategy)current;
+                dialog.Content = new FileNameSortDialog.FileNameSortDialogRes(strategy.fileNamePattern, strategy.folderNamePattern);
+            }
+            if(dialog.ShowDialog() == DialogResult.OK)
+            {
+                FileNameSortDialog.FileNameSortDialogRes res = dialog.Content;
+                mainView.FileSortStrategyList[idx] = new FileNameSortStrategy(res.fileName, res.folderName);
+            }
+        }
+
         private void onRemove(object? sender, EventArgs e)
         {
             if (mainView == null)
                 return;
-            Button removeButton = sender as Button;
+            Button? removeButton = sender as Button;
             if (removeButton == null)
                 return;
             int idx = Utils.getTagNumber(removeButton) - 1;
@@ -136,6 +160,9 @@
                     break;
                 case 3:
                     mainView.FileSortStrategyList[idx] = new YearSortStrategy(FileSortDate.LastChangedDate);
+                    break;
+                case 4:
+                    mainView.FileSortStrategyList[idx] = null;
                     break;
             }
         }
