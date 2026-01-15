@@ -83,17 +83,20 @@
                 return;
             int idx = Utils.getTagNumber(editButton) - 1;
             ComboBox comboBox = (ComboBox)editButton.Parent.Controls[2];
-            FileNameSortDialog dialog = new FileNameSortDialog();
-            FileSortStrategy current = mainView.FileSortStrategyList[idx];
-            if(current != null && current.GetType() == typeof(FileNameSortStrategy))
+            if(comboBox.SelectedIndex == 4) // only on FileNameSort
             {
-                FileNameSortStrategy strategy = (FileNameSortStrategy)current;
-                dialog.Content = new FileNameSortDialog.FileNameSortDialogRes(strategy.fileNamePattern, strategy.folderNamePattern);
-            }
-            if(dialog.ShowDialog() == DialogResult.OK)
-            {
-                FileNameSortDialog.FileNameSortDialogRes res = dialog.Content;
-                mainView.FileSortStrategyList[idx] = new FileNameSortStrategy(res.fileName, res.folderName);
+                FileNameSortDialog dialog = new FileNameSortDialog();
+                FileSortStrategy current = mainView.FileSortStrategyList[idx];
+                if (current != null && current.GetType() == typeof(FileNameSortStrategy))
+                {
+                    FileNameSortStrategy strategy = (FileNameSortStrategy)current;
+                    dialog.Content = new FileNameSortDialog.FileNameSortDialogRes(strategy.fileNamePattern, strategy.folderNamePattern);
+                }
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    FileNameSortDialog.FileNameSortDialogRes res = dialog.Content;
+                    mainView.FileSortStrategyList[idx] = new FileNameSortStrategy(res.fileName, res.folderName);
+                }
             }
         }
 

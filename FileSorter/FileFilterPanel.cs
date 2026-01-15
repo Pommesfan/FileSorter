@@ -178,6 +178,7 @@
         {
             List<FileFilter> fileFilters = mainView.FileFilterList;
             KeyWordsDialog dialog = new KeyWordsDialog();
+            dialog.Text = filterModeText[(int)mode];
             FileFilter current = fileFilters[idx];
             if (current != null)
             {
@@ -217,6 +218,7 @@
                 DateSpanFilter filter = (DateSpanFilter)currentFilter;
                 dialog.DateSpan = new DateFilterDialog.DateFilterRes(filter.from, filter.until);
             }
+            dialog.Text = filterModeText[(int)mode];
             DialogResult res = dialog.ShowDialog();
             if (res == DialogResult.OK)
             {

@@ -150,7 +150,7 @@
             Controls.Add(comboBoxSizeUntil);
             Controls.Add(comboBoxSizeFrom);
             Name = "SizeFilterDialog";
-            Text = "Dateigröße auswählen";
+            Text = "Dateigröße";
             ResumeLayout(false);
             PerformLayout();
         }

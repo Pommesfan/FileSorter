@@ -151,7 +151,6 @@
             ClientSize = new Size(461, 422);
             Controls.Add(layoutMain);
             Name = "KeyWordsDialog";
-            Text = "WordFilterPanel";
             layoutForList.ResumeLayout(false);
             layoutForList.PerformLayout();
             layoutForBtns.ResumeLayout(false);

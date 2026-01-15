@@ -172,7 +172,7 @@
             ClientSize = new Size(261, 209);
             Controls.Add(layoutMain);
             Name = "DateFilterDialog";
-            Text = "DateFilterDialog";
+            Text = "Datumsfilter";
             layoutMain.ResumeLayout(false);
             layoutFrom.ResumeLayout(false);
             layoutFrom.PerformLayout();

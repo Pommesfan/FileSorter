@@ -127,7 +127,7 @@
             ClientSize = new Size(396, 182);
             Controls.Add(layoutMain);
             Name = "FileNameSortDialog";
-            Text = "FileNameSortDialog";
+            Text = "Sortieren nach Muster im Dateiname";
             layoutOkCancel.ResumeLayout(false);
             layoutMain.ResumeLayout(false);
             layoutMain.PerformLayout();

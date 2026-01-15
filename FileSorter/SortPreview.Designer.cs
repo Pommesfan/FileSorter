@@ -77,7 +77,7 @@
             ClientSize = new Size(1132, 758);
             Controls.Add(layoutMain);
             Name = "SortPreview";
-            Text = "SortPreview";
+            Text = "Vorschau";
             layoutMain.Panel1.ResumeLayout(false);
             layoutMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)layoutMain).EndInit();
