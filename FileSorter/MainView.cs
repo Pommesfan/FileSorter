@@ -111,7 +111,7 @@ namespace FileSorter
             foreach (FileSortStrategy strategy in fileSortStrategies)
             {
                 s += strategy.folderName(file) + "\\";
-                if(!subDirsDst.Contains(s))
+                if (!subDirsDst.Contains(s))
                 {
                     subDirsDst.Add(s);
                     fileAction.createSubDirectory(s);
@@ -290,6 +290,16 @@ namespace FileSorter
         private void btnAddSortStrategy_Click(object sender, EventArgs e)
         {
             fileSortStrategyPanel.addSortStrategy(sender, e);
+        }
+
+        private void btnMoveSorterUp_Click(object sender, EventArgs e)
+        {
+            fileSortStrategyPanel.moveUp();
+        }
+
+        private void btnMoveSorterDown_Click(object sender, EventArgs e)
+        {
+            fileSortStrategyPanel.moveDown();
         }
 
         public List<FileFilter> FileFilterList

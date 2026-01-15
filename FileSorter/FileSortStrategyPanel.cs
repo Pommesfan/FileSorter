@@ -4,6 +4,8 @@
     {
         public MainView? mainView;
         public static String[] sortModeText = ["Erstelldatum", "Zuletzt geändert", "Jahr erstellt", "Jahr zuletzt geändert"];
+        private List<RadioButton> radioButtonGroup = new List<RadioButton>();
+        private int selectedRadioButton = -1;
         public FileSortStrategyPanel()
         {
             InitializeComponent();
@@ -54,8 +56,15 @@
             editValueButton.ForeColor = Color.Gray;
             editValueButton.TextAlign = ContentAlignment.TopLeft;
 
+            //createRadioButton
+            RadioButton radioButton = new RadioButton();
+            radioButton.Size = new Size(25, 25);
+            radioButtonGroup.Add(radioButton);
+            radioButton.CheckedChanged += new EventHandler(onRadioButtonClicked);
+
             //add all to panels
             newSortStrategyLayout.Size = new Size(260, 30);
+            newSortStrategyLayout.Controls.Add(radioButton);
             newSortStrategyLayout.Controls.Add(removeButton);
             newSortStrategyLayout.Controls.Add(comboBoxNewFilter);
             newSortStrategyLayout.Controls.Add(editValueButton);
@@ -73,6 +82,9 @@
                 return;
             int idx = Utils.getTagNumber(removeButton) - 1;
             Controls.RemoveAt(idx);
+            if (radioButtonGroup[idx].Checked)
+                selectedRadioButton = -1;
+            radioButtonGroup.RemoveAt(idx);
             mainView.FileSortStrategyList.RemoveAt(idx);
             //on remove, move tag and index in name
             for (int i = idx; i < Controls.Count; i++)
@@ -80,6 +92,24 @@
                 Control c = Controls[i];
                 c.Tag = i + 1;
                 c.Name = "layoutSortStrategy" + (i + 1);
+            }
+        }
+
+        private void onRadioButtonClicked(object? sender, EventArgs e)
+        {
+            RadioButton? radioButton = sender as RadioButton;
+            if (radioButton == null)
+                return;
+            if(radioButton.Checked)
+            {
+                for (int i = 0; i < radioButtonGroup.Count; i++)
+                {
+                    RadioButton rbtn = radioButtonGroup[i];
+                    if (radioButton != rbtn)
+                        rbtn.Checked = false;
+                    else
+                        selectedRadioButton = i;
+                }
             }
         }
 
@@ -106,6 +136,53 @@
                     mainView.FileSortStrategyList[idx] = new YearSortStrategy(FileSortDate.LastChangedDate);
                     break;
             }
+        }
+
+        public void moveUp()
+        {
+            if (mainView == null)
+                return;
+            if(selectedRadioButton > 0)
+            {
+                move(-1);
+            }
+        }
+
+        public void moveDown()
+        {
+            if (mainView == null)
+                return;
+            if (selectedRadioButton < Controls.Count - 1 && selectedRadioButton > -1)
+            {
+                move(1);
+            }
+        }
+
+        public void move(int direction)
+        {
+            //copy panels to array
+            Control[] controls = new Control[Controls.Count];
+            for (int i = 0; i < Controls.Count; i++)
+            {
+                controls[i] = Controls[i];
+            }
+            Controls.Clear();
+            // switch items
+            Control controlTmp = controls[selectedRadioButton];
+            controls[selectedRadioButton] = controls[selectedRadioButton + direction];
+            controls[selectedRadioButton + direction] = controlTmp;
+            // switch FileSortStrategy models
+            List<FileSortStrategy> strategies = mainView.FileSortStrategyList;
+            FileSortStrategy strategyTmp = strategies[selectedRadioButton];
+            strategies[selectedRadioButton] = strategies[selectedRadioButton + direction];
+            strategies[selectedRadioButton + direction] = strategyTmp;
+            // switch radioButtons in list
+            RadioButton radioButtonTmp = radioButtonGroup[selectedRadioButton];
+            radioButtonGroup[selectedRadioButton] = radioButtonGroup[selectedRadioButton + direction];
+            radioButtonGroup[selectedRadioButton + direction] = radioButtonTmp;
+            //copy panels back
+            Controls.AddRange(controls);
+            selectedRadioButton += direction;
         }
     }
 }

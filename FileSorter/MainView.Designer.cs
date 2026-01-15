@@ -50,6 +50,8 @@ namespace FileSorter
             layoutSetUpSorterHead = new FlowLayoutPanel();
             textBoxInsertSortStrategy = new TextBox();
             btnAddSortStrategy = new Button();
+            btnMoveSorterUp = new Button();
+            btnMoveSorterDown = new Button();
             layoutMain = new FileFilterPanel();
             layoutGenralSortSettings = new FlowLayoutPanel();
             layoutSrcAndDst = new FlowLayoutPanel();
@@ -198,7 +200,7 @@ namespace FileSorter
             fileSortStrategyPanel.Anchor = AnchorStyles.Top;
             fileSortStrategyPanel.AutoSize = true;
             fileSortStrategyPanel.FlowDirection = FlowDirection.TopDown;
-            fileSortStrategyPanel.Location = new Point(130, 47);
+            fileSortStrategyPanel.Location = new Point(154, 47);
             fileSortStrategyPanel.Name = "fileSortStrategyPanel";
             fileSortStrategyPanel.Size = new Size(0, 0);
             fileSortStrategyPanel.TabIndex = 14;
@@ -234,9 +236,9 @@ namespace FileSorter
             layoutFilterAndSort.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             layoutFilterAndSort.Controls.Add(layoutFilters);
             layoutFilterAndSort.Controls.Add(flowLayoutPanel1);
-            layoutFilterAndSort.Location = new Point(53, 131);
+            layoutFilterAndSort.Location = new Point(28, 131);
             layoutFilterAndSort.Name = "layoutFilterAndSort";
-            layoutFilterAndSort.Size = new Size(538, 60);
+            layoutFilterAndSort.Size = new Size(587, 60);
             layoutFilterAndSort.TabIndex = 11;
             // 
             // layoutFilters
@@ -268,7 +270,7 @@ namespace FileSorter
             flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
             flowLayoutPanel1.Location = new Point(275, 3);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(260, 50);
+            flowLayoutPanel1.Size = new Size(309, 50);
             flowLayoutPanel1.TabIndex = 14;
             // 
             // layoutSetUpSorterHead
@@ -276,9 +278,11 @@ namespace FileSorter
             layoutSetUpSorterHead.AutoSize = true;
             layoutSetUpSorterHead.Controls.Add(textBoxInsertSortStrategy);
             layoutSetUpSorterHead.Controls.Add(btnAddSortStrategy);
+            layoutSetUpSorterHead.Controls.Add(btnMoveSorterUp);
+            layoutSetUpSorterHead.Controls.Add(btnMoveSorterDown);
             layoutSetUpSorterHead.Location = new Point(3, 3);
             layoutSetUpSorterHead.Name = "layoutSetUpSorterHead";
-            layoutSetUpSorterHead.Size = new Size(254, 38);
+            layoutSetUpSorterHead.Size = new Size(303, 38);
             layoutSetUpSorterHead.TabIndex = 0;
             // 
             // textBoxInsertSortStrategy
@@ -287,7 +291,7 @@ namespace FileSorter
             textBoxInsertSortStrategy.Font = new Font("Segoe UI", 12F);
             textBoxInsertSortStrategy.Location = new Point(3, 3);
             textBoxInsertSortStrategy.Name = "textBoxInsertSortStrategy";
-            textBoxInsertSortStrategy.Size = new Size(214, 29);
+            textBoxInsertSortStrategy.Size = new Size(188, 29);
             textBoxInsertSortStrategy.TabIndex = 11;
             textBoxInsertSortStrategy.Text = "Sortierer einstellen";
             // 
@@ -296,7 +300,7 @@ namespace FileSorter
             btnAddSortStrategy.BackColor = Color.LimeGreen;
             btnAddSortStrategy.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAddSortStrategy.ForeColor = Color.White;
-            btnAddSortStrategy.Location = new Point(223, 3);
+            btnAddSortStrategy.Location = new Point(197, 3);
             btnAddSortStrategy.Name = "btnAddSortStrategy";
             btnAddSortStrategy.Size = new Size(28, 32);
             btnAddSortStrategy.TabIndex = 12;
@@ -304,6 +308,34 @@ namespace FileSorter
             btnAddSortStrategy.TextAlign = ContentAlignment.TopLeft;
             btnAddSortStrategy.UseVisualStyleBackColor = false;
             btnAddSortStrategy.Click += btnAddSortStrategy_Click;
+            // 
+            // btnMoveSorterUp
+            // 
+            btnMoveSorterUp.BackColor = Color.FromArgb(255, 128, 0);
+            btnMoveSorterUp.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnMoveSorterUp.ForeColor = Color.White;
+            btnMoveSorterUp.Location = new Point(231, 3);
+            btnMoveSorterUp.Name = "btnMoveSorterUp";
+            btnMoveSorterUp.Size = new Size(31, 32);
+            btnMoveSorterUp.TabIndex = 13;
+            btnMoveSorterUp.Text = "△";
+            btnMoveSorterUp.TextAlign = ContentAlignment.TopLeft;
+            btnMoveSorterUp.UseVisualStyleBackColor = false;
+            btnMoveSorterUp.Click += btnMoveSorterUp_Click;
+            // 
+            // btnMoveSorterDown
+            // 
+            btnMoveSorterDown.BackColor = Color.FromArgb(255, 128, 0);
+            btnMoveSorterDown.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnMoveSorterDown.ForeColor = Color.White;
+            btnMoveSorterDown.Location = new Point(268, 3);
+            btnMoveSorterDown.Name = "btnMoveSorterDown";
+            btnMoveSorterDown.Size = new Size(32, 32);
+            btnMoveSorterDown.TabIndex = 14;
+            btnMoveSorterDown.Text = "▽";
+            btnMoveSorterDown.TextAlign = ContentAlignment.TopLeft;
+            btnMoveSorterDown.UseVisualStyleBackColor = false;
+            btnMoveSorterDown.Click += btnMoveSorterDown_Click;
             // 
             // layoutMain
             // 
@@ -494,5 +526,7 @@ namespace FileSorter
         private FlowLayoutPanel layoutSetUpSorterHead;
         private TextBox textBoxInsertSortStrategy;
         private Button btnAddSortStrategy;
+        private Button btnMoveSorterUp;
+        private Button btnMoveSorterDown;
     }
 }
