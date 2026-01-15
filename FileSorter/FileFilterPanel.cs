@@ -67,11 +67,11 @@
 
         private void onComboboxValueChanged(object? sender, EventArgs e)
         {
-            if (mainView == null)
-                return;
             //when moving from DateSpanFilter to FileNameFilter or opposite, drop the selected information
-            ComboBox combobox = (ComboBox)sender;
-            int idx = (int)combobox.Parent.Tag - 1;
+            ComboBox? combobox = sender as ComboBox;
+            if (mainView == null || combobox == null)
+                return;
+            int idx = Utils.getTagNumber(combobox) - 1;
             int selection = combobox.SelectedIndex;
             List<FileFilter> fileFilters = mainView.FileFilterList;
             if (selection == 1 || selection == 2)
@@ -133,8 +133,10 @@
         {
             if (mainView == null)
                 return;
-            Button removeButton = sender as Button;
-            int idx = ((int)removeButton.Parent.Tag) - 1;
+            Button? removeButton = sender as Button;
+            if (removeButton == null)
+                return;
+            int idx = Utils.getTagNumber(removeButton) - 1;
             mainView.FileFilterList.RemoveAt(idx);
             Controls.RemoveAt(idx);
             //on remove, move tag and index in name
@@ -152,7 +154,7 @@
                 return;
             FlowLayoutPanel currentLayout = (FlowLayoutPanel)(((Control)sender).Parent);
             ComboBox comboBox = (ComboBox)currentLayout.Controls[1];
-            int idx = (int)currentLayout.Tag - 1;
+            int idx = Utils.getTagNumber(currentLayout) - 1;
             int selectedMode = comboBox.SelectedIndex;
             if (selectedMode < 0)
                 return;

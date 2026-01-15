@@ -3,7 +3,7 @@
     public partial class FileSortStrategyPanel : FlowLayoutPanel
     {
         public MainView? mainView;
-        public static String[] sortModeText = ["Erstelldatum", "Zuletzt geändert"];
+        public static String[] sortModeText = ["Erstelldatum", "Zuletzt geändert", "Jahr erstellt", "Jahr zuletzt geändert"];
         public FileSortStrategyPanel()
         {
             InitializeComponent();
@@ -69,7 +69,9 @@
             if (mainView == null)
                 return;
             Button removeButton = sender as Button;
-            int idx = ((int)removeButton.Parent.Tag) - 1;
+            if (removeButton == null)
+                return;
+            int idx = Utils.getTagNumber(removeButton) - 1;
             Controls.RemoveAt(idx);
             mainView.FileSortStrategyList.RemoveAt(idx);
             //on remove, move tag and index in name
@@ -88,7 +90,7 @@
             ComboBox comboBox = sender as ComboBox;
             if (comboBox == null)
                 return;
-            int idx = ((int)comboBox.Parent.Tag) - 1;
+            int idx = Utils.getTagNumber(comboBox) - 1;
             switch (comboBox.SelectedIndex)
             {
                 case 0:
@@ -96,6 +98,12 @@
                     break;
                 case 1:
                     mainView.FileSortStrategyList[idx] = new DateSortStrategy(FileSortDate.LastChangedDate);
+                    break;
+                case 2:
+                    mainView.FileSortStrategyList[idx] = new YearSortStrategy(FileSortDate.CreationDate);
+                    break;
+                case 3:
+                    mainView.FileSortStrategyList[idx] = new YearSortStrategy(FileSortDate.LastChangedDate);
                     break;
             }
         }
