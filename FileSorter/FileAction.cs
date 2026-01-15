@@ -74,7 +74,7 @@
 
         public void action(FileInfo file, String folderTo)
         {
-            sortPreview.addItem(folderTo, file.Name);
+            sortPreview.addItem("Sortierte Dateien\\" + folderTo, file.Name);
         }
 
         public void createSubDirectory(string name)
@@ -94,7 +94,7 @@
                 dir = "";
             else
             {
-                dir = dir.Substring(srcPath.Length);
+                dir = "Aussortierte Dateien\\" + dir.Substring(srcPath.Length);
             }
             dialog.addSortedOutFile(dir, file.Name);
         }

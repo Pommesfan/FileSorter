@@ -29,81 +29,65 @@
         private void InitializeComponent()
         {
             treeViewSorted = new TreeView();
-            textBoxShowFilteredOutItems = new TextBox();
-            layoutFilteredOut = new FlowLayoutPanel();
-            treeViewsortedOut = new TreeView();
-            layoutMain = new FlowLayoutPanel();
-            layoutFilteredOut.SuspendLayout();
+            layoutMain = new SplitContainer();
+            treeViewSortedOut = new TreeView();
+            ((System.ComponentModel.ISupportInitialize)layoutMain).BeginInit();
+            layoutMain.Panel1.SuspendLayout();
+            layoutMain.Panel2.SuspendLayout();
             layoutMain.SuspendLayout();
             SuspendLayout();
             // 
             // treeViewSorted
             // 
-            treeViewSorted.Location = new Point(3, 3);
+            treeViewSorted.Dock = DockStyle.Fill;
+            treeViewSorted.Location = new Point(0, 0);
             treeViewSorted.Name = "treeViewSorted";
-            treeViewSorted.Size = new Size(475, 537);
+            treeViewSorted.Size = new Size(574, 758);
             treeViewSorted.TabIndex = 0;
-            // 
-            // textBoxShowFilteredOutItems
-            // 
-            textBoxShowFilteredOutItems.Enabled = false;
-            textBoxShowFilteredOutItems.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            textBoxShowFilteredOutItems.Location = new Point(3, 3);
-            textBoxShowFilteredOutItems.Name = "textBoxShowFilteredOutItems";
-            textBoxShowFilteredOutItems.Size = new Size(441, 29);
-            textBoxShowFilteredOutItems.TabIndex = 2;
-            textBoxShowFilteredOutItems.Text = "Herausgefilterte Dateien";
-            // 
-            // layoutFilteredOut
-            // 
-            layoutFilteredOut.AutoSize = true;
-            layoutFilteredOut.Controls.Add(textBoxShowFilteredOutItems);
-            layoutFilteredOut.Controls.Add(treeViewsortedOut);
-            layoutFilteredOut.FlowDirection = FlowDirection.TopDown;
-            layoutFilteredOut.Location = new Point(484, 3);
-            layoutFilteredOut.Name = "layoutFilteredOut";
-            layoutFilteredOut.Size = new Size(447, 537);
-            layoutFilteredOut.TabIndex = 3;
-            // 
-            // treeViewsortedOut
-            // 
-            treeViewsortedOut.Location = new Point(3, 38);
-            treeViewsortedOut.Name = "treeViewsortedOut";
-            treeViewsortedOut.Size = new Size(441, 496);
-            treeViewsortedOut.TabIndex = 4;
             // 
             // layoutMain
             // 
-            layoutMain.AutoSize = true;
-            layoutMain.Controls.Add(treeViewSorted);
-            layoutMain.Controls.Add(layoutFilteredOut);
-            layoutMain.Location = new Point(12, 12);
+            layoutMain.Dock = DockStyle.Fill;
+            layoutMain.Location = new Point(0, 0);
             layoutMain.Name = "layoutMain";
-            layoutMain.Size = new Size(934, 546);
-            layoutMain.TabIndex = 4;
+            // 
+            // layoutMain.Panel1
+            // 
+            layoutMain.Panel1.Controls.Add(treeViewSorted);
+            // 
+            // layoutMain.Panel2
+            // 
+            layoutMain.Panel2.Controls.Add(treeViewSortedOut);
+            layoutMain.Size = new Size(1132, 758);
+            layoutMain.SplitterDistance = 574;
+            layoutMain.TabIndex = 5;
+            // 
+            // treeViewSortedOut
+            // 
+            treeViewSortedOut.Dock = DockStyle.Fill;
+            treeViewSortedOut.Location = new Point(0, 0);
+            treeViewSortedOut.Name = "treeViewSortedOut";
+            treeViewSortedOut.Size = new Size(554, 758);
+            treeViewSortedOut.TabIndex = 1;
             // 
             // SortPreview
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(951, 561);
+            ClientSize = new Size(1132, 758);
             Controls.Add(layoutMain);
             Name = "SortPreview";
             Text = "SortPreview";
-            layoutFilteredOut.ResumeLayout(false);
-            layoutFilteredOut.PerformLayout();
+            layoutMain.Panel1.ResumeLayout(false);
+            layoutMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)layoutMain).EndInit();
             layoutMain.ResumeLayout(false);
-            layoutMain.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
-
         private TreeView treeViewSorted;
-        private TextBox textBoxShowFilteredOutItems;
-        private FlowLayoutPanel layoutFilteredOut;
-        private FlowLayoutPanel layoutMain;
-        private TreeView treeViewsortedOut;
+        private SplitContainer layoutMain;
+        private TreeView treeViewSortedOut;
     }
 }

@@ -49,7 +49,7 @@
 
         public void addSortedOutFile(String folderName, String fileName)
         {
-            addItemToTreeView(folderName, fileName, treeViewsortedOut.Nodes);
+            addItemToTreeView(folderName, fileName, treeViewSortedOut.Nodes);
         }
     }
 }
