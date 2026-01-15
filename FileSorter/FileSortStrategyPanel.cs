@@ -84,6 +84,8 @@
             Controls.RemoveAt(idx);
             if (radioButtonGroup[idx].Checked)
                 selectedRadioButton = -1;
+            if (selectedRadioButton > idx) // if radiobutton from item after the deleted one ist checked, its index decreases with one 
+                selectedRadioButton -= 1;
             radioButtonGroup.RemoveAt(idx);
             mainView.FileSortStrategyList.RemoveAt(idx);
             //on remove, move tag and index in name
@@ -167,6 +169,10 @@
                 controls[i] = Controls[i];
             }
             Controls.Clear();
+            //switch tags
+            object? tagTmp = controls[selectedRadioButton].Tag;
+            controls[selectedRadioButton].Tag = controls[selectedRadioButton + direction].Tag;
+            controls[selectedRadioButton + direction].Tag = tagTmp;
             // switch items
             Control controlTmp = controls[selectedRadioButton];
             controls[selectedRadioButton] = controls[selectedRadioButton + direction];
