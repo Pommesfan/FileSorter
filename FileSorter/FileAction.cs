@@ -10,7 +10,7 @@
 
     public abstract class RealFileAction : FileAction
     {
-        private DirectoryInfo dstInfo;
+        protected DirectoryInfo dstInfo;
 
         public RealFileAction(DirectoryInfo dstInfo)
         {
@@ -47,7 +47,8 @@
         public CopyAction(DirectoryInfo dstInfo) : base(dstInfo) { }
         public override void action(FileInfo file, String folderTo)
         {
-            file.CopyTo(createUrl(file, folderTo));
+            if(!File.Exists(dstInfo.FullName + "\\" + folderTo + file.Name))
+                file.CopyTo(createUrl(file, folderTo));
         }
     }
 
@@ -56,7 +57,8 @@
         public MoveAction(DirectoryInfo dirInfoDst) : base(dirInfoDst) { }
         public override void action(FileInfo file, String folderTo)
         {
-            file.MoveTo(createUrl(file, folderTo));
+            if (!File.Exists(dstInfo.FullName + "\\" + folderTo + file.Name))
+                file.MoveTo(createUrl(file, folderTo));
         }
     }
     public class PreviewAction : FileAction
