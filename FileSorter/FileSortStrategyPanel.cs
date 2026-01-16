@@ -34,7 +34,7 @@
 
             //create remove button
             Button removeButton = new Button();
-            removeButton.Text = "x";
+            removeButton.Text = "-";
             removeButton.Size = new Size(25, 25);
             removeButton.BackColor = Color.Red;
             removeButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
