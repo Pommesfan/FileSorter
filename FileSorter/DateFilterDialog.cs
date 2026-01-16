@@ -21,12 +21,15 @@
 
         private void dateFrom_ValueChanged(object sender, EventArgs e)
         {
-            dateUntil.MinDate = dateFrom.Value;
+            
+            if (checkBoxFrom.Checked || !checkBoxUntil.Checked)
+                dateUntil.MinDate = dateFrom.Value;
         }
 
         private void dateUntil_ValueChanged(object sender, EventArgs e)
         {
-            dateFrom.MaxDate = dateUntil.Value;
+            if (checkBoxUntil.Checked || !checkBoxFrom.Checked)
+                dateFrom.MaxDate = dateUntil.Value;
         }
         private void checkBoxFrom_CheckedChanged(object sender, EventArgs e)
         {
